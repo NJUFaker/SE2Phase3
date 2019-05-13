@@ -27,6 +27,16 @@ public interface StatisticsMapper {
      * @return
      */
     List<MovieTotalBoxOffice> selectMovieTotalBoxOffice();
+    /**
+     *  查询date日期每部电影的观众人数
+     */
+    List<MovieTotalBoxOffice> selectAudienceNum(@Param("date") Date date);
+
+
+    /**
+     *查询一定时间内的每部电影的总票房
+     */
+    List<MovieTotalBoxOffice> selectMovieBoxOfficeOnCertainDate(@Param("date") Date date,@Param("nextDate") Date nextDate);
 
     /**
      * 查询某天每个客户的购票金额

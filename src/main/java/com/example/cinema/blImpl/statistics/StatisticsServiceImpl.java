@@ -5,10 +5,7 @@ import com.example.cinema.data.statistics.StatisticsMapper;
 import com.example.cinema.po.AudiencePrice;
 import com.example.cinema.po.MovieScheduleTime;
 import com.example.cinema.po.MovieTotalBoxOffice;
-import com.example.cinema.vo.AudiencePriceVO;
-import com.example.cinema.vo.MovieScheduleTimeVO;
-import com.example.cinema.vo.MovieTotalBoxOfficeVO;
-import com.example.cinema.vo.ResponseVO;
+import com.example.cinema.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,14 +77,41 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public ResponseVO getMoviePlacingRateByDate(Date date) {
+        try{
+            List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date);
+            List<PlacingRateVO> placingRateVOList=new ArrayList<PlacingRateVO>() ;
+            for(int i=0;i<movieTotalBoxOffices.size();i++){
+                int id=movieTotalBoxOffices.get(i).getMovieId();
+                float rate=movieTotalBoxOffices.get(i).getBoxOffice();
+                placingRateVOList.add(new PlacingRateVO(id,rate));
+            }
+            return ResponseVO.buildSuccess(placingRateVOList);
+        }catch(Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
         //要求见接口说明
-        return null;
     }
 
     @Override
     public ResponseVO getPopularMovies(int days, int movieNum) {
         //要求见接口说明
-        return null;
+        try{
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date today = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
+            List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectMovieBoxOfficeOnCertainDate(today,getNumDayAfterDate(today,days));
+            List<PopularMoviePO> popularMoviePOS=new ArrayList<>();
+            for(int i=0;i<movieNum;i++){
+                PopularMoviePO popularMoviePO=new PopularMoviePO();
+                popularMoviePO.setMovieId(movieTotalBoxOffices.get(i).getMovieId());
+                popularMoviePO.setName(movieTotalBoxOffices.get(i).getName());
+                popularMoviePO.setPopularRank(i+1);
+                popularMoviePOS.add(popularMoviePO);
+            }
+            return ResponseVO.buildSuccess(popularMoviePOS);
+        }catch (Exception e){
+            return ResponseVO.buildFailure("失败");
+        }
     }
 
 
