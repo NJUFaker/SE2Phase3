@@ -12,7 +12,8 @@ import java.util.List;
 public interface TicketService {
     /**
      * TODO:锁座【增加票但状态为未付款】
-     *
+     * 订单状态：
+     * 0：未完成 1：已完成 2:已失效
      * @param ticketForm
      * @return
      */

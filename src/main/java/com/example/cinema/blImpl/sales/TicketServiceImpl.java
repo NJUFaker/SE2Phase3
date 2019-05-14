@@ -1,17 +1,22 @@
 package com.example.cinema.blImpl.sales;
 
+import com.example.cinema.bl.promotion.CouponService;
+import com.example.cinema.bl.promotion.VIPService;
 import com.example.cinema.bl.sales.TicketService;
 import com.example.cinema.blImpl.management.hall.HallServiceForBl;
+import com.example.cinema.blImpl.management.schedule.MovieServiceForBl;
 import com.example.cinema.blImpl.management.schedule.ScheduleServiceForBl;
+import com.example.cinema.data.promotion.CouponMapper;
 import com.example.cinema.data.sales.TicketMapper;
-import com.example.cinema.po.Hall;
-import com.example.cinema.po.ScheduleItem;
-import com.example.cinema.po.Ticket;
+import com.example.cinema.po.*;
 import com.example.cinema.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,31 +31,220 @@ public class TicketServiceImpl implements TicketService {
     ScheduleServiceForBl scheduleService;
     @Autowired
     HallServiceForBl hallService;
+    //下面是添加的
+    @Autowired
+    private CouponService couponService;
+    @Autowired
+    private MovieServiceForBl movieServiceForBl;
+    @Autowired
+    private CouponServiceForBl couponServiceForBl;
+    @Autowired
+    private ActivityServiceForBl activityServiceForBl;
+    @Autowired
+    private VipServiceForBl vipServiceForBl;
+    @Autowired
+    private VIPService vipService;
+    /**
+     * 每一个schedule绑定一系列票，从而确定哪些座位被锁定
+     * @param scheduleId
+     * @return
+     */
+    private int[][] getLockedSeats(int scheduleId){
+        List<Ticket> tickets = ticketMapper.selectTicketsBySchedule(scheduleId);
+        ScheduleItem schedule=scheduleService.getScheduleItemById(scheduleId);
+        Hall hall=hallService.getHallById(schedule.getHallId());
+        int[][] seats=new int[hall.getRow()][hall.getColumn()];
+        //每一个ticket都对应一个座位被锁定。
+        tickets.stream().forEach(ticket -> {
+            seats[ticket.getRowIndex()][ticket.getColumnIndex()]=1;
+        });
+        return  seats;
+    }
 
+
+    /**
+     * TODO:锁座【增加票但状态为未付款】
+     * 订单状态：
+     * 0：未完成 1：已完成 2:已失效
+     * @param ticketForm
+     * @return
+     */
     @Override
     @Transactional
     public ResponseVO addTicket(TicketForm ticketForm) {
-        return null;
+        List<Ticket> tickets=new ArrayList<>();
+        List<SeatForm> seats=ticketForm.getSeats();
+        for (int i = 0; i < seats.size(); i++) {
+            int[][] lockedSeats=getLockedSeats(ticketForm.getScheduleId());
+            if (lockedSeats[seats.get(i).getRowIndex()][seats.get(i).getColumnIndex()]==1){
+                return ResponseVO.buildFailure("座位已经被锁定");
+            }
+            Ticket ticket=new Ticket();
+            ticket.setUserId(ticketForm.getUserId());
+            ticket.setScheduleId(ticketForm.getScheduleId());
+            ticket.setColumnIndex(seats.get(i).getColumnIndex());
+            ticket.setRowIndex(seats.get(i).getRowIndex());
+            ticket.setState(0);
+            Date date = new Date();
+            Timestamp timestamp = new Timestamp(date.getTime());
+            ticket.setTime(timestamp);
+            tickets.add(ticket);
+        }
+
+        try {
+            return ResponseVO.buildSuccess(ticketMapper.insertTickets(tickets));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
     }
 
+    /**
+     * TODO:取消锁座（只有状态是"锁定中"的可以取消）
+     *
+     * @param ticketId
+     * @return
+     */
+    @Override
+    public ResponseVO cancelTicket(List<Integer> ticketId) {
+        try {
+            for (int i = 0; i < ticketId.size(); i++) {
+                Ticket ticket=ticketMapper.selectTicketById(ticketId.get(i));
+                if (ticket==null||ticket.getState()==2){
+                    return  ResponseVO.buildFailure("座位未被锁定");
+                }
+                else {
+                    ticketMapper.deleteTicket(ticketId.get(i));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+        return ResponseVO.buildSuccess();
+    }
+
+
+
+
+    /**
+     * TODO:完成购票【不使用会员卡】流程包括校验优惠券和根据优惠活动赠送优惠券
+     *
+     * 在sales包添加了一个接口。CouponServiceImpl实现了它。（仿照schedule）
+     *
+     * @param ticketId
+     * @param couponId
+     * @return
+     */
     @Override
     @Transactional
-    public ResponseVO completeTicket(List<Integer> id, int couponId) {
-        return null;
+    public ResponseVO completeTicket(List<Integer> ticketId, int couponId) {
+        Coupon coupon=couponServiceForBl.getCouponById(couponId);
+        Date date = new Date();
+        Timestamp now = new Timestamp(date.getTime());
+        String content="";
+        Boolean success=false;
+        if (coupon==null){
+            content="优惠券不存在";
+        }
+        else if (coupon.getEndTime().before(now)){
+            content="优惠卷已经过期";
+        }
+        else if (coupon.getStartTime().after(now)){
+            content= "优惠卷尚未生效";
+        }
+        else{
+            content="优惠券有效";
+            success=true;
+        }
+        try {
+            Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
+            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
+            double sum=ticketId.size()*scheduleItem.getFare();
+            Integer movieId=scheduleItem.getMovieId();
+            if (sum<coupon.getTargetAmount()){
+                content="优惠券未达到使用门槛";
+                success=false;
+            }
+            Movie movie=movieServiceForBl.getMovieById(movieId);
+            List<Activity> activities=activityServiceForBl.selectActivities();
+            Boolean success0=false;
+            for (int i = 0; i < activities.size(); i++) {
+                if (activities.get(i).getMovieList()==null){
+                    couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
+                    content=content+"且用户获得优惠券";
+                    success0=true;
+                }
+                else if (activities.get(i).getMovieList().contains(movie)){
+                    couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
+                    content=content+"且用户获得优惠券";
+                    success0=true;
+                }
+                else {
+                    content=content+"且用户未获得优惠券";
+                }
+            }
+            success=success&success0;
+            if (success){
+                System.out.println(content);
+                return ResponseVO.buildSuccess();
+            }
+            else {
+                return ResponseVO.buildFailure(content);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
     }
 
+
+
+    /**
+     * TODO:完成购票【使用会员卡】流程包括会员卡扣费、校验优惠券和根据优惠活动赠送优惠券
+     *
+     * @param ticketId
+     * @param couponId
+     * @return
+     */
+    @Override
+    @Transactional
+    public ResponseVO completeByVIPCard(List<Integer> ticketId, int couponId) {
+        try{
+            completeTicket(ticketId,couponId);
+            Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
+            VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
+            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
+            double sum=ticketId.size()*scheduleItem.getFare();
+            boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
+            if (isEnough){
+                return ResponseVO.buildSuccess();
+            }
+            else {
+                return ResponseVO.buildFailure("会员卡余额不足");
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+
+
+    }
+
+    /**
+     * 获得该场次的被锁座位和场次信息
+     *
+     * @param scheduleId
+     * @return
+     */
     @Override
     public ResponseVO getBySchedule(int scheduleId) {
         try {
-            List<Ticket> tickets = ticketMapper.selectTicketsBySchedule(scheduleId);
-            ScheduleItem schedule=scheduleService.getScheduleItemById(scheduleId);
-            Hall hall=hallService.getHallById(schedule.getHallId());
-            int[][] seats=new int[hall.getRow()][hall.getColumn()];
-            tickets.stream().forEach(ticket -> {
-                seats[ticket.getRowIndex()][ticket.getColumnIndex()]=1;
-            });
+            int[][] seats=getLockedSeats(scheduleId);
             ScheduleWithSeatVO scheduleWithSeatVO=new ScheduleWithSeatVO();
-            scheduleWithSeatVO.setScheduleItem(schedule);
+            scheduleWithSeatVO.setScheduleItem(scheduleService.getScheduleItemById(scheduleId));
             scheduleWithSeatVO.setSeats(seats);
             return ResponseVO.buildSuccess(scheduleWithSeatVO);
         } catch (Exception e) {
@@ -59,22 +253,30 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
+
+    /**
+     * TODO:获得用户买过的票
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public ResponseVO getTicketByUser(int userId) {
-        return null;
+        List<Ticket> tickets=ticketMapper.selectTicketByUser(userId);
+        if (tickets==null){
+            return ResponseVO.buildFailure("失败");
+        }
+        else {
+            return ResponseVO.buildSuccess(tickets);
+        }
 
     }
 
-    @Override
-    @Transactional
-    public ResponseVO completeByVIPCard(List<Integer> id, int couponId) {
-        return null;
-    }
 
-    @Override
-    public ResponseVO cancelTicket(List<Integer> id) {
-        return null;
-    }
+
+
+
+
 
 
 

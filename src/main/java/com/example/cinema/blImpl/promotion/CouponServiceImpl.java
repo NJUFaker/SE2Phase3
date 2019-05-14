@@ -1,6 +1,7 @@
 package com.example.cinema.blImpl.promotion;
 
 import com.example.cinema.bl.promotion.CouponService;
+import com.example.cinema.blImpl.sales.CouponServiceForBl;
 import com.example.cinema.data.promotion.CouponMapper;
 import com.example.cinema.po.Coupon;
 import com.example.cinema.vo.CouponForm;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
  * Created by liying on 2019/4/17.
  */
 @Service
-public class CouponServiceImpl implements CouponService {
+public class CouponServiceImpl implements CouponService, CouponServiceForBl {
 
     @Autowired
     CouponMapper couponMapper;
@@ -53,6 +54,17 @@ public class CouponServiceImpl implements CouponService {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
+        }
+
+    }
+
+    @Override
+    public Coupon getCouponById(Integer couponId){
+        try {
+            return couponMapper.selectById(couponId);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
         }
 
     }

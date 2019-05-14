@@ -29,6 +29,9 @@ public interface TicketMapper {
 
     List<Ticket> selectTicketByUser(int userId);
 
+    /**
+     * 删除失效过期的票
+     */
     @Scheduled(cron = "0/1 * * * * ?")
     void cleanExpiredTicket();
 }
