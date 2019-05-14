@@ -46,4 +46,13 @@
         on s.movieId = movie.id
         order by boxOffice desc
     </select>
+    <select id="selectTotalTimes" resultType="int">
+        select count(*) from schedule
+    </select>
+    <select id="selectTotalSeats" resultType="int">
+        select sum("column"*row) from hall
+    </select>
+    <select id="selectTotalHalls" resultType="int">
+        select count(*) from hall
+    </select>
 </mapper>

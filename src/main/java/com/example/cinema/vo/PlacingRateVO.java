@@ -5,7 +5,7 @@ package com.example.cinema.vo;
  */
 public class PlacingRateVO {
     private int movieId;
-    private float placingRate;
+    private double placingRate;
     public int getMovieId(){
         return movieId;
     }
@@ -13,15 +13,15 @@ public class PlacingRateVO {
         this.movieId=movieId;
     }
 
-    public float getPlacingRate() {
+    public double getPlacingRate() {
         return placingRate;
     }
 
-    public void setPlacingRate(float placingRate) {
+    public void setPlacingRate(double placingRate) {
         this.placingRate = placingRate;
     }
 
-    public PlacingRateVO(int movieId,float placingRate){
+    public PlacingRateVO(int movieId,double placingRate){
         this.movieId=movieId;this.placingRate=placingRate;
     }
 }

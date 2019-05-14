@@ -82,7 +82,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             List<PlacingRateVO> placingRateVOList=new ArrayList<PlacingRateVO>() ;
             for(int i=0;i<movieTotalBoxOffices.size();i++){
                 int id=movieTotalBoxOffices.get(i).getMovieId();
-                float rate=movieTotalBoxOffices.get(i).getBoxOffice();
+                double rate=(movieTotalBoxOffices.get(i).getBoxOffice()+0.0)/statisticsMapper.selectTotalSeats()/statisticsMapper.selectTotalTimes()/statisticsMapper.selectTotalHalls();
                 placingRateVOList.add(new PlacingRateVO(id,rate));
             }
             return ResponseVO.buildSuccess(placingRateVOList);
