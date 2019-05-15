@@ -66,6 +66,10 @@ public class CouponServiceImpl implements CouponService, CouponServiceForBl {
             e.printStackTrace();
             return null;
         }
+    }
 
+    @Override
+    public void deleteCoupon(int couponId,int userId){
+        couponMapper.deleteCouponUser(couponId,userId);
     }
 }

@@ -124,11 +124,48 @@ public class TicketServiceImpl implements TicketService {
         return ResponseVO.buildSuccess();
     }
 
+    /**
+     * 完成校验优惠券（初步定为仅仅删除使用过的优惠券）和赠送优惠券
+     * @param ticketId
+     * @param couponId
+     * @return
+     */
+    private String checkAndGiveCoupon(List<Integer> ticketId, int couponId){
+        Coupon coupon=couponServiceForBl.getCouponById(couponId);
+        String content="";
+        if (coupon==null) {
+            content="没有该优惠券";
+            return content;
+        }
 
+        Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
+
+        //删除优惠券
+        couponServiceForBl.deleteCoupon(couponId,ticket.getUserId());
+
+        Movie movie=movieServiceForBl.getMovieById(scheduleService.getScheduleItemById(ticket.getScheduleId()).getMovieId());
+        List<Activity> activities=activityServiceForBl.selectActivities();
+
+        for (int i = 0; i < activities.size(); i++) {
+            if (activities.get(i).getMovieList()==null){
+                couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
+                content="用户获得优惠券";
+            }
+            else if (activities.get(i).getMovieList().contains(movie)){
+                couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
+                content="用户获得优惠券";
+            }
+            else {
+                content="用户未获得优惠券";
+            }
+        }
+        return content;
+
+    }
 
 
     /**
-     * TODO:完成购票【不使用会员卡】流程包括校验优惠券和根据优惠活动赠送优惠券
+     * TODO:完成购票【不使用会员卡】流程包括校验优惠券(初步定为仅仅删除优惠券）和根据优惠活动赠送优惠券
      *
      * 在sales包添加了一个接口。CouponServiceImpl实现了它。（仿照schedule）
      *
@@ -139,60 +176,12 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     public ResponseVO completeTicket(List<Integer> ticketId, int couponId) {
-        Coupon coupon=couponServiceForBl.getCouponById(couponId);
-        Date date = new Date();
-        Timestamp now = new Timestamp(date.getTime());
-        String content="";
-        Boolean success=false;
-        if (coupon==null){
-            content="优惠券不存在";
-        }
-        else if (coupon.getEndTime().before(now)){
-            content="优惠卷已经过期";
-        }
-        else if (coupon.getStartTime().after(now)){
-            content= "优惠卷尚未生效";
-        }
-        else{
-            content="优惠券有效";
-            success=true;
-        }
         try {
-            Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
-            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
-            double sum=ticketId.size()*scheduleItem.getFare();
-            Integer movieId=scheduleItem.getMovieId();
-            if (sum<coupon.getTargetAmount()){
-                content="优惠券未达到使用门槛";
-                success=false;
+            String content=checkAndGiveCoupon(ticketId,couponId);
+            if(content.equals("没有该优惠券")){
+                return ResponseVO.buildFailure("没有该优惠券");
             }
-            Movie movie=movieServiceForBl.getMovieById(movieId);
-            List<Activity> activities=activityServiceForBl.selectActivities();
-            Boolean success0=false;
-            for (int i = 0; i < activities.size(); i++) {
-                if (activities.get(i).getMovieList()==null){
-                    couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
-                    content=content+"且用户获得优惠券";
-                    success0=true;
-                }
-                else if (activities.get(i).getMovieList().contains(movie)){
-                    couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
-                    content=content+"且用户获得优惠券";
-                    success0=true;
-                }
-                else {
-                    content=content+"且用户未获得优惠券";
-                }
-            }
-            success=success&success0;
-            if (success){
-                System.out.println(content);
-                return ResponseVO.buildSuccess();
-            }
-            else {
-                return ResponseVO.buildFailure(content);
-            }
-
+            return ResponseVO.buildSuccess(content);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
@@ -212,13 +201,17 @@ public class TicketServiceImpl implements TicketService {
     @Transactional
     public ResponseVO completeByVIPCard(List<Integer> ticketId, int couponId) {
         try{
-            completeTicket(ticketId,couponId);
             Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
             VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
             ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
-            double sum=ticketId.size()*scheduleItem.getFare();
+            Coupon coupon=couponServiceForBl.getCouponById(couponId);
+            if (coupon==null){
+                return ResponseVO.buildFailure("没有该优惠券");
+            }
+            double sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
             boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
             if (isEnough){
+                checkAndGiveCoupon(ticketId,couponId);
                 return ResponseVO.buildSuccess();
             }
             else {
