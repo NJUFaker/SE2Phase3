@@ -78,13 +78,36 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public ResponseVO getMoviePlacingRateByDate(Date date) {
         try{
-            List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date);
-            List<PlacingRateVO> placingRateVOList=new ArrayList<PlacingRateVO>() ;
+            List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date,getNumDayAfterDate(date,1));
+            List<PlacingRateVO> placingRateVOList=new ArrayList<>();
+            List<MovieScheduleTime> movieScheduleTimeList=statisticsMapper.selectMovieScheduleTimes(date,getNumDayAfterDate(date,1));
+            int totalSeats=146,hallNums=0;//座位数，影厅数
+
+            /*List<HallVO> halls=statisticsMapper.selectTotalHalls();
+
+            for(int j=0;j<halls.size();j++){
+                totalSeats=totalSeats+halls.get(j).getColumn()*totalSeats+halls.get(j).getRow();
+                hallNums++;
+            }*/
+
+            double placingRate=0;
+            double AudienceNum;
+
             for(int i=0;i<movieTotalBoxOffices.size();i++){
-                int id=movieTotalBoxOffices.get(i).getMovieId();
-                double rate=(movieTotalBoxOffices.get(i).getBoxOffice()+0.0)/statisticsMapper.selectTotalSeats()/statisticsMapper.selectTotalTimes()/statisticsMapper.selectTotalHalls();
-                placingRateVOList.add(new PlacingRateVO(id,rate));
+                AudienceNum=0;
+                for(int j=0;j<movieScheduleTimeList.size();j++){
+                    if(movieTotalBoxOffices.get(i).getMovieId()==movieScheduleTimeList.get(j).getMovieId()){
+                        AudienceNum=movieTotalBoxOffices.get(i).getBoxOffice()+0.0;
+                    }
+                }
+                if(AudienceNum==0){
+                    placingRateVOList.add(new PlacingRateVO(movieTotalBoxOffices.get(i).getMovieId(),0));
+                    continue;
+                }
+                placingRate=AudienceNum/totalSeats/movieScheduleTimeList.get(i).getTime();
+                placingRateVOList.add(new PlacingRateVO(movieTotalBoxOffices.get(i).getMovieId(),placingRate));
             }
+
             return ResponseVO.buildSuccess(placingRateVOList);
         }catch(Exception e){
             e.printStackTrace();
@@ -97,10 +120,12 @@ public class StatisticsServiceImpl implements StatisticsService {
     public ResponseVO getPopularMovies(int days, int movieNum) {
         //要求见接口说明
         try{
+
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date today = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectMovieBoxOfficeOnCertainDate(today,getNumDayAfterDate(today,days));
             List<PopularMoviePO> popularMoviePOS=new ArrayList<>();
+
             for(int i=0;i<movieNum;i++){
                 PopularMoviePO popularMoviePO=new PopularMoviePO();
                 popularMoviePO.setMovieId(movieTotalBoxOffices.get(i).getMovieId());

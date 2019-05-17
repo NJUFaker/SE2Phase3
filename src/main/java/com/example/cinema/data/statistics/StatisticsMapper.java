@@ -3,6 +3,7 @@ package com.example.cinema.data.statistics;
 import com.example.cinema.po.AudiencePrice;
 import com.example.cinema.po.MovieScheduleTime;
 import com.example.cinema.po.MovieTotalBoxOffice;
+import com.example.cinema.vo.HallVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,21 +17,21 @@ import java.util.List;
 @Mapper
 public interface StatisticsMapper {
     /**
-     * 查询date日期每部电影的排片次数
+     * 查询date日期每部电影的排片次数 1
      * @param date
      * @return
      */
     List<MovieScheduleTime> selectMovieScheduleTimes(@Param("date") Date date, @Param("nextDate") Date nextDate);
 
     /**
-     * 查询所有电影的总票房（包括已经下架的，降序排列）
+     * 查询所有电影的总票房（包括已经下架的，降序排列） 1
      * @return
      */
     List<MovieTotalBoxOffice> selectMovieTotalBoxOffice();
     /**
      *  查询date日期每部电影的观众人数
      */
-    List<MovieTotalBoxOffice> selectAudienceNum(@Param("date") Date date);
+    List<MovieTotalBoxOffice> selectAudienceNum(@Param("date") Date date,@Param("nextDate") Date nextDate);
 
 
     /**
@@ -39,7 +40,7 @@ public interface StatisticsMapper {
     List<MovieTotalBoxOffice> selectMovieBoxOfficeOnCertainDate(@Param("date") Date date,@Param("nextDate") Date nextDate);
 
     /**
-     * 查询某天每个客户的购票金额
+     * 查询某天每个客户的购票金额 1
      * @param date
      * @param nextDate
      * @return
@@ -47,9 +48,7 @@ public interface StatisticsMapper {
     List<AudiencePrice> selectAudiencePrice(@Param("date") Date date, @Param("nextDate") Date nextDate);
 
     /**
-     *
+     *查询每部电影某天的放映场数
      */
-    int selectTotalTimes();
-    int selectTotalSeats();
-    int selectTotalHalls();
+    List<HallVO> selectTotalHalls();
 }
