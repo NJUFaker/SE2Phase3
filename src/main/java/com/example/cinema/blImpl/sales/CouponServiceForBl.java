@@ -13,4 +13,5 @@ public interface CouponServiceForBl {
      * @return
      */
      Coupon getCouponById(Integer couponId);
+     void deleteCoupon(int couponId,int userId);
 }
