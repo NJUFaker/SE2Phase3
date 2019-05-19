@@ -1,11 +1,16 @@
 var selectedSeats = []
 var scheduleId;
 var order = {ticketId: [], couponId: 0};
+var orderInfo={}
+var ticketPrice;
 var coupons = [];
 var isVIP = false;
 var useVIP = true;
 
+
+//
 $(document).ready(function () {
+    //console.log(window)
     scheduleId = parseInt(window.location.href.split('?')[1].split('&')[1].split('=')[1]);
 
     getInfo();
@@ -14,6 +19,7 @@ $(document).ready(function () {
         getRequest(
             '/ticket/get/occupiedSeats?scheduleId=' + scheduleId,
             function (res) {
+                // console.log(res)
                 if (res.success) {
                     renderSchedule(res.content.scheduleItem, res.content.seats);
                 }
@@ -25,11 +31,18 @@ $(document).ready(function () {
     }
 });
 
+
+//填充排片信息
 function renderSchedule(schedule, seats) {
+    //影厅名
     $('#schedule-hall-name').text(schedule.hallName);
     $('#order-schedule-hall-name').text(schedule.hallName);
+    ticketPrice=schedule.fare.toFixed(2);
+    //票價
     $('#schedule-fare').text(schedule.fare.toFixed(2));
+    //訂單票價
     $('#order-schedule-fare').text(schedule.fare.toFixed(2));
+
     $('#schedule-time').text(schedule.startTime.substring(5, 7) + "月" + schedule.startTime.substring(8, 10) + "日 " + schedule.startTime.substring(11, 16) + "场");
     $('#order-schedule-time').text(schedule.startTime.substring(5, 7) + "月" + schedule.startTime.substring(8, 10) + "日 " + schedule.startTime.substring(11, 16) + "场");
 
@@ -64,6 +77,8 @@ function renderSchedule(schedule, seats) {
     $('#hall-card').html(hallDomStr);
 }
 
+
+//
 function seatClick(id, i, j) {
     let seat = $('#' + id);
     if (seat.hasClass("cinema-hall-seat-choose")) {
@@ -101,9 +116,34 @@ function seatClick(id, i, j) {
 function orderConfirmClick() {
     $('#seat-state').css("display", "none");
     $('#order-state').css("display", "");
+    //開始鎖座
+    let seats=[];
+    selectedSeats.forEach(function (seat) {
+        seats.push({
+            columnIndex:seat[1],
+            rowIndex:seat[0]
+        })
+    });
+    postRequest(
+        '/ticket/lockSeat',
+        {
+            userId:sessionStorage.getItem('id'),
+            scheduleId:scheduleId,
+            seats:seats
+        },
+        function (res) {
+            //锁座数量
+            var status=res.content
+            //console.log(status)
 
-    // TODO:这里是假数据，需要连接后端获取真数据，数据格式可以自行修改，但如果改了格式，别忘了修改renderOrder方法
-    var orderInfo = {
+        },
+        function (error) {
+            alert(JSON.stringify(error));
+        }
+    );
+
+/*
+    orderInfo = {
         "ticketVOList": [{
             "id": 63,
             "userId": 15,
@@ -164,26 +204,48 @@ function orderConfirmClick() {
             }
         }]
     };
-    renderOrder(orderInfo);
+*/
+    // TODO:这里是假数据，需要连接后端获取真数据，数据格式可以自行修改，但如果改了格式，别忘了修改renderOrder方法
+    //得到优惠券
+    //暂时不获取最佳
 
     getRequest(
-        '/vip/' + sessionStorage.getItem('id') + '/get',
+        '/coupon/'+sessionStorage.getItem('id')+'/get',
         function (res) {
-            isVIP = res.success;
-            useVIP = res.success;
-            if (isVIP) {
-                $('#member-balance').html("<div><b>会员卡余额：</b>" + res.content.balance.toFixed(2) + "元</div>");
-            } else {
-                $("#member-pay").css("display", "none");
-                $("#nonmember-pay").addClass("active");
+            console.log(res)
+            orderInfo.coupons=res.content;
+            console.log(orderInfo.coupons)
 
-                $("#modal-body-member").css("display", "none");
-                $("#modal-body-nonmember").css("display", "");
-            }
-        },
-        function (error) {
-            alert(error);
-        });
+            //插入票务信息
+            orderInfo.ticketVOList=seats;
+            //计算总价
+            orderInfo.total=(seats.length*ticketPrice).toFixed(2)
+            //orderInfo.activities=
+            renderOrder(orderInfo);
+
+            getRequest(
+                '/vip/' + sessionStorage.getItem('id') + '/get',
+                function (res) {
+                    isVIP = res.success;
+                    useVIP = res.success;
+                    if (isVIP) {
+                        $('#member-balance').html("<div><b>会员卡余额：</b>" + res.content.balance.toFixed(2) + "元</div>");
+                    } else {
+                        $("#member-pay").css("display", "none");
+                        $("#nonmember-pay").addClass("active");
+
+                        $("#modal-body-member").css("display", "none");
+                        $("#modal-body-nonmember").css("display", "");
+                    }
+                },
+                function (error) {
+                    alert(error);
+                });
+        }
+    )
+
+
+
 }
 
 function switchPay(type) {
@@ -211,18 +273,18 @@ function renderOrder(orderInfo) {
     }
     $('#order-tickets').html(ticketStr);
 
-    var total = orderInfo.total.toFixed(2);
+    var total = orderInfo.total;
     $('#order-total').text(total);
     $('#order-footer-total').text("总金额： ¥" + total);
 
 
     var couponTicketStr = "";
-    if (orderInfo.coupons.length == 0) {
+    coupons = orderInfo.coupons;
+    if (coupons.length==0) {
         $('#order-discount').text("优惠金额：无");
         $('#order-actual-total').text(" ¥" + total);
         $('#pay-amount').html("<div><b>金额：</b>" + total + "元</div>");
     } else {
-        coupons = orderInfo.coupons;
         for (let coupon of coupons) {
             couponTicketStr += "<option>满" + coupon.targetAmount + "减" + coupon.discountAmount + "</option>"
         }
@@ -241,11 +303,11 @@ function changeCoupon(couponIndex) {
 
 function payConfirmClick() {
     if (useVIP) {
-        postPayRequest();
+        postPayRequest(true);
     } else {
         if (validateForm()) {
             if ($('#userBuy-cardNum').val() === "123123123" && $('#userBuy-cardPwd').val() === "123123") {
-                postPayRequest();
+                postPayRequest(false);
             } else {
                 alert("银行卡号或密码错误");
             }
@@ -254,12 +316,18 @@ function payConfirmClick() {
 }
 
 // TODO:填空
-function postPayRequest() {
+function postPayRequest(isVIP) {
     $('#order-state').css("display", "none");
     $('#success-state').css("display", "");
     $('#buyModal').modal('hide')
-}
+    // if (isVIP)
+    // postRequest(
+    //
+    //
+    // )
 
+}
+//
 function validateForm() {
     var isValidate = true;
     if (!$('#userBuy-cardNum').val()) {
