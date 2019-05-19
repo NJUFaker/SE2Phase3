@@ -1,6 +1,10 @@
 package com.example.cinema.blImpl.sales;
 
 import com.example.cinema.po.Coupon;
+import com.example.cinema.vo.TicketForm;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author lyp
@@ -14,4 +18,5 @@ public interface CouponServiceForBl {
      */
      Coupon getCouponById(Integer couponId);
      void deleteCoupon(int couponId,int userId);
+     List<Coupon> selectCouponByUserAndAmount(TicketForm ticketForm);
 }

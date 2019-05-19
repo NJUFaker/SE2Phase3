@@ -92,7 +92,8 @@ public class TicketServiceImpl implements TicketService {
         }
 
         try {
-            return ResponseVO.buildSuccess(ticketMapper.insertTickets(tickets));
+            ticketMapper.insertTickets(tickets);
+            return ResponseVO.buildSuccess(tickets);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
