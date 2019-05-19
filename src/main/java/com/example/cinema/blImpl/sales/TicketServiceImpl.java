@@ -92,7 +92,8 @@ public class TicketServiceImpl implements TicketService {
         }
 
         try {
-            return ResponseVO.buildSuccess(ticketMapper.insertTickets(tickets));
+            ticketMapper.insertTickets(tickets);
+            return ResponseVO.buildSuccess(tickets);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
@@ -181,6 +182,9 @@ public class TicketServiceImpl implements TicketService {
             if(content.equals("没有该优惠券")){
                 return ResponseVO.buildFailure("没有该优惠券");
             }
+            for (int i = 0; i < ticketId.size(); i++) {
+                ticketMapper.updateTicketState(ticketId.get(i),1);
+            }
             return ResponseVO.buildSuccess(content);
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,6 +216,9 @@ public class TicketServiceImpl implements TicketService {
             boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
             if (isEnough){
                 checkAndGiveCoupon(ticketId,couponId);
+                for (int i = 0; i < ticketId.size(); i++) {
+                    ticketMapper.updateTicketState(ticketId.get(i),1);
+                }
                 return ResponseVO.buildSuccess();
             }
             else {
