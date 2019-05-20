@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -34,7 +35,7 @@ public class StatisticsController {
     }
 
     @RequestMapping(value = "statistics/PlacingRate", method = RequestMethod.GET)
-    public ResponseVO getMoviePlacingRateByDate(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") Date date){
+    public ResponseVO getMoviePlacingRateByDate(@RequestParam("date") @DateTimeFormat(pattern="yyyy-MM-dd") Date date){
         return statisticsService.getMoviePlacingRateByDate(date);
     }
 
@@ -42,14 +43,4 @@ public class StatisticsController {
     public ResponseVO getPopularMovies(@RequestParam int days, @RequestParam int movieNum){
         return statisticsService.getPopularMovies(days, movieNum);
     }
-
-
-
-
-
-
-
-
-
-
 }

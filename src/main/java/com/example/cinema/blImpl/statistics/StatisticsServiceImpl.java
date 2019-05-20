@@ -3,6 +3,7 @@ package com.example.cinema.blImpl.statistics;
 import com.example.cinema.bl.statistics.StatisticsService;
 import com.example.cinema.data.statistics.StatisticsMapper;
 import com.example.cinema.po.AudiencePrice;
+import com.example.cinema.po.Hall;
 import com.example.cinema.po.MovieScheduleTime;
 import com.example.cinema.po.MovieTotalBoxOffice;
 import com.example.cinema.vo.*;
@@ -81,14 +82,15 @@ public class StatisticsServiceImpl implements StatisticsService {
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date,getNumDayAfterDate(date,1));
             List<PlacingRateVO> placingRateVOList=new ArrayList<>();
             List<MovieScheduleTime> movieScheduleTimeList=statisticsMapper.selectMovieScheduleTimes(date,getNumDayAfterDate(date,1));
-            int totalSeats=146,hallNums=0;//座位数，影厅数
+            int totalSeats=0,hallNums=0;//座位数，影厅数
 
-            /*List<HallVO> halls=statisticsMapper.selectTotalHalls();
+
+            List<Hall> halls=statisticsMapper.selectTotalHalls();
 
             for(int j=0;j<halls.size();j++){
-                totalSeats=totalSeats+halls.get(j).getColumn()*totalSeats+halls.get(j).getRow();
+                totalSeats=totalSeats+halls.get(j).getColumn()*halls.get(j).getRow();
                 hallNums++;
-            }*/
+            }
 
             double placingRate=0;
             double AudienceNum;

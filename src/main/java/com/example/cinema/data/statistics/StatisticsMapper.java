@@ -1,6 +1,7 @@
 package com.example.cinema.data.statistics;
 
 import com.example.cinema.po.AudiencePrice;
+import com.example.cinema.po.Hall;
 import com.example.cinema.po.MovieScheduleTime;
 import com.example.cinema.po.MovieTotalBoxOffice;
 import com.example.cinema.vo.HallVO;
@@ -50,5 +51,5 @@ public interface StatisticsMapper {
     /**
      *查询每部电影某天的放映场数
      */
-    List<HallVO> selectTotalHalls();
+    List<Hall> selectTotalHalls();
 }

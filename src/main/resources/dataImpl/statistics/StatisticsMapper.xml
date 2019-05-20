@@ -48,7 +48,7 @@
         on s.movieId = movie.id
         order by boxOffice desc
     </select>
-    <select id="selectTotalHalls" resultType="com.example.cinema.vo.HallVO">
-        select id,name,`column` as "column",row from hall
+    <select id="selectTotalHalls"  resultType="com.example.cinema.po.Hall">
+        select * from hall
     </select>
 </mapper>
