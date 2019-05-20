@@ -74,26 +74,40 @@ public class TicketServiceImpl implements TicketService {
     public ResponseVO addTicket(TicketForm ticketForm) {
         List<Ticket> tickets=new ArrayList<>();
         List<SeatForm> seats=ticketForm.getSeats();
+        List<TicketVO> ticketVOS=new ArrayList<>();
         for (int i = 0; i < seats.size(); i++) {
             int[][] lockedSeats=getLockedSeats(ticketForm.getScheduleId());
             if (lockedSeats[seats.get(i).getRowIndex()][seats.get(i).getColumnIndex()]==1){
                 return ResponseVO.buildFailure("座位已经被锁定");
             }
             Ticket ticket=new Ticket();
+            TicketVO ticketVO=new TicketVO();
             ticket.setUserId(ticketForm.getUserId());
+            ticketVO.setUserId(ticketForm.getUserId());
             ticket.setScheduleId(ticketForm.getScheduleId());
+            ticketVO.setScheduleId(ticketForm.getScheduleId());
             ticket.setColumnIndex(seats.get(i).getColumnIndex());
+            ticketVO.setColumnIndex(seats.get(i).getColumnIndex());
             ticket.setRowIndex(seats.get(i).getRowIndex());
+            ticketVO.setRowIndex(seats.get(i).getRowIndex());
             ticket.setState(0);
+            ticketVO.setState("0");
             Date date = new Date();
             Timestamp timestamp = new Timestamp(date.getTime());
             ticket.setTime(timestamp);
+            ticketVO.setTime(timestamp);
+            ticketVOS.add(ticketVO);
             tickets.add(ticket);
         }
 
         try {
+            TicketWithCouponVO ticketWithCouponVO=new TicketWithCouponVO();
+            ticketWithCouponVO.setTicketVOList(ticketVOS);
+            ticketWithCouponVO.setTotal(tickets.size()*scheduleService.getScheduleItemById(ticketForm.getScheduleId()).getFare());
+            ticketWithCouponVO.setCoupons(couponServiceForBl.selectCouponByUserAndAmount(ticketForm));
+            ticketWithCouponVO.setActivities(activityServiceForBl.selectActivities());
             ticketMapper.insertTickets(tickets);
-            return ResponseVO.buildSuccess(tickets);
+            return ResponseVO.buildSuccess(ticketWithCouponVO);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
