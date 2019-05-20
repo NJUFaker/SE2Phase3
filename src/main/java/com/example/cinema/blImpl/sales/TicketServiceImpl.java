@@ -72,9 +72,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     public ResponseVO addTicket(TicketForm ticketForm) {
-        List<Ticket> tickets=new ArrayList<>();
+
         List<SeatForm> seats=ticketForm.getSeats();
         List<TicketVO> ticketVOS=new ArrayList<>();
+        int count=0;
         for (int i = 0; i < seats.size(); i++) {
             int[][] lockedSeats=getLockedSeats(ticketForm.getScheduleId());
             if (lockedSeats[seats.get(i).getRowIndex()][seats.get(i).getColumnIndex()]==1){
@@ -96,17 +97,18 @@ public class TicketServiceImpl implements TicketService {
             Timestamp timestamp = new Timestamp(date.getTime());
             ticket.setTime(timestamp);
             ticketVO.setTime(timestamp);
+            ticketMapper.insertTicket(ticket);
+            ticketVO.setId(ticketMapper.selectTicketByScheduleIdAndSeat(ticketForm.getScheduleId(),ticket.getColumnIndex(),ticket.getRowIndex()).getId());
             ticketVOS.add(ticketVO);
-            tickets.add(ticket);
+            count++;
         }
 
         try {
             TicketWithCouponVO ticketWithCouponVO=new TicketWithCouponVO();
             ticketWithCouponVO.setTicketVOList(ticketVOS);
-            ticketWithCouponVO.setTotal(tickets.size()*scheduleService.getScheduleItemById(ticketForm.getScheduleId()).getFare());
+            ticketWithCouponVO.setTotal(count*scheduleService.getScheduleItemById(ticketForm.getScheduleId()).getFare());
             ticketWithCouponVO.setCoupons(couponServiceForBl.selectCouponByUserAndAmount(ticketForm));
             ticketWithCouponVO.setActivities(activityServiceForBl.selectActivities());
-            ticketMapper.insertTickets(tickets);
             return ResponseVO.buildSuccess(ticketWithCouponVO);
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,9 +158,10 @@ public class TicketServiceImpl implements TicketService {
             //删除优惠券
             couponServiceForBl.deleteCoupon(couponId,ticket.getUserId());
         }
-        Movie movie=movieServiceForBl.getMovieById(scheduleService.getScheduleItemById(ticket.getScheduleId()).getMovieId());
+        int scheduleId=ticket.getScheduleId();
+        ScheduleItem scheduleItem=scheduleService.getScheduleItemById(scheduleId);
+        Movie movie=movieServiceForBl.getMovieById(scheduleItem.getMovieId());
         List<Activity> activities=activityServiceForBl.selectActivities();
-
         for (int i = 0; i < activities.size(); i++) {
             if (activities.get(i).getMovieList()==null){
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
