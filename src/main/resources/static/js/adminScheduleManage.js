@@ -132,6 +132,18 @@ $(document).ready(function() {
             fare: $("#schedule-price-input").val()
         };
         //todo 需要做一下表单验证？
+        if(form.startTime == null||form.startTime == ''){
+                     alert('开始时间不能为空');
+                     return false;
+                     }
+                if(form.endTime == null||form.endTime == ''){
+                             alert('结束时间不能为空');
+                             return false;
+                }
+                if(form.fare == null||form.fare == ''){
+                             alert('电影费用不能为空');
+                             return false;
+                }
 
         postRequest(
             '/schedule/add',
@@ -160,6 +172,19 @@ $(document).ready(function() {
             fare: $("#schedule-edit-price-input").val()
         };
         //todo 需要做一下表单验证？
+        if(form.startTime == null||form.startTime == ''){
+             alert('开始时间不能为空');
+             return false;
+             }
+        if(form.endTime == null||form.endTime == ''){
+                     alert('结束时间不能为空');
+                     return false;
+        }
+        if(form.fare == null||form.fare == ''){
+                     alert('电影费用不能为空');
+                     return false;
+        }
+
 
         postRequest(
             '/schedule/update',
