@@ -133,8 +133,8 @@ function orderConfirmClick() {
         },
         function (res) {
             //锁座数量
-            var status=res.content
-            //console.log(status)
+            orderInfo=res.content
+            // console.log(orderInfo)
 
         },
         function (error) {
@@ -209,40 +209,29 @@ function orderConfirmClick() {
     //得到优惠券
     //暂时不获取最佳
 
+    orderInfo.total = (seats.length * ticketPrice).toFixed(2);
+    //显示第二页面
+    renderOrder(orderInfo);
+
     getRequest(
-        '/coupon/'+sessionStorage.getItem('id')+'/get',
+        '/vip/' + sessionStorage.getItem('id') + '/get',
         function (res) {
-            console.log(res)
-            orderInfo.coupons=res.content;
-            console.log(orderInfo.coupons)
+            isVIP = res.success;
+            useVIP = res.success;
+            if (isVIP) {
+                $('#member-balance').html("<div><b>会员卡余额：</b>" + res.content.balance.toFixed(2) + "元</div>");
+            } else {
+                $("#member-pay").css("display", "none");
+                $("#nonmember-pay").addClass("active");
 
-            //插入票务信息
-            orderInfo.ticketVOList=seats;
-            //计算总价
-            orderInfo.total=(seats.length*ticketPrice).toFixed(2)
-            //orderInfo.activities=
-            renderOrder(orderInfo);
+                $("#modal-body-member").css("display", "none");
+                $("#modal-body-nonmember").css("display", "");
+            }
+        },
+        function (error) {
+            alert(error);
+        });
 
-            getRequest(
-                '/vip/' + sessionStorage.getItem('id') + '/get',
-                function (res) {
-                    isVIP = res.success;
-                    useVIP = res.success;
-                    if (isVIP) {
-                        $('#member-balance').html("<div><b>会员卡余额：</b>" + res.content.balance.toFixed(2) + "元</div>");
-                    } else {
-                        $("#member-pay").css("display", "none");
-                        $("#nonmember-pay").addClass("active");
-
-                        $("#modal-body-member").css("display", "none");
-                        $("#modal-body-nonmember").css("display", "");
-                    }
-                },
-                function (error) {
-                    alert(error);
-                });
-        }
-    )
 
 
 
@@ -320,14 +309,30 @@ function postPayRequest(isVIP) {
     $('#order-state').css("display", "none");
     $('#success-state').css("display", "");
     $('#buyModal').modal('hide')
-    // if (isVIP)
-    // postRequest(
-    //
-    //
-    // )
-
+    if(!isVIP){
+        postRequest(
+                'ticket/buy',
+                {
+                    'ticketId':order.ticketId,
+                    'couponId':order.couponId
+                },
+                function (res) {
+                }
+            );
+    }
+    else {
+        postRequest(
+            'ticket/vip/buy',
+            {
+                'ticketId':order.ticketId,
+                'couponId':order.couponId
+            },
+            function (res) {
+            }
+        );
+    }
 }
-//
+
 function validateForm() {
     var isValidate = true;
     if (!$('#userBuy-cardNum').val()) {
