@@ -233,6 +233,7 @@ public class TicketServiceImpl implements TicketService {
                 for (int i = 0; i < ticketId.size(); i++) {
                     ticketMapper.updateTicketState(ticketId.get(i),1);
                 }
+                vipServiceForBl.updateVipBalance(vipCard.getId(),vipCard.getBalance()-sum);
                 return ResponseVO.buildSuccess();
             }
             else {

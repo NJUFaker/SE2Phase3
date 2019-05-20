@@ -94,4 +94,9 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl {
         }
     }
 
+    @Override
+    public void updateVipBalance(int vipId,double balance){
+        vipCardMapper.updateCardBalance(vipId,balance);
+    }
+
 }
