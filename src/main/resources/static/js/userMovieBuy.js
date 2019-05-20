@@ -241,10 +241,6 @@ function postPayRequest(isVIP) {
         postRequest(
                 '/ticket/buy?ticketId='+order.ticketId+'&couponId='+order.couponId,
                 null,
-                // {
-                //     'ticketId':order.ticketId,
-                //     'couponId':order.couponId
-                // },
                 function (res) {
                     console.log(res)
                 }
@@ -253,11 +249,12 @@ function postPayRequest(isVIP) {
     else {
         postRequest(
             '/ticket/vip/buy?ticketId='+order.ticketId+'&couponId='+order.couponId,
-            {
-                'ticketId':order.ticketId,
-                'couponId':order.couponId
-            },
+            null,
             function (res) {
+                console.log(res)
+            },
+            function (err) {
+                alert(err.message)
             }
         );
     }
