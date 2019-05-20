@@ -148,16 +148,14 @@ public class TicketServiceImpl implements TicketService {
     private String checkAndGiveCoupon(List<Integer> ticketId, int couponId){
         Coupon coupon=couponServiceForBl.getCouponById(couponId);
         String content="";
-        if (coupon==null) {
-            content="没有该优惠券";
-            return content;
-        }
-
         Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
-
-        //删除优惠券
-        couponServiceForBl.deleteCoupon(couponId,ticket.getUserId());
-
+        if (coupon==null) {
+            ;
+        }
+        else {
+            //删除优惠券
+            couponServiceForBl.deleteCoupon(couponId,ticket.getUserId());
+        }
         Movie movie=movieServiceForBl.getMovieById(scheduleService.getScheduleItemById(ticket.getScheduleId()).getMovieId());
         List<Activity> activities=activityServiceForBl.selectActivities();
 
@@ -193,9 +191,6 @@ public class TicketServiceImpl implements TicketService {
     public ResponseVO completeTicket(List<Integer> ticketId, int couponId) {
         try {
             String content=checkAndGiveCoupon(ticketId,couponId);
-            if(content.equals("没有该优惠券")){
-                return ResponseVO.buildFailure("没有该优惠券");
-            }
             for (int i = 0; i < ticketId.size(); i++) {
                 ticketMapper.updateTicketState(ticketId.get(i),1);
             }
@@ -223,9 +218,6 @@ public class TicketServiceImpl implements TicketService {
             VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
             ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
             Coupon coupon=couponServiceForBl.getCouponById(couponId);
-            if (coupon==null){
-                return ResponseVO.buildFailure("没有该优惠券");
-            }
             double sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
             boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
             if (isEnough){
@@ -233,7 +225,6 @@ public class TicketServiceImpl implements TicketService {
                 for (int i = 0; i < ticketId.size(); i++) {
                     ticketMapper.updateTicketState(ticketId.get(i),1);
                 }
-                vipServiceForBl.updateVipBalance(vipCard.getId(),vipCard.getBalance()-sum);
                 return ResponseVO.buildSuccess();
             }
             else {
