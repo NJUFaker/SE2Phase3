@@ -167,7 +167,7 @@ public class TicketServiceImpl implements TicketService {
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
                 content="用户获得优惠券";
             }
-            else if (activities.get(i).getMovieList().contains(movie)){
+            else if (containMovie(activities.get(i).getMovieList(),movie)){
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
                 content="用户获得优惠券";
             }
@@ -177,6 +177,14 @@ public class TicketServiceImpl implements TicketService {
         }
         return content;
 
+    }
+
+    private boolean containMovie(List<Movie> movies,Movie movie){
+        ArrayList<Integer> ids=new ArrayList<>();
+        for (int i = 0; i < movies.size(); i++) {
+            ids.add(movies.get(i).getId());
+        }
+        return ids.contains(movie.getId());
     }
 
 
