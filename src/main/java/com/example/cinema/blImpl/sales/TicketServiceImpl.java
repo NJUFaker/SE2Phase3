@@ -220,8 +220,14 @@ public class TicketServiceImpl implements TicketService {
             Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
             VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
             ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
-            Coupon coupon=couponServiceForBl.getCouponById(couponId);
-            double sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
+            double sum;
+            if (couponId==0){
+                sum=ticketId.size()*scheduleItem.getFare();
+            }
+            else {
+                Coupon coupon=couponServiceForBl.getCouponById(couponId);
+                sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
+            }
             boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
             if (isEnough){
                 checkAndGiveCoupon(ticketId,couponId);
