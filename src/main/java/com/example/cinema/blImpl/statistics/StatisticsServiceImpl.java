@@ -80,8 +80,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public ResponseVO getMoviePlacingRateByDate(Date date) {
         try{
-            ArrayList<String> x=null;
-            x.add("?");
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date,getNumDayAfterDate(date,1));
             List<PlacingRateVO> placingRateVOList=new ArrayList<>();
             List<MovieScheduleTime> movieScheduleTimeList=statisticsMapper.selectMovieScheduleTimes(date,getNumDayAfterDate(date,1));
@@ -125,8 +123,6 @@ public class StatisticsServiceImpl implements StatisticsService {
     public ResponseVO getPopularMovies(int days, int movieNum) {
         //要求见接口说明
         try{
-            ArrayList<String> x=null;
-            x.add("?");
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date today = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectMovieBoxOfficeOnCertainDate(today,getNumDayAfterDate(today,days));
