@@ -36,8 +36,12 @@ public class Ticket {
      * 0：未完成 1：已完成 2:已失效
      */
     private int state;
-
+    /**
+     * 时间
+     */
     private Timestamp time;
+
+
 
     public Timestamp getTime() {
         return time;
@@ -77,12 +81,14 @@ public class Ticket {
         return vo;
 
     }
+    //漏了一个setschedule？
     public TicketWithScheduleVO getWithScheduleVO() {
         TicketWithScheduleVO vo = new TicketWithScheduleVO();
         vo.setRowIndex(this.getRowIndex());
         vo.setColumnIndex(this.getColumnIndex());
         vo.setId(this.getId());
         vo.setUserId(this.getUserId());
+
         String stateString;
         switch (state) {
             case 0:

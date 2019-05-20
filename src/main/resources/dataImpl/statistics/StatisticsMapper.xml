@@ -24,4 +24,31 @@
               (select id from schedule where start_time between #{date} and #{nextDate}) and state = 1) t
         on schedule.id = schedule_id group by user_id
     </select>
+
+    <select id="selectAudienceNum" resultType="com.example.cinema.po.MovieTotalBoxOffice">
+        select movie.id as movieId, boxOffice,name from movie
+        left join
+          (select movie_id as movieId,sum(1) as boxOffice from
+            (select * from schedule where start_time between #{date} and #{nextDate}) m
+          right join
+          (select schedule_id from ticket where state = 1) t
+          on m.id = t.schedule_id group by movie_id) s
+        on s.movieId = movie.id
+        order by boxOffice desc
+    </select>
+
+    <select id="selectMovieBoxOfficeOnCertainDate" resultType="com.example.cinema.po.MovieTotalBoxOffice">
+        select movie.id as movieId, boxOffice,name from movie
+        left join
+          (select movie_id as movieId,sum(fare) as boxOffice from
+            (select * from schedule where start_time between #{date} and #{nextDate}) m
+          right join
+          (select schedule_id from ticket where state = 1) t
+          on m.id = t.schedule_id group by movie_id) s
+        on s.movieId = movie.id
+        order by boxOffice desc
+    </select>
+    <select id="selectTotalHalls"  resultType="com.example.cinema.po.Hall">
+        select * from hall
+    </select>
 </mapper>

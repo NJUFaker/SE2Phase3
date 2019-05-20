@@ -2,6 +2,8 @@ package com.example.cinema.blImpl.promotion;
 
 import com.example.cinema.bl.promotion.ActivityService;
 import com.example.cinema.bl.promotion.CouponService;
+
+import com.example.cinema.blImpl.sales.ActivityServiceForBl;
 import com.example.cinema.data.promotion.ActivityMapper;
 import com.example.cinema.po.Activity;
 import com.example.cinema.po.Coupon;
@@ -11,11 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by liying on 2019/4/20.
  */
 @Service
-public class ActivityServiceImpl implements ActivityService {
+public class ActivityServiceImpl implements ActivityService, ActivityServiceForBl {
 
     @Autowired
     ActivityMapper activityMapper;
@@ -53,6 +57,10 @@ public class ActivityServiceImpl implements ActivityService {
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
         }
+    }
+    @Override
+    public List<Activity> selectActivities(){
+        return activityMapper.selectActivities();
     }
 
 }
