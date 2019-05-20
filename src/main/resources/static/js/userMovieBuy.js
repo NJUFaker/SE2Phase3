@@ -238,7 +238,7 @@ function postPayRequest(isVIP) {
     $('#buyModal').modal('hide')
     if(!isVIP){
         postRequest(
-                'ticket/buy',
+                '/ticket/buy',
                 {
                     'ticketId':order.ticketId,
                     'couponId':order.couponId
@@ -249,7 +249,7 @@ function postPayRequest(isVIP) {
     }
     else {
         postRequest(
-            'ticket/vip/buy',
+            '/ticket/vip/buy',
             {
                 'ticketId':order.ticketId,
                 'couponId':order.couponId
