@@ -303,7 +303,6 @@ function payConfirmClick() {
         }
     }
 }
-
 // TODO:填空
 function postPayRequest(isVIP) {
     $('#order-state').css("display", "none");
