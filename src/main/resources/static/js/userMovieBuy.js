@@ -163,10 +163,6 @@ function orderConfirmClick() {
             alert(JSON.stringify(error));
         }
     );
-    // TODO:这里是假数据，需要连接后端获取真数据，数据格式可以自行修改，但如果改了格式，别忘了修改renderOrder方法
-    //得到优惠券
-    //暂时不获取最佳
-
 }
 
 function switchPay(type) {
