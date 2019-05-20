@@ -181,7 +181,7 @@ $(document).ready(function() {
     $("#schedule-edit-remove-btn").click(function () {
         var r=confirm("确认要删除该排片信息吗")
         if (r) {
-            deleteRequest(
+            postRequest(
                 '/schedule/delete/batch',
                 {scheduleIdList:[Number($('#scheduleEditModal')[0].dataset.scheduleId)]},
                 function (res) {

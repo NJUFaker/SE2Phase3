@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-
     getScheduleRate();
     
     getBoxOffice();
@@ -10,6 +9,8 @@ $(document).ready(function() {
     getPlacingRate();
 
     getPolularMovie();
+
+    console.log("stac")
 
     function getScheduleRate() {
 
@@ -76,12 +77,12 @@ $(document).ready(function() {
     }
 
     function getBoxOffice() {
-
+        console.log("asdfhj")
         getRequest(
             '/statistics/boxOffice/total',
             function (res) {
                 var data = res.content || [];
-                var tableData = data.map(function (item) {
+                   var tableData = data.map(function (item) {
                     return item.boxOffice;
                 });
                 var nameList = data.map(function (item) {
@@ -89,7 +90,7 @@ $(document).ready(function() {
                 });
                 var option = {
                     title : {
-                        text: '所有电影票房',
+                        text: '所有票房',
                         subtext: '截止至'+new Date().toLocaleDateString(),
                         x:'center'
                     },
@@ -114,6 +115,7 @@ $(document).ready(function() {
     }
 
     function getAudiencePrice() {
+        console.log("sdffwqe")
         getRequest(
             '/statistics/audience/price',
             function (res) {
@@ -150,10 +152,46 @@ $(document).ready(function() {
     }
 
     function getPlacingRate() {
-        // todo
+      //上座率
     }
 
     function getPolularMovie() {
-        // todo
+        console.log("asdfhj")
+        alert("asfadsfwe")
+        getRequest(
+            'statistics/popular/movie?days='+3+'&movieNum='+5,
+            function (res) {
+                var data = res.content || [];
+                console.log("getPM")
+                var tableData = data.map(function (item) {
+                    return item.popularRank;
+                });
+                var nameList = data.map(function (item) {
+                    return item.name;
+                });
+                var option = {
+                    title : {
+                        text: '最受欢迎电影',
+                        //subtext: '截止至'+new Date().toLocaleDateString(),
+                        x:'center'
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: nameList
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [{
+                        data: tableData,
+                        type: 'bar'
+                    }]
+                };
+                var scheduleRateChart = echarts.init($("#popular-movie-container")[0]);
+                scheduleRateChart.setOption(option);
+            },
+            function (error) {
+                alert(JSON.stringify(error));
+            });
     }
 });
