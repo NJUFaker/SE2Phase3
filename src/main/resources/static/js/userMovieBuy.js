@@ -124,6 +124,7 @@ function orderConfirmClick() {
             rowIndex:seat[0]
         })
     });
+    console.log("可以锁座")
     postRequest(
         '/ticket/lockSeat',
         {
@@ -134,8 +135,6 @@ function orderConfirmClick() {
         function (res) {
             //锁座数量
             orderInfo=res.content
-            console.log(orderInfo)
-            console.log(orderInfo)
             orderInfo.total = (seats.length * ticketPrice).toFixed(2);
             //显示第二页面
             renderOrder(orderInfo);
@@ -236,20 +235,24 @@ function postPayRequest(isVIP) {
     $('#order-state').css("display", "none");
     $('#success-state').css("display", "");
     $('#buyModal').modal('hide')
+    console.log(orderInfo)
+    console.log(order)
     if(!isVIP){
         postRequest(
-                'ticket/buy',
-                {
-                    'ticketId':order.ticketId,
-                    'couponId':order.couponId
-                },
+                '/ticket/buy?ticketId='+order.ticketId+'&couponId='+order.couponId,
+                null,
+                // {
+                //     'ticketId':order.ticketId,
+                //     'couponId':order.couponId
+                // },
                 function (res) {
+                    console.log(res)
                 }
             );
     }
     else {
         postRequest(
-            'ticket/vip/buy',
+            '/ticket/vip/buy?ticketId='+order.ticketId+'&couponId='+order.couponId,
             {
                 'ticketId':order.ticketId,
                 'couponId':order.couponId
