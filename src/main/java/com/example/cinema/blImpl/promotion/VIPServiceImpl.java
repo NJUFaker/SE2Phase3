@@ -86,9 +86,7 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl {
     public boolean payByVipCard(int id,double fare){
         VIPCard vipCard = vipCardMapper.selectCardById(id);
         if (vipCard.getBalance()>=fare){
-            System.out.println(vipCard.getBalance()-fare);
-            System.out.println(id);
-            vipCardMapper.updateCardBalance(id,(int)(vipCard.getBalance()-fare));
+            vipCardMapper.updateCardBalance(id,vipCard.getBalance()-fare);
             return true;
         }
         else{
