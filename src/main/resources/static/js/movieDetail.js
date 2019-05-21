@@ -118,7 +118,5 @@ $(document).ready(function(){
                 }
             );
         }
-    })
     });
-
-});
+})
