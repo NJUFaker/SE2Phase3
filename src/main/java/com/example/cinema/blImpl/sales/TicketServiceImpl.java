@@ -90,8 +90,8 @@ public class TicketServiceImpl implements TicketService {
             Date date = new Date();
             Timestamp timestamp = new Timestamp(date.getTime());
             ticket.setTime(timestamp);
-            TicketVO ticketVO=ticket.getVO();
             ticketMapper.insertTicket(ticket);
+            TicketVO ticketVO=ticketMapper.selectTicketByScheduleIdAndSeat(ticket.getScheduleId(),ticket.getColumnIndex(),ticket.getRowIndex()).getVO();
             ticketVOS.add(ticketVO);
             count++;
         }
