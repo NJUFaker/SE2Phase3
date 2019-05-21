@@ -1,6 +1,6 @@
 package com.example.cinema.vo;
 
-public class PopularMoviePO {
+public class PopularMovieVO {
     private int movieId;
     private String name;
     private int popularRank;

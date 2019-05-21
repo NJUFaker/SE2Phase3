@@ -128,16 +128,16 @@ public class StatisticsServiceImpl implements StatisticsService {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date today = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectMovieBoxOfficeOnCertainDate(today,getNumDayAfterDate(today,days));
-            List<PopularMoviePO> popularMoviePOS=new ArrayList<>();
+            List<PopularMovieVO> popularMovieVOS=new ArrayList<>();
 
             for(int i=0;i<movieNum;i++){
-                PopularMoviePO popularMoviePO=new PopularMoviePO();
+                PopularMovieVO popularMoviePO=new PopularMovieVO();
                 popularMoviePO.setMovieId(movieTotalBoxOffices.get(i).getMovieId());
                 popularMoviePO.setName(movieTotalBoxOffices.get(i).getName());
                 popularMoviePO.setPopularRank(i+1);
-                popularMoviePOS.add(popularMoviePO);
+                popularMovieVOS.add(popularMoviePO);
             }
-            return ResponseVO.buildSuccess(popularMoviePOS);
+            return ResponseVO.buildSuccess(popularMovieVOS);
         }catch (Exception e){
             return ResponseVO.buildFailure("失败");
         }
