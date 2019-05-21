@@ -82,23 +82,16 @@ public class TicketServiceImpl implements TicketService {
                 return ResponseVO.buildFailure("座位已经被锁定");
             }
             Ticket ticket=new Ticket();
-            TicketVO ticketVO=new TicketVO();
             ticket.setUserId(ticketForm.getUserId());
-            ticketVO.setUserId(ticketForm.getUserId());
             ticket.setScheduleId(ticketForm.getScheduleId());
-            ticketVO.setScheduleId(ticketForm.getScheduleId());
             ticket.setColumnIndex(seats.get(i).getColumnIndex());
-            ticketVO.setColumnIndex(seats.get(i).getColumnIndex());
             ticket.setRowIndex(seats.get(i).getRowIndex());
-            ticketVO.setRowIndex(seats.get(i).getRowIndex());
             ticket.setState(0);
-            ticketVO.setState("0");
             Date date = new Date();
             Timestamp timestamp = new Timestamp(date.getTime());
             ticket.setTime(timestamp);
-            ticketVO.setTime(timestamp);
+            TicketVO ticketVO=ticket.getVO();
             ticketMapper.insertTicket(ticket);
-            ticketVO.setId(ticketMapper.selectTicketByScheduleIdAndSeat(ticketForm.getScheduleId(),ticket.getColumnIndex(),ticket.getRowIndex()).getId());
             ticketVOS.add(ticketVO);
             count++;
         }
@@ -148,10 +141,9 @@ public class TicketServiceImpl implements TicketService {
      * @return
      */
     private String checkAndGiveCoupon(List<Integer> ticketId, int couponId){
-        Coupon coupon=couponServiceForBl.getCouponById(couponId);
         String content="";
         Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
-        if (coupon==null) {
+        if (couponId==0) {
             ;
         }
         else {
@@ -290,7 +282,11 @@ public class TicketServiceImpl implements TicketService {
             return ResponseVO.buildFailure("失败");
         }
         else {
-            return ResponseVO.buildSuccess(tickets);
+            List<TicketVO> ticketVOS=new ArrayList<>();
+            for (int i = 0; i < tickets.size(); i++) {
+                ticketVOS.add(tickets.get(i).getVO());
+            }
+            return ResponseVO.buildSuccess(ticketVOS);
         }
 
     }
