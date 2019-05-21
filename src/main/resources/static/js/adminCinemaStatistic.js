@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    console.log("asdafearga")
 
 
     getScheduleRate();
@@ -82,9 +83,11 @@ $(document).ready(function() {
             function (res) {
                 var data = res.content || [];
                 var tableData = data.map(function (item) {
+                console.log(item)
                     return item.boxOffice;
                 });
                 var nameList = data.map(function (item) {
+                console.log(item)
                     return item.name;
                 });
                 var option = {
@@ -119,7 +122,9 @@ $(document).ready(function() {
             function (res) {
                 var data = res.content || [];
                 var tableData = data.map(function (item) {
-                    return item.price;
+//console.log(item)
+                     return item.price;
+
                 });
                 var nameList = data.map(function (item) {
                     return formatDate(new Date(item.date));
@@ -147,10 +152,46 @@ $(document).ready(function() {
             function (error) {
                 alert(JSON.stringify(error));
             });
+
     }
 
     function getPlacingRate() {
         // todo
+        getRequest(
+        '/statistics/PlacingRate' + date,
+        function (res) {
+                        var data = res.content || [];
+                        var tableData = data.map(function (item) {
+                        console.log(item)
+                             return item.PlacingRate;
+                        });
+                        var nameList = data.map(function (item) {
+                            return formatDate(new Date(item.date));
+                        });
+                        var option = {
+                            title : {
+                               text: '每日上座率',
+                                x:'center'
+                            },
+                            xAxis: {
+                                type: 'category',
+                                data: nameList
+                            },
+                            yAxis: {
+                                type: 'value'
+                            },
+                            series: [{
+                                data: tableData,
+                                type: 'line'
+                            }]
+                        };
+                        var scheduleRateChart = echarts.init($("#place-rate-container")[0]);
+                        scheduleRateChart.setOption(option);
+                    },
+                    function (error) {
+                        alert(JSON.stringify(error));
+                    });
+
     }
 
     function getPolularMovie() {

@@ -6,11 +6,19 @@ package com.example.cinema.vo;
 public class PlacingRateVO {
     private int movieId;
     private double placingRate;
+    private String name;
     public int getMovieId(){
         return movieId;
     }
     public void setMovieId(int movieId){
         this.movieId=movieId;
+    }
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getPlacingRate() {
