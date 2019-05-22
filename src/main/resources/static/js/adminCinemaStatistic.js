@@ -83,11 +83,11 @@ $(document).ready(function() {
             function (res) {
                 var data = res.content || [];
                 var tableData = data.map(function (item) {
-                console.log(item)
+//                console.log(item)
                     return item.boxOffice;
                 });
                 var nameList = data.map(function (item) {
-                console.log(item)
+//                console.log(item)
                     return item.name;
                 });
                 var option = {
@@ -157,16 +157,16 @@ $(document).ready(function() {
 
     function getPlacingRate() {
         // todo
+        var date=new Date().toLocaleDateString();
         getRequest(
-        '/statistics/PlacingRate' + date,
-        function (res) {
+            '/statistics/PlacingRate?date=' + date,
+            function (res) {
                         var data = res.content || [];
                         var tableData = data.map(function (item) {
-                        console.log(item)
-                             return item.PlacingRate;
+                             return item.placingRate;
                         });
                         var nameList = data.map(function (item) {
-                            return formatDate(new Date(item.date));
+                            return item.name;
                         });
                         var option = {
                             title : {
@@ -195,6 +195,44 @@ $(document).ready(function() {
     }
 
     function getPolularMovie() {
-        // todo
+//                var date=new Date().toLocaleDateString();
+                   getRequest(
+                           '/statistics/popular/movie?days=3&movieNum=30',
+                               function (res) {
+                                           var data = res.content || [];
+                                           var tableData = data.map(function (item) {
+                                                console.log(item)
+                                                return item.movieId;
+                                           });
+                                           var nameList = data.map(function (item) {
+                                               return item.name;
+                                           });
+                                           var option = {
+                                               title : {
+                                                  text: '最受欢迎电影排行',
+                                                   x:'center'
+                                               },
+                                               xAxis: {
+                                                   type: 'category',
+                                                   data: nameList
+                                               },
+                                               yAxis: {
+                                                   type: 'value'
+                                               },
+                                               series: [{
+                                                   data: tableData,
+                                                   type: 'bar'
+                                               }]
+                                           };
+                                           var scheduleRateChart = echarts.init($("#popular-movie-container")[0]);
+                                           scheduleRateChart.setOption(option);
+                                       },
+                                       function (error) {
+                                           alert(JSON.stringify(error));
+                                       });
+
+
     }
+        // todo
+//
 });

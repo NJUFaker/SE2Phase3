@@ -78,7 +78,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public ResponseVO getMoviePlacingRateByDate(Date date) {
+        public ResponseVO getMoviePlacingRateByDate(Date date) {
         try{
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date,getNumDayAfterDate(date,1));
             List<PlacingRateVO> placingRateVOList=new ArrayList<>();
@@ -108,7 +108,9 @@ public class StatisticsServiceImpl implements StatisticsService {
                     continue;
                 }
                 placingRate=AudienceNum/totalSeats/movieScheduleTimeList.get(i).getTime();
-                placingRateVOList.add(new PlacingRateVO(movieTotalBoxOffices.get(i).getMovieId(),placingRate));
+                PlacingRateVO prv=new PlacingRateVO(movieTotalBoxOffices.get(i).getMovieId(),placingRate);
+                prv.setName(movieTotalBoxOffices.get(i).getName());
+                placingRateVOList.add(prv);
             }
 
             return ResponseVO.buildSuccess(placingRateVOList);
