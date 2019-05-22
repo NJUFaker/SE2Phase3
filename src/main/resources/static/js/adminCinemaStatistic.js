@@ -1,16 +1,19 @@
 $(document).ready(function() {
-    console.log("asdafearga")
-
-
+    console.log("start")
     getScheduleRate();
-    
+    console.log("sr")
+
     getBoxOffice();
+    console.log("bo")
 
     getAudiencePrice();
+    console.log("ap")
 
     getPlacingRate();
+    console.log("pr")
 
-    getPolularMovie();
+    getPopularMovie();
+    console.log("pm")
 
     function getScheduleRate() {
 
@@ -194,11 +197,17 @@ $(document).ready(function() {
 
     }
 
-    function getPolularMovie() {
+    function getPopularMovie() {
 //                var date=new Date().toLocaleDateString();
+                   console.log("进去function")
                    getRequest(
-                           '/statistics/popular/movie?days=3&movieNum=30',
+                           '/statistics/popular/movie?days=1&movieNum=9',
+                           //这个是报错呢还是进入的不是下面这个function而是进了err那个？
+                           //但是很玄幻的是他也没有alert
                                function (res) {
+                                                   console.log("get成功")
+
+                                            console.log(res)
                                            var data = res.content || [];
                                            var tableData = data.map(function (item) {
                                                 console.log(item)
@@ -228,6 +237,8 @@ $(document).ready(function() {
                                            scheduleRateChart.setOption(option);
                                        },
                                        function (error) {
+                                        console.log("get失败")
+
                                            alert(JSON.stringify(error));
                                        });
 
