@@ -15,6 +15,8 @@ $(document).ready(function() {
     getPopularMovie();
     console.log("pm")
 
+    console.log("stac")
+
     function getScheduleRate() {
 
         getRequest(
@@ -80,7 +82,7 @@ $(document).ready(function() {
     }
 
     function getBoxOffice() {
-
+        console.log("asdfhj")
         getRequest(
             '/statistics/boxOffice/total',
             function (res) {
@@ -95,7 +97,7 @@ $(document).ready(function() {
                 });
                 var option = {
                     title : {
-                        text: '所有电影票房',
+                        text: '所有票房',
                         subtext: '截止至'+new Date().toLocaleDateString(),
                         x:'center'
                     },
@@ -120,6 +122,7 @@ $(document).ready(function() {
     }
 
     function getAudiencePrice() {
+        console.log("sdffwqe")
         getRequest(
             '/statistics/audience/price',
             function (res) {
