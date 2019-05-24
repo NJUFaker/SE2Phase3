@@ -3,6 +3,7 @@ package com.example.cinema.blImpl.statistics;
 import com.example.cinema.bl.statistics.StatisticsService;
 import com.example.cinema.data.statistics.StatisticsMapper;
 import com.example.cinema.po.AudiencePrice;
+import com.example.cinema.po.Hall;
 import com.example.cinema.po.MovieScheduleTime;
 import com.example.cinema.po.MovieTotalBoxOffice;
 import com.example.cinema.vo.*;
@@ -26,6 +27,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public ResponseVO getScheduleRateByDate(Date date) {
         try{
+
             Date requireDate = date;
             if(requireDate == null){
                 requireDate = new Date();
@@ -76,15 +78,41 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public ResponseVO getMoviePlacingRateByDate(Date date) {
+        public ResponseVO getMoviePlacingRateByDate(Date date) {
         try{
-            List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date);
-            List<PlacingRateVO> placingRateVOList=new ArrayList<PlacingRateVO>() ;
-            for(int i=0;i<movieTotalBoxOffices.size();i++){
-                int id=movieTotalBoxOffices.get(i).getMovieId();
-                double rate=(movieTotalBoxOffices.get(i).getBoxOffice()+0.0)/statisticsMapper.selectTotalSeats()/statisticsMapper.selectTotalTimes()/statisticsMapper.selectTotalHalls();
-                placingRateVOList.add(new PlacingRateVO(id,rate));
+            List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date,getNumDayAfterDate(date,1));
+            List<PlacingRateVO> placingRateVOList=new ArrayList<>();
+            List<MovieScheduleTime> movieScheduleTimeList=statisticsMapper.selectMovieScheduleTimes(date,getNumDayAfterDate(date,1));
+            int totalSeats=0,hallNums=0;//座位数，影厅数
+
+
+            List<Hall> halls=statisticsMapper.selectTotalHalls();
+
+            for(int j=0;j<halls.size();j++){
+                totalSeats=totalSeats+halls.get(j).getColumn()*halls.get(j).getRow();
+                hallNums++;
             }
+
+            double placingRate=0;
+            double AudienceNum;
+
+            for(int i=0;i<movieTotalBoxOffices.size();i++){
+                AudienceNum=0;
+                for(int j=0;j<movieScheduleTimeList.size();j++){
+                    if(movieTotalBoxOffices.get(i).getMovieId()==movieScheduleTimeList.get(j).getMovieId()){
+                        AudienceNum=movieTotalBoxOffices.get(i).getBoxOffice()+0.0;
+                    }
+                }
+                if(AudienceNum==0){
+                    placingRateVOList.add(new PlacingRateVO(movieTotalBoxOffices.get(i).getMovieId(),0));
+                    continue;
+                }
+                placingRate=AudienceNum/totalSeats/movieScheduleTimeList.get(i).getTime();
+                PlacingRateVO prv=new PlacingRateVO(movieTotalBoxOffices.get(i).getMovieId(),placingRate);
+                prv.setName(movieTotalBoxOffices.get(i).getName());
+                placingRateVOList.add(prv);
+            }
+
             return ResponseVO.buildSuccess(placingRateVOList);
         }catch(Exception e){
             e.printStackTrace();
@@ -101,6 +129,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             Date today = simpleDateFormat.parse(simpleDateFormat.format(new Date()));
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectMovieBoxOfficeOnCertainDate(today,getNumDayAfterDate(today,days));
             List<PopularMoviePO> popularMoviePOS=new ArrayList<>();
+
             for(int i=0;i<movieNum;i++){
                 PopularMoviePO popularMoviePO=new PopularMoviePO();
                 popularMoviePO.setMovieId(movieTotalBoxOffices.get(i).getMovieId());

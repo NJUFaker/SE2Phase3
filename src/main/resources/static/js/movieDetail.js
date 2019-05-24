@@ -96,27 +96,82 @@ $(document).ready(function(){
     });
 
     // admin界面才有
+    function getMovieForm() {
+        return {
+            movieId: movieId,
+            name: $('#movie-name-input').val(),
+            startDate: $('#movie-date-input').val(),
+            posterUrl: $('#movie-img-input').val(),
+            description: $('#movie-description-input').val(),
+            type: $('#movie-type-input').val(),
+            length: $('#movie-length-input').val(),
+            country: $('#movie-country-input').val(),
+            starring: $('#movie-star-input').val(),
+            director: $('#movie-director-input').val(),
+            screenWriter: $('#movie-writer-input').val(),
+            language: $('#movie-language-input').val()
+        };
+    }
+
     $("#modify-btn").click(function () {
-       alert('交给你们啦，修改时需要在对应html文件添加表单然后获取用户输入，提交给后端，别忘记对用户输入进行验证。（可参照添加电影&添加排片&修改排片）');
+//       alert('交给你们啦，修改时需要在对应html文件添加表单然后获取用户输入，提交给后端，别忘记对用户输入进行验证。（可参照添加电影&添加排片&修改排片）');
+        $("#movie-name-input").val(movie.name);
+        $("#movie-date-input").val(movie.startDate.slice(0,10));
+        $("#movie-img-input").val(movie.posterUrl);
+        $("#movie-description-input").val(movie.description);
+        $("#movie-type-input").val(movie.type);
+        $("#movie-length-input").val(movie.length);
+        $("#movie-country-input").val(movie.country);
+        $("#movie-language-input").val(movie.language);
+        $("#movie-director-input").val(movie.director);
+        $("#movie-star-input").val(movie.starring);
+        $("#movie-writer-input").val(movie.screenWriter);
+
     });
-    $("#delete-btn").click(function () {
-        alert('交给你们啦，下架别忘记需要一个确认提示框，也别忘记下架之后要对用户有所提示哦');
-        var r=confirm("确认要下架该电影吗")
-        if (r) {
-            postRequest(
-                '/movie/off/batch',
-                {'movieIdList':[movieId]},
-                function (res) {
-                    if(res.success){
-                        console.log(res);
-                    } else{
-                        alert(res.message);
-                    }
-                },
-                function (error) {
-                    alert(JSON.stringify(error));
-                }
-            );
+    $("#modify-form-btn").click(function () {
+        var movieForm = getMovieForm();
+        if (!validateMovieForm(movieForm)) {
+            return;
         }
+        postRequest(
+            '/movie/update',
+            movieForm,
+            function (res) {
+                if (res.success){
+                    getMovie();
+                    $("#movieModal").modal('hide');
+                }
+                else {
+                    alert(res.message);
+                }
+            },
+            function (error) {
+            alert(error);
+        }
+
+        )
+    })
+    $("#delete-btn").click(function () {
+//        alert('交给你们啦，下架别忘记需要一个确认提示框，也别忘记下架之后要对用户有所提示哦');
+          var r=confirm("确认要下架该电影吗")
+                  if (r) {
+                      postRequest(
+                          '/movie/off/batch',
+                          {'movieIdList':[movieId]},
+                          function (res) {
+                              if(res.success){
+                                  console.log(res);
+                              } else{
+                                  alert(res.message);
+                              }
+                          },
+                          function (error) {
+                              alert(JSON.stringify(error));
+                          }
+                      );
+                  }
+
+
+
     });
 })

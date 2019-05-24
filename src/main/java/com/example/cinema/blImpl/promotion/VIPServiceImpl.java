@@ -95,5 +95,4 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl {
     }
 
 
-
 }
