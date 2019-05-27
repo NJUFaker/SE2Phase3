@@ -7,17 +7,18 @@ import javafx.util.Pair;
  * created on 2019.05.26
  */
 public class VIPActivityForm {
-    private String Name;
-    private float costInNeed;
-    private float fixedDiscount;
-    private float discountPercentage;
+    private String name;
+    private float costInNeed; //固定金额减免所需要的最低消费
+    private float fixedDiscount;    //固定减免
+    private float discountPercentage;   //百分比减免Dd
+    private int id;
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public float getDiscountPercentage() {
@@ -42,5 +43,13 @@ public class VIPActivityForm {
 
     public void setFixedDiscount(float fixedDiscount) {
         this.fixedDiscount = fixedDiscount;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
