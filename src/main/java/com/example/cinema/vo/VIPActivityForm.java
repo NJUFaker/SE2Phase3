@@ -8,8 +8,8 @@ import javafx.util.Pair;
  */
 public class VIPActivityForm {
     private String Name;
-    private int costInNeed;
-    private int fixedDiscount;
+    private float costInNeed;
+    private float fixedDiscount;
     private float discountPercentage;
 
     public void setName(String name) {
@@ -24,15 +24,15 @@ public class VIPActivityForm {
         return discountPercentage;
     }
 
-    public int getCostInNeed() {
+    public float getCostInNeed() {
         return costInNeed;
     }
 
-    public void setCostInNeed(int costInNeed) {
+    public void setCostInNeed(float costInNeed) {
         this.costInNeed = costInNeed;
     }
 
-    public int getFixedDiscount() {
+    public float getFixedDiscount() {
         return fixedDiscount;
     }
 
@@ -40,7 +40,7 @@ public class VIPActivityForm {
         this.discountPercentage = discountPercentage;
     }
 
-    public void setFixedDiscount(int fixedDiscount) {
+    public void setFixedDiscount(float fixedDiscount) {
         this.fixedDiscount = fixedDiscount;
     }
 }
