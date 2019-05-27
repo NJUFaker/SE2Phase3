@@ -1,16 +1,21 @@
 $(document).ready(function() {
-    console.log("asdafearga")
-
-
+    console.log("start")
     getScheduleRate();
-    
+    console.log("sr")
+
     getBoxOffice();
+    console.log("bo")
 
     getAudiencePrice();
+    console.log("ap")
 
     getPlacingRate();
+    console.log("pr")
 
-    getPolularMovie();
+    getPopularMovie();
+    console.log("pm")
+
+    console.log("stac")
 
     function getScheduleRate() {
 
@@ -77,22 +82,22 @@ $(document).ready(function() {
     }
 
     function getBoxOffice() {
-
+        console.log("asdfhj")
         getRequest(
             '/statistics/boxOffice/total',
             function (res) {
                 var data = res.content || [];
                 var tableData = data.map(function (item) {
-                console.log(item)
+//                console.log(item)
                     return item.boxOffice;
                 });
                 var nameList = data.map(function (item) {
-                console.log(item)
+//                console.log(item)
                     return item.name;
                 });
                 var option = {
                     title : {
-                        text: '所有电影票房',
+                        text: '所有票房',
                         subtext: '截止至'+new Date().toLocaleDateString(),
                         x:'center'
                     },
@@ -117,6 +122,7 @@ $(document).ready(function() {
     }
 
     function getAudiencePrice() {
+        console.log("sdffwqe")
         getRequest(
             '/statistics/audience/price',
             function (res) {
@@ -157,16 +163,16 @@ $(document).ready(function() {
 
     function getPlacingRate() {
         // todo
+        var date=new Date().toLocaleDateString();
         getRequest(
-        '/statistics/PlacingRate' + date,
-        function (res) {
+            '/statistics/PlacingRate?date=' + date,
+            function (res) {
                         var data = res.content || [];
                         var tableData = data.map(function (item) {
-                        console.log(item)
-                             return item.PlacingRate;
+                             return item.placingRate;
                         });
                         var nameList = data.map(function (item) {
-                            return formatDate(new Date(item.date));
+                            return item.name;
                         });
                         var option = {
                             title : {
@@ -194,7 +200,53 @@ $(document).ready(function() {
 
     }
 
-    function getPolularMovie() {
-        // todo
+    function getPopularMovie() {
+//                var date=new Date().toLocaleDateString();
+                   console.log("进去function")
+                   getRequest(
+                           '/statistics/popular/movie?days=1&movieNum=9',
+                           //这个是报错呢还是进入的不是下面这个function而是进了err那个？
+                           //但是很玄幻的是他也没有alert
+                               function (res) {
+                                                   console.log("get成功")
+
+                                            console.log(res)
+                                           var data = res.content || [];
+                                           var tableData = data.map(function (item) {
+                                                console.log(item)
+                                                return item.movieId;
+                                           });
+                                           var nameList = data.map(function (item) {
+                                               return item.name;
+                                           });
+                                           var option = {
+                                               title : {
+                                                  text: '最受欢迎电影排行',
+                                                   x:'center'
+                                               },
+                                               xAxis: {
+                                                   type: 'category',
+                                                   data: nameList
+                                               },
+                                               yAxis: {
+                                                   type: 'value'
+                                               },
+                                               series: [{
+                                                   data: tableData,
+                                                   type: 'bar'
+                                               }]
+                                           };
+                                           var scheduleRateChart = echarts.init($("#popular-movie-container")[0]);
+                                           scheduleRateChart.setOption(option);
+                                       },
+                                       function (error) {
+                                        console.log("get失败")
+
+                                           alert(JSON.stringify(error));
+                                       });
+
+
     }
+        // todo
+//
 });

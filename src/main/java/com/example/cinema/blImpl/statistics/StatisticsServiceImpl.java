@@ -78,7 +78,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public ResponseVO getMoviePlacingRateByDate(Date date) {
+        public ResponseVO getMoviePlacingRateByDate(Date date) {
         try{
             List<MovieTotalBoxOffice> movieTotalBoxOffices=statisticsMapper.selectAudienceNum(date,getNumDayAfterDate(date,1));
             List<PlacingRateVO> placingRateVOList=new ArrayList<>();

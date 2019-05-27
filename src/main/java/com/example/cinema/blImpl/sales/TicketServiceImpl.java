@@ -72,41 +72,36 @@ public class TicketServiceImpl implements TicketService {
     @Override
     @Transactional
     public ResponseVO addTicket(TicketForm ticketForm) {
-        List<Ticket> tickets=new ArrayList<>();
+
         List<SeatForm> seats=ticketForm.getSeats();
         List<TicketVO> ticketVOS=new ArrayList<>();
+        int count=0;
         for (int i = 0; i < seats.size(); i++) {
             int[][] lockedSeats=getLockedSeats(ticketForm.getScheduleId());
             if (lockedSeats[seats.get(i).getRowIndex()][seats.get(i).getColumnIndex()]==1){
                 return ResponseVO.buildFailure("座位已经被锁定");
             }
             Ticket ticket=new Ticket();
-            TicketVO ticketVO=new TicketVO();
             ticket.setUserId(ticketForm.getUserId());
-            ticketVO.setUserId(ticketForm.getUserId());
             ticket.setScheduleId(ticketForm.getScheduleId());
-            ticketVO.setScheduleId(ticketForm.getScheduleId());
             ticket.setColumnIndex(seats.get(i).getColumnIndex());
-            ticketVO.setColumnIndex(seats.get(i).getColumnIndex());
             ticket.setRowIndex(seats.get(i).getRowIndex());
-            ticketVO.setRowIndex(seats.get(i).getRowIndex());
             ticket.setState(0);
-            ticketVO.setState("0");
             Date date = new Date();
             Timestamp timestamp = new Timestamp(date.getTime());
             ticket.setTime(timestamp);
-            ticketVO.setTime(timestamp);
+            ticketMapper.insertTicket(ticket);
+            TicketVO ticketVO=ticketMapper.selectTicketByScheduleIdAndSeat(ticket.getScheduleId(),ticket.getColumnIndex(),ticket.getRowIndex()).getVO();
             ticketVOS.add(ticketVO);
-            tickets.add(ticket);
+            count++;
         }
 
         try {
             TicketWithCouponVO ticketWithCouponVO=new TicketWithCouponVO();
             ticketWithCouponVO.setTicketVOList(ticketVOS);
-            ticketWithCouponVO.setTotal(tickets.size()*scheduleService.getScheduleItemById(ticketForm.getScheduleId()).getFare());
+            ticketWithCouponVO.setTotal(count*scheduleService.getScheduleItemById(ticketForm.getScheduleId()).getFare());
             ticketWithCouponVO.setCoupons(couponServiceForBl.selectCouponByUserAndAmount(ticketForm));
             ticketWithCouponVO.setActivities(activityServiceForBl.selectActivities());
-            ticketMapper.insertTickets(tickets);
             return ResponseVO.buildSuccess(ticketWithCouponVO);
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,27 +141,25 @@ public class TicketServiceImpl implements TicketService {
      * @return
      */
     private String checkAndGiveCoupon(List<Integer> ticketId, int couponId){
-        Coupon coupon=couponServiceForBl.getCouponById(couponId);
         String content="";
-        if (coupon==null) {
-            content="没有该优惠券";
-            return content;
-        }
-
         Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
-
-        //删除优惠券
-        couponServiceForBl.deleteCoupon(couponId,ticket.getUserId());
-
-        Movie movie=movieServiceForBl.getMovieById(scheduleService.getScheduleItemById(ticket.getScheduleId()).getMovieId());
+        if (couponId==0) {
+            ;
+        }
+        else {
+            //删除优惠券
+            couponServiceForBl.deleteCoupon(couponId,ticket.getUserId());
+        }
+        int scheduleId=ticket.getScheduleId();
+        ScheduleItem scheduleItem=scheduleService.getScheduleItemById(scheduleId);
+        Movie movie=movieServiceForBl.getMovieById(scheduleItem.getMovieId());
         List<Activity> activities=activityServiceForBl.selectActivities();
-
         for (int i = 0; i < activities.size(); i++) {
             if (activities.get(i).getMovieList()==null){
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
                 content="用户获得优惠券";
             }
-            else if (activities.get(i).getMovieList().contains(movie)){
+            else if (containMovie(activities.get(i).getMovieList(),movie)){
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
                 content="用户获得优惠券";
             }
@@ -176,6 +169,14 @@ public class TicketServiceImpl implements TicketService {
         }
         return content;
 
+    }
+
+    private boolean containMovie(List<Movie> movies,Movie movie){
+        ArrayList<Integer> ids=new ArrayList<>();
+        for (int i = 0; i < movies.size(); i++) {
+            ids.add(movies.get(i).getId());
+        }
+        return ids.contains(movie.getId());
     }
 
 
@@ -193,9 +194,6 @@ public class TicketServiceImpl implements TicketService {
     public ResponseVO completeTicket(List<Integer> ticketId, int couponId) {
         try {
             String content=checkAndGiveCoupon(ticketId,couponId);
-            if(content.equals("没有该优惠券")){
-                return ResponseVO.buildFailure("没有该优惠券");
-            }
             for (int i = 0; i < ticketId.size(); i++) {
                 ticketMapper.updateTicketState(ticketId.get(i),1);
             }
@@ -222,18 +220,20 @@ public class TicketServiceImpl implements TicketService {
             Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
             VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
             ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
-            Coupon coupon=couponServiceForBl.getCouponById(couponId);
-            if (coupon==null){
-                return ResponseVO.buildFailure("没有该优惠券");
+            double sum;
+            if (couponId==0){
+                sum=ticketId.size()*scheduleItem.getFare();
             }
-            double sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
+            else {
+                Coupon coupon=couponServiceForBl.getCouponById(couponId);
+                sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
+            }
             boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
             if (isEnough){
                 checkAndGiveCoupon(ticketId,couponId);
                 for (int i = 0; i < ticketId.size(); i++) {
                     ticketMapper.updateTicketState(ticketId.get(i),1);
                 }
-                vipServiceForBl.updateVipBalance(vipCard.getId(),vipCard.getBalance()-sum);
                 return ResponseVO.buildSuccess();
             }
             else {
@@ -282,9 +282,18 @@ public class TicketServiceImpl implements TicketService {
             return ResponseVO.buildFailure("失败");
         }
         else {
-            return ResponseVO.buildSuccess(tickets);
+            List<TicketVO> ticketVOS=new ArrayList<>();
+            for (int i = 0; i < tickets.size(); i++) {
+                ticketVOS.add(tickets.get(i).getVO());
+            }
+            return ResponseVO.buildSuccess(ticketVOS);
         }
 
+    }
+
+    @Override
+    public ResponseVO refundTickets(List<Integer> ticketId){
+        return null;
     }
 
 
