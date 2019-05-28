@@ -12,6 +12,24 @@ public class VIPActivityForm {
     private float fixedDiscount;    //固定减免
     private float discountPercentage;   //百分比减免Dd
     private int id;
+    private float bonusBalance;
+    private String description;
+
+    public float getBonusBalance() {
+        return bonusBalance;
+    }
+
+    public void setBonusBalance(float bonusBalance) {
+        this.bonusBalance = bonusBalance;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public void setName(String name) {
         this.name = name;
