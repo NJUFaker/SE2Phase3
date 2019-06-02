@@ -6,11 +6,11 @@ import com.example.cinema.vo.RefundTicketStrategyForm;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.Date;
 
 @Service
-public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, RefundTicketStrategyService {
+public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, RefundTicketStrategyService{
     @Autowired
     private RefundTicketMapper refundTicketMapper;
 
@@ -30,9 +30,9 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
         return null;
     }
 
-    @Override
-    public double getBestRefundStrategy(){
+    public double getBestRefundStrategy(Date date){
         return 0;
     }
+
 
 }

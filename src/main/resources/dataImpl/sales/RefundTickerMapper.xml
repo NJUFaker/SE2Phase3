@@ -9,8 +9,7 @@
     </select>
     <insert id="insertRefundStrategy" parameterType="com.example.cinema.po.RefundTicketStrategy"
             useGeneratedKeys="true" keyProperty="id">
-      insert into refund_strategy values(null,#{refund_percentage},#{available_time});
-      select LAST_INSERT_ID()
+      insert into refund_strategy values(null,#{refund_percentage},#{available_time})
     </insert>
     <delete id="deleteRefundStrategy" parameterType="int">
         delete from refund_strategy where `id`=#{refundTicketId}
