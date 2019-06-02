@@ -1,6 +1,6 @@
 package com.example.cinema.vo;
 
-import javafx.util.Pair;
+
 
 /**
  * @author lyp
