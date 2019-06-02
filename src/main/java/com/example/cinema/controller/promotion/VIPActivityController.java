@@ -20,6 +20,7 @@ public class VIPActivityController {
     public ResponseVO getVIPActivity(){
         return vipActivityService.getVIPActivities();
     }
+
     @RequestMapping(value = "vipActivity/update",method = RequestMethod.POST)
     public ResponseVO updateVIPActivity(@RequestBody VIPActivityForm vipActivityForm){
         return vipActivityService.updateVIPActivity(vipActivityForm);
