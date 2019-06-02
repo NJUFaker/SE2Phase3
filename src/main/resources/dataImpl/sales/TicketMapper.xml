@@ -51,9 +51,15 @@
         <result column="state" property="state"></result>
         <result column="time" property="time"></result>
     </resultMap>
-
+    <update id="updateTicketConsume">
+        update ticket set consume=#{consume} where id=#{ticketId}
+    </update>
     <update id="cleanExpiredTicket">
         update ticket SET  state =2 WHERE minute(timediff(now(),time))>15 and state=0;
     </update>
+
+    <select id="getTicketConsume" resultMap="Ticket">
+        select * from ticket where id=#{ticketId}
+    </select>
 
 </mapper>

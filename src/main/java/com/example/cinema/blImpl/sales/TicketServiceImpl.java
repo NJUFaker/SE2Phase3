@@ -46,6 +46,8 @@ public class TicketServiceImpl implements TicketService {
     private VIPService vipService;
     @Autowired
     private ConsumeRecordServiceForBl consumeRecordServiceForBl;
+    @Autowired
+    private RefundStrategyForBl refundStrategyForBl;
     /**
      * 每一个schedule绑定一系列票，从而确定哪些座位被锁定
      * @param scheduleId
@@ -225,6 +227,26 @@ public class TicketServiceImpl implements TicketService {
     }
 
     /**
+     * 得到这笔订单最终实际要花多少钱
+     * @param ticketId
+     * @param couponId
+     * @return
+     */
+    private double getTotalCosume(List<Integer> ticketId, int couponId){
+        Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
+        ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
+        double sum;
+        if (couponId==0){
+            sum=ticketId.size()*scheduleItem.getFare();
+        }
+        else {
+            Coupon coupon=couponServiceForBl.getCouponById(couponId);
+            sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
+        }
+        return sum;
+    }
+
+    /**
      * TODO:完成购票【不使用会员卡】流程包括校验优惠券(初步定为仅仅删除优惠券）和根据优惠活动赠送优惠券
      *
      * 在sales包添加了一个接口。CouponServiceImpl实现了它。（仿照schedule）
@@ -238,6 +260,10 @@ public class TicketServiceImpl implements TicketService {
     public ResponseVO completeTicket(List<Integer> ticketId, int couponId) {
         try {
             consumeRecordServiceForBl.insertConsumeRecord(creatConsumeRecord(0,ticketId,couponId));
+            double each=getTotalCosume(ticketId,couponId)/(double)ticketId.size();//平均每张票多少钱
+            for (int i = 0; i < ticketId.size(); i++) {
+                ticketMapper.updateTicketConsume(ticketId.get(i),each);
+            }
             String content=checkAndGiveCoupon(ticketId,couponId);
             for (int i = 0; i < ticketId.size(); i++) {
                 ticketMapper.updateTicketState(ticketId.get(i),1);
@@ -264,17 +290,13 @@ public class TicketServiceImpl implements TicketService {
         try{
             Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
             VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
-            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
-            double sum;
-            if (couponId==0){
-                sum=ticketId.size()*scheduleItem.getFare();
-            }
-            else {
-                Coupon coupon=couponServiceForBl.getCouponById(couponId);
-                sum=ticketId.size()*scheduleItem.getFare()-coupon.getDiscountAmount();
-            }
+            double sum=getTotalCosume(ticketId,couponId);
             boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
             if (isEnough){
+                double each=getTotalCosume(ticketId,couponId)/(double)ticketId.size();
+                for (int i = 0; i < ticketId.size(); i++) {
+                    ticketMapper.updateTicketConsume(ticketId.get(i),each);
+                }
                 consumeRecordServiceForBl.insertConsumeRecord(creatConsumeRecord(1,ticketId,couponId));
                 vipServiceForBl.updataVipConsume(vipCard.getId(),sum);
                 checkAndGiveCoupon(ticketId,couponId);
@@ -340,11 +362,46 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public ResponseVO getRefundStrategies(){
-        return null;
+        try {
+            List<RefundTicketStrategyForm> refundTicketStrategyForms = refundStrategyForBl.getRefundStrategy();
+            if (refundTicketStrategyForms==null){
+                return ResponseVO.buildFailure("当前未发布退票策略");
+            }
+            else if (refundTicketStrategyForms.size()==0){
+                return ResponseVO.buildFailure("当前未发布退票策略");
+            }
+            else{
+                return ResponseVO.buildSuccess(refundTicketStrategyForms);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
     }
     @Override
     public ResponseVO refundTickets(List<Integer> ticketId){
-        return null;
+        try{
+            Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
+            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
+            double rate=refundStrategyForBl.getBestRefundStrategy(scheduleItem.getStartTime());
+            if (rate==0){
+                return ResponseVO.buildFailure("不可以退票");
+            }
+            else {
+                double total=0;
+                for (int i = 0; i < ticketId.size(); i++) {
+                    total=total+ticketMapper.selectTicketById(ticketId.get(i)).getConsume();
+                    ticketMapper.deleteTicket(ticketId.get(i));
+                }
+                double out=rate*total;//退还给用户的总金额
+                return ResponseVO.buildSuccess(out);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
     }
 
 
