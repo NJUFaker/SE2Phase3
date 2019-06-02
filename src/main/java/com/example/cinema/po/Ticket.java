@@ -40,8 +40,18 @@ public class Ticket {
      * 时间
      */
     private Timestamp time;
+    /**
+     * 平均一张票的消费
+     */
+    private double consume;
 
+    public double getConsume() {
+        return consume;
+    }
 
+    public void setConsume(double consume) {
+        this.consume = consume;
+    }
 
     public Timestamp getTime() {
         return time;

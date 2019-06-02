@@ -1,9 +1,10 @@
 package com.example.cinema.data.sales;
 
 import com.example.cinema.po.RefundTicketStrategy;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-
+@Mapper
 public interface RefundTicketMapper {
     /**
      *

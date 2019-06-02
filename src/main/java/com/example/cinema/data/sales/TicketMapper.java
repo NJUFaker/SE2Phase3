@@ -29,6 +29,9 @@ public interface TicketMapper {
 
     List<Ticket> selectTicketByUser(int userId);
 
+    void updateTicketConsume(@Param("ticketId") int ticketId,@Param("consume") double consume);
+
+
     /**
      * 删除失效过期的票
      */
