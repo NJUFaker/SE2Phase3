@@ -3,6 +3,7 @@ package com.example.cinema.blImpl.promotion;
 import com.example.cinema.bl.promotion.VIPService;
 import com.example.cinema.blImpl.sales.VipServiceForBl;
 import com.example.cinema.data.promotion.VIPCardMapper;
+import com.example.cinema.data.sales.RefundTicketMapper;
 import com.example.cinema.vo.VIPCardForm;
 import com.example.cinema.po.VIPCard;
 import com.example.cinema.vo.ResponseVO;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class VIPServiceImpl implements VIPService, VipServiceForBl {
     @Autowired
     VIPCardMapper vipCardMapper;
+    RefundTicketMapper refundTicketMapper;
 
     @Override
     public ResponseVO addVIPCard(int userId) {
