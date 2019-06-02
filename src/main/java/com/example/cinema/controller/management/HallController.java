@@ -1,6 +1,7 @@
 package com.example.cinema.controller.management;
 
 import com.example.cinema.bl.management.HallService;
+import com.example.cinema.vo.HallForm;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,5 +20,13 @@ public class HallController {
     @RequestMapping(value = "hall/all", method = RequestMethod.GET)
     public ResponseVO searchAllHall(){
         return hallService.searchAllHall();
+    }
+    @RequestMapping(value="hall/addHall",method = RequestMethod.POST)
+    public ResponseVO addHall(HallForm hallForm){
+        return hallService.addHall(hallForm);
+    }
+    @RequestMapping(value="hall/updateHall",method = RequestMethod.POST)
+    public ResponseVO updateHall(HallForm hallForm){
+        return hallService.updateHall(hallForm);
     }
 }
