@@ -343,7 +343,7 @@ UNLOCK TABLES;
 
 
 --
---Table structure for table `refund_strategy`
+-- Table structure for table `refund_strategy`
 --
 DROP TABLE IF EXISTS `refund_strategy`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -352,8 +352,8 @@ CREATE TABLE `refund_strategy`(
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `refund_percentage` float(9,6) NOT NULL,
   `available_time` int(11) NOT NULL,
-  PRIMIARY KEY (`id`),
-)ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `refund_strategy`
@@ -361,12 +361,12 @@ CREATE TABLE `refund_strategy`(
 
 LOCK TABLES `refund_strategy` WRITE;
 /*!40000 ALTER TABLE `refund_strategy` DISABLE KEYS */;
-INSERT INTO `refund_strategy` VALUES (0,0.85,36000),(1,0.9,86400);
+INSERT INTO `refund_strategy` VALUES (0,0.85,36000),(null,0.9,86400);
 /*!40000 ALTER TABLE `refund_strategy` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
---Table structure for table `vip_activity`
+-- Table structure for table `vip_activity`
 --
 DROP TABLE IF EXISTS `vip_activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -379,8 +379,8 @@ CREATE TABLE `vip_activity`(
   `fixed_discount` float(9,3) NOT NULL DEFAULT '0',
   `bonus_balance` float(9,3) NOT NULL DEFAULT '0',
   `discount_percentage` float(5,4) NOT NULL DEFAULT '0',
-  PRIMIARY KEY (`id`),
-)ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `vip_activity`
@@ -388,7 +388,7 @@ CREATE TABLE `vip_activity`(
 
 LOCK TABLES `vip_activity` WRITE;
 /*!40000 ALTER TABLE `refund_strategy` DISABLE KEYS */;
-INSERT INTO `vip_activity` VALUES (0,"赠送余额","充值100元送10元",100,0,10,0),(1,"折扣优惠","所有充值打9折",0,0,0,0.9);
+INSERT INTO `vip_activity` VALUES (0,"赠送余额","充值100元送10元",100,0,10,0),(null,"折扣优惠","所有充值打9折",0,0,0,0.9);
 /*!40000 ALTER TABLE `refund_strategy` ENABLE KEYS */;
 UNLOCK TABLES;
 
