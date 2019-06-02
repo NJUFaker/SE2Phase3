@@ -44,6 +44,10 @@ public class TicketController {
         return ticketService.cancelTicket(ticketId);
     }
 
+    @GetMapping("/get/refundStrategy")
+    public ResponseVO getRefundStrategies(){
+        return ticketService.getRefundStrategies();
+    }
     @DeleteMapping("/delete")
     public ResponseVO refundTickets(@RequestParam List<Integer> ticketId){
         return ticketService.refundTickets(ticketId);

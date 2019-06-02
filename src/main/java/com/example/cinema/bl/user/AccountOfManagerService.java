@@ -1,6 +1,7 @@
 package com.example.cinema.bl.user;
 
 import com.example.cinema.vo.ManagerForm;
+import com.example.cinema.vo.ManagerVO;
 import com.example.cinema.vo.ResponseVO;
 /**
  * @author lyp
@@ -23,10 +24,10 @@ public interface AccountOfManagerService {
 
     /**
      * 修改管理员的信息
-     * @param managerForm
+     * @param
      * @return
      */
-    ResponseVO updateManager(ManagerForm managerForm);
+    ResponseVO updateManager(ManagerVO managerVO);
 
     /**
      * 查找管理员的信息（根据用户名）

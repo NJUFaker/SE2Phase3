@@ -7,12 +7,15 @@ import com.example.cinema.blImpl.sales.CouponServiceForBl;
 import com.example.cinema.data.promotion.CouponMapper;
 import com.example.cinema.po.Coupon;
 import com.example.cinema.po.ScheduleItem;
+import com.example.cinema.po.VIPCard;
 import com.example.cinema.vo.CouponForm;
 import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.TicketForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +28,8 @@ public class CouponServiceImpl implements CouponService, CouponServiceForBl {
     CouponMapper couponMapper;
     @Autowired
     ScheduleServiceForBl scheduleServiceForBl;
+    @Autowired
+    VIPServiceForPromotionBl vipServiceForPromotionBl;
 
     @Override
     public ResponseVO getCouponsByUser(int userId) {
@@ -85,5 +90,56 @@ public class CouponServiceImpl implements CouponService, CouponServiceForBl {
     public List<Coupon> selectCouponByUserAndAmount(TicketForm ticketForm){
         ScheduleItem schedule=scheduleServiceForBl.getScheduleItemById(ticketForm.getScheduleId());
         return couponMapper.selectCouponByUserAndAmount(ticketForm.getUserId(),schedule.getFare()*ticketForm.getSeats().size());
+    }
+
+    @Override
+    public ResponseVO giveVIPCoupons(double consume, List<Integer> couponIds){
+        try {
+            List<VIPCard> vipCards=vipServiceForPromotionBl.selectVipByConsume(consume);
+            if (vipCards==null){
+                return ResponseVO.buildFailure("没有会员符合要求");
+            }
+            else if (vipCards.size()==0){
+                return ResponseVO.buildFailure("没有会员符合要求");
+            }
+            else {
+                for (int i = 0; i < vipCards.size(); i++) {
+                    for (int j = 0; j < couponIds.size(); j++) {
+                        couponMapper.insertCouponUser(couponIds.get(j),vipCards.get(i).getUserId());
+                    }
+                }
+                return ResponseVO.buildSuccess();
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
+
+    @Override
+    public ResponseVO searchCoupons(){
+        try {
+            Timestamp now=new Timestamp(System.currentTimeMillis());
+            List<Coupon> coupons=couponMapper.selectValidCoupon(now);
+            if(coupons==null){
+                return ResponseVO.buildFailure("无有效的优惠券");
+            }
+            else if (coupons.size()==0){
+                return ResponseVO.buildFailure("无有效的优惠券");
+            }
+            else {
+                List<CouponForm> couponForms=new ArrayList<>();
+                for (int i = 0; i < coupons.size(); i++) {
+                    couponForms.add(coupons.get(i).getCouponForm());
+                }
+                return ResponseVO.buildSuccess(couponForms);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+
     }
 }

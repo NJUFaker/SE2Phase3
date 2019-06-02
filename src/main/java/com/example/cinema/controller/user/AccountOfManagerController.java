@@ -2,6 +2,7 @@ package com.example.cinema.controller.user;
 
 import com.example.cinema.bl.user.AccountOfManagerService;
 import com.example.cinema.vo.ManagerForm;
+import com.example.cinema.vo.ManagerVO;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/accountOfManager")
 public class AccountOfManagerController {
     @Autowired
-    AccountOfManagerService accountOfManagerService;
+    private AccountOfManagerService accountOfManagerService;
 
     @PostMapping("/add")
     public ResponseVO addManager(@RequestBody ManagerForm managerForm){
@@ -27,8 +28,8 @@ public class AccountOfManagerController {
     }
 
     @PostMapping("/update")
-    public ResponseVO updateManager(@RequestBody ManagerForm managerForm){
-        return  accountOfManagerService.updateManager(managerForm);
+    public ResponseVO updateManager(@RequestBody ManagerVO managerVO){
+        return  accountOfManagerService.updateManager(managerVO);
     }
 
     @GetMapping("/get")

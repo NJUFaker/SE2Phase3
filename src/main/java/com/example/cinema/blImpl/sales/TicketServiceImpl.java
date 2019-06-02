@@ -44,6 +44,8 @@ public class TicketServiceImpl implements TicketService {
     private VipServiceForBl vipServiceForBl;
     @Autowired
     private VIPService vipService;
+    @Autowired
+    private ConsumeRecordServiceForBl consumeRecordServiceForBl;
     /**
      * 每一个schedule绑定一系列票，从而确定哪些座位被锁定
      * @param scheduleId
@@ -179,6 +181,48 @@ public class TicketServiceImpl implements TicketService {
         return ids.contains(movie.getId());
     }
 
+    /**
+     * 根据付款方式创建一个消费记录用于插入数据库
+     * @param way 1代表会员卡支付，0代表银行卡
+     * @return
+     */
+    private ConsumeRecordUserVO creatConsumeRecord(int way,List<Integer> ticketId,int couponId){
+        ConsumeRecordUserVO consumeRecordUserVO=new ConsumeRecordUserVO();
+
+        double amout=0;//票价
+        String filmName="";
+        String hallName="";
+        String seat=""+ticketId.size()+"张 ";
+        Timestamp begin=new Timestamp(System.currentTimeMillis());
+        Timestamp end=new Timestamp(System.currentTimeMillis());
+        int userID=0;
+        for (int i = 0; i < ticketId.size(); i++) {
+            Ticket ticket=ticketMapper.selectTicketById(ticketId.get(i));
+            userID=ticket.getUserId();
+            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
+            filmName=scheduleItem.getMovieName();
+            hallName=scheduleItem.getHallName();
+            seat=seat+(ticket.getRowIndex()+1)+"排"+(ticket.getColumnIndex()+1)+"座 ";
+            begin=new Timestamp(scheduleItem.getStartTime().getTime());
+            end=new Timestamp(scheduleItem.getEndTime().getTime());
+            amout=scheduleItem.getFare();
+        }
+        if (couponId==0){
+            consumeRecordUserVO.setAmount(ticketId.size()*amout);
+        }
+        else {
+            consumeRecordUserVO.setAmount(ticketId.size()*amout-couponServiceForBl.getCouponById(couponId).getDiscountAmount());
+        }
+        consumeRecordUserVO.setUserID(userID);
+        consumeRecordUserVO.setConsumeTime(new Timestamp(System.currentTimeMillis()));
+        consumeRecordUserVO.setWay(way);
+        consumeRecordUserVO.setFilmName(filmName);
+        consumeRecordUserVO.setHallName(hallName);
+        consumeRecordUserVO.setSeat(seat);
+        consumeRecordUserVO.setBegin(begin);
+        consumeRecordUserVO.setEnd(end);
+        return consumeRecordUserVO;
+    }
 
     /**
      * TODO:完成购票【不使用会员卡】流程包括校验优惠券(初步定为仅仅删除优惠券）和根据优惠活动赠送优惠券
@@ -193,6 +237,7 @@ public class TicketServiceImpl implements TicketService {
     @Transactional
     public ResponseVO completeTicket(List<Integer> ticketId, int couponId) {
         try {
+            consumeRecordServiceForBl.insertConsumeRecord(creatConsumeRecord(0,ticketId,couponId));
             String content=checkAndGiveCoupon(ticketId,couponId);
             for (int i = 0; i < ticketId.size(); i++) {
                 ticketMapper.updateTicketState(ticketId.get(i),1);
@@ -230,6 +275,8 @@ public class TicketServiceImpl implements TicketService {
             }
             boolean isEnough=vipServiceForBl.payByVipCard(vipCard.getId(),sum);
             if (isEnough){
+                consumeRecordServiceForBl.insertConsumeRecord(creatConsumeRecord(1,ticketId,couponId));
+                vipServiceForBl.updataVipConsume(vipCard.getId(),sum);
                 checkAndGiveCoupon(ticketId,couponId);
                 for (int i = 0; i < ticketId.size(); i++) {
                     ticketMapper.updateTicketState(ticketId.get(i),1);
@@ -291,6 +338,10 @@ public class TicketServiceImpl implements TicketService {
 
     }
 
+    @Override
+    public ResponseVO getRefundStrategies(){
+        return null;
+    }
     @Override
     public ResponseVO refundTickets(List<Integer> ticketId){
         return null;

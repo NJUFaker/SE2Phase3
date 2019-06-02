@@ -9,4 +9,10 @@ public interface VipServiceForBl {
      */
     boolean payByVipCard(int id,double fare);
 
+    /**
+     * 更新会员的累计消费额度
+     * @param vipcardID
+     * @param consume
+     */
+    void updataVipConsume(int vipcardID,double consume);
 }

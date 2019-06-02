@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/consumeRecord")
 public class ConsumeRecordController {
     @Autowired
-    ConsumeRecordService consumeRecordService;
+    private ConsumeRecordService consumeRecordService;
 
     /**
      * 得到消费记录

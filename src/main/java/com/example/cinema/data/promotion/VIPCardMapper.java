@@ -4,6 +4,8 @@ import com.example.cinema.po.VIPCard;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * Created by liying on 2019/4/14.
  */
@@ -17,6 +19,10 @@ public interface VIPCardMapper {
     void updateCardBalance(@Param("id") int id,@Param("balance") double balance);
 
     VIPCard selectCardByUserId(int userId);
+
+    void updateVipConsume(@Param("id")int id,@Param("consume") double consume);
+
+    List<VIPCard> selectVipByConsume(double consume);
 
 
 

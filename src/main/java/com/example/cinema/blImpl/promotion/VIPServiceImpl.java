@@ -10,12 +10,14 @@ import com.example.cinema.vo.VIPInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 /**
  * Created by liying on 2019/4/14.
  */
 @Service
-public class VIPServiceImpl implements VIPService, VipServiceForBl {
+public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceForPromotionBl {
     @Autowired
     VIPCardMapper vipCardMapper;
 
@@ -94,5 +96,14 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl {
         }
     }
 
+    @Override
+    public void updataVipConsume(int vipcardID,double consume){
+        vipCardMapper.updateVipConsume(vipcardID,consume);
+    }
+
+    @Override
+    public List<VIPCard> selectVipByConsume(double consume){
+        return vipCardMapper.selectVipByConsume(consume);
+    }
 
 }

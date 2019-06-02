@@ -62,6 +62,11 @@ public interface TicketService {
     ResponseVO cancelTicket(List<Integer> id);
 
     /**
+     * 得到所有的退票策略
+     * @return
+     */
+    ResponseVO getRefundStrategies();
+    /**
      * 退票
      * @param ticketId
      * @return

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chargeRecord")
 public class ChargeRecordController {
     @Autowired
-    ChargeRecordService chargeRecordService;
+    private ChargeRecordService chargeRecordService;
 
     /**
      * 得到充值记录
