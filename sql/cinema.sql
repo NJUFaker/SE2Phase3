@@ -341,6 +341,58 @@ INSERT INTO `vip_card` VALUES (1,15,375,'2019-04-21 13:54:38'),(2,12,660,'2019-0
 /*!40000 ALTER TABLE `vip_card` ENABLE KEYS */;
 UNLOCK TABLES;
 
+
+--
+--Table structure for table `refund_strategy`
+--
+DROP TABLE IF EXISTS `refund_strategy`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `refund_strategy`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `refund_percentage` float(9,6) NOT NULL,
+  `available_time` int(11) NOT NULL,
+  PRIMIARY KEY (`id`),
+)ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `refund_strategy`
+--
+
+LOCK TABLES `refund_strategy` WRITE;
+/*!40000 ALTER TABLE `refund_strategy` DISABLE KEYS */;
+INSERT INTO `refund_strategy` VALUES (0,0.85,36000),(1,0.9,86400);
+/*!40000 ALTER TABLE `refund_strategy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+--Table structure for table `vip_activity`
+--
+DROP TABLE IF EXISTS `vip_activity`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `vip_activity`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NUll,
+  `cost_in_need` float(9,3) NOT NULL DEFAULT '0',
+  `fixed_discount` float(9,3) NOT NULL DEFAULT '0',
+  `bonus_balance` float(9,3) NOT NULL DEFAULT '0',
+  `discount_percentage` float(5,4) NOT NULL DEFAULT '0',
+  PRIMIARY KEY (`id`),
+)ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `vip_activity`
+--
+
+LOCK TABLES `vip_activity` WRITE;
+/*!40000 ALTER TABLE `refund_strategy` DISABLE KEYS */;
+INSERT INTO `vip_activity` VALUES (0,"赠送余额","充值100元送10元",100,0,10,0),(1,"折扣优惠","所有充值打9折",0,0,0,0.9);
+/*!40000 ALTER TABLE `refund_strategy` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 --
 -- Dumping events for database 'cinema'
 --
