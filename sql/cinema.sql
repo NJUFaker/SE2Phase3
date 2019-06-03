@@ -389,9 +389,9 @@ CREATE TABLE `vip_activity`(
 --
 
 LOCK TABLES `vip_activity` WRITE;
-/*!40000 ALTER TABLE `refund_strategy` DISABLE KEYS */;
+/*!40000 ALTER TABLE `vip_activity` DISABLE KEYS */;
 INSERT INTO `vip_activity` VALUES (0,"赠送余额","充值100元送10元",100,0,10,0),(null,"折扣优惠","所有充值打9折",0,0,0,0.9);
-/*!40000 ALTER TABLE `refund_strategy` ENABLE KEYS */;
+/*!40000 ALTER TABLE `vip_activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
