@@ -4,7 +4,18 @@
     <select id="getConsumeRecords"  resultMap="ConsumeRecordPO">
         select * from consumerecord where userid=#{userID} order by consumetime asc
     </select>
-    <resultMap id="ConsumeRecordPO" type="com.example.cinema.po.ConsumeRecordPO"></resultMap>
+    <resultMap id="ConsumeRecordPO" type="com.example.cinema.po.ConsumeRecordPO">
+        <id column="id" property="id"></id>
+        <result column="userid" property="userID"></result>
+        <result column="amount" property="amount"></result>
+        <result column="consumetime" property="consumeTime"></result>
+        <result column="way" property="way"></result>
+        <result column="filmname" property="filmName"></result>
+        <result column="hallname" property="hallName"></result>
+        <result column="seat" property="seat"></result>
+        <result column="begin_time" property="begin"></result>
+        <result column="end_time" property="end"></result>
+    </resultMap>
     <insert id="addConsumeRecord" parameterType="com.example.cinema.vo.ConsumeRecordUserVO" useGeneratedKeys="true" keyProperty="id">
         insert into consumerecord(userid, amount, consumetime, way, filmname, hallname, seat, begin_time, end_time)
         values (#{userID},#{amount},#{consumeTime},#{way},#{filmName},#{hallName},#{seat},#{begin},#{end})

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.cinema.data.promotion.VIPActivityMapper">
-    <select id="getAllActivities" resultMap="com.example.cinema.po.VIPActivity">
+    <select id="getAllActivities" resultMap="VIPActivity">
       select * from vip_activity
     </select>
 
-    <select id="getVIPActivityById" resultType="com.example.cinema.po.VIPActivity" parameterType="int">
+    <select id="getVIPActivityById" resultMap="VIPActivity" parameterType="int">
         select * from vip_activity where `id`=#{id}
     </select>
 
@@ -19,6 +19,15 @@
     </delete>
 
     <update id="updateActivity" parameterType="=com.example.cinema.po.VIPActivity">
-        update vip_activity set `name`=#{name},`description`=#{description},cost_in_need=#{cost_in_need},fixed_discount=#{fixed_discount},bonus_balance=#{bonus_balance},discount_percentage=#{discpimt_percentage} where `id`=#{id}
+        update vip_activity set `name`=#{name},`description`=#{description},cost_in_need=#{cost_in_need},fixed_discount=#{fixed_discount},bonus_balance=#{bonus_balance},discount_percentage=#{discount_percentage} where `id`=#{id}
     </update>
+    <resultMap id="VIPActivity" type="com.example.cinema.po.VIPActivity">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="description" property="description"></result>
+        <result column="cost_in_need" property="cost_in_need"></result>
+        <result column="fixed_discount" property="fixed_discount"></result>
+        <result column="bonus_balance" property="bonus_balance"></result>
+        <result column="discount_percentage" property="discount_percentage"></result>
+    </resultMap>
 </mapper>

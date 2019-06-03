@@ -50,6 +50,7 @@
         <result column="row_index" property="rowIndex"></result>
         <result column="state" property="state"></result>
         <result column="time" property="time"></result>
+        <result column="consume" property="consume"></result>
     </resultMap>
     <update id="updateTicketConsume">
         update ticket set consume=#{consume} where id=#{ticketId}
