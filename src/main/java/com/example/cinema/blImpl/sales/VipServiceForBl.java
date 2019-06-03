@@ -14,5 +14,11 @@ public interface VipServiceForBl {
      * @param vipcardID
      * @param consume
      */
-    void updataVipConsume(int vipcardID,double consume);
+    void updateVipConsume(int vipcardID,double consume);
+
+    /**
+     * 通过退款更新会员的余额
+     * @param refund 退款
+     */
+    void updateVipBalance(int vipcardID,double refund);
 }

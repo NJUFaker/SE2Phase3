@@ -60,7 +60,7 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
         VIPCard vipCard=vipCardMapper.selectCardById(vipCardForm.getVipId());
         chargeRecordUserVO.setUserID(vipCard.getUserId());
         chargeRecordUserVO.setAmount(vipCardForm.getAmount());
-        chargeRecordUserVO.setChargetime(new Timestamp(System.currentTimeMillis()));
+        chargeRecordUserVO.setChargeTime(new Timestamp(System.currentTimeMillis()));
         chargeRecordUserVO.setVIPActivity(VIPActivity);
         chargeRecordUserVO.setGivenAmount(givenAmount);
         chargeRecordServiceForBl.insertChargeRecord(chargeRecordUserVO);
@@ -112,13 +112,19 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
     }
 
     @Override
-    public void updataVipConsume(int vipcardID,double consume){
+    public void updateVipConsume(int vipcardID,double consume){
         vipCardMapper.updateVipConsume(vipcardID,consume);
     }
 
     @Override
     public List<VIPCard> selectVipByConsume(double consume){
         return vipCardMapper.selectVipByConsume(consume);
+    }
+
+    @Override
+    public void updateVipBalance(int vipcardID,double refund){
+        VIPCard vipCard=vipCardMapper.selectCardById(vipcardID);
+        vipCardMapper.updateCardBalance(vipcardID,vipCard.getBalance()+refund);
     }
 
 }

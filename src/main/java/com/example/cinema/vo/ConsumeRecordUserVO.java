@@ -20,29 +20,14 @@ public class ConsumeRecordUserVO {
     private int way;
 
     /**
-     * 电影名称
-     */
-    private String filmName;
-
-    /**
-     * 影厅名
-     */
-    private String hallName;
-
-    /**
      * 座位，例如：1排1座
      */
     private String seat;
 
     /**
-     * 电影开始时间
+     * 排片id
      */
-    private Timestamp begin;
-
-    /**
-     * 电影结束时间
-     */
-    private Timestamp end;
+    private int scheduleID;
 
     public int getUserID() {
         return userID;
@@ -76,20 +61,12 @@ public class ConsumeRecordUserVO {
         this.way = way;
     }
 
-    public String getFilmName() {
-        return filmName;
+    public int getScheduleID() {
+        return scheduleID;
     }
 
-    public void setFilmName(String filmName) {
-        this.filmName = filmName;
-    }
-
-    public String getHallName() {
-        return hallName;
-    }
-
-    public void setHallName(String hallName) {
-        this.hallName = hallName;
+    public void setScheduleID(int scheduleID) {
+        this.scheduleID = scheduleID;
     }
 
     public String getSeat() {
@@ -100,19 +77,5 @@ public class ConsumeRecordUserVO {
         this.seat = seat;
     }
 
-    public Timestamp getBegin() {
-        return begin;
-    }
 
-    public void setBegin(Timestamp begin) {
-        this.begin = begin;
-    }
-
-    public Timestamp getEnd() {
-        return end;
-    }
-
-    public void setEnd(Timestamp end) {
-        this.end = end;
-    }
 }

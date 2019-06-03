@@ -45,6 +45,20 @@ public class Ticket {
      */
     private double consume;
 
+    /**
+     * 付款方式，1是会员卡，0是银行卡
+     * @return
+     */
+    private int way;
+
+    public int getWay() {
+        return way;
+    }
+
+    public void setWay(int way) {
+        this.way = way;
+    }
+
     public double getConsume() {
         return consume;
     }

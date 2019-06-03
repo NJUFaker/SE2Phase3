@@ -14,12 +14,12 @@ public class ConsumeRecordVO {
     /**
      * 消费时间
      */
-    private Timestamp timestamp;
+    private Timestamp consumeTime;
 
     /**
      * 消费方式（银行卡/会员卡）
      */
-    private String way;
+    private int way;
 
     /**
      * 电影名称
@@ -54,19 +54,19 @@ public class ConsumeRecordVO {
         this.amount = amount;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getConsumeTime() {
+        return consumeTime;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setConsumeTime(Timestamp consumeTime) {
+        this.consumeTime = consumeTime;
     }
 
-    public String getWay() {
+    public int getWay() {
         return way;
     }
 
-    public void setWay(String way) {
+    public void setWay(int way) {
         this.way = way;
     }
 

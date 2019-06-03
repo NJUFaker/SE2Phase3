@@ -1,5 +1,7 @@
 package com.example.cinema.po;
 
+import com.example.cinema.vo.ChargeRecordVO;
+
 import java.sql.Timestamp;
 
 public class ChargeRecordPO {
@@ -24,6 +26,15 @@ public class ChargeRecordPO {
      * 被充值优惠赠送的金额
      */
     private int givenAmount;
+
+    public ChargeRecordVO getVO(){
+        ChargeRecordVO chargeRecordVO=new ChargeRecordVO();
+        chargeRecordVO.setAmount(this.amount);
+        chargeRecordVO.setChargeTime(this.chargeTime);
+        chargeRecordVO.setGivenAmount(this.givenAmount);
+        chargeRecordVO.setVIPActivity(this.VIPactivity);
+        return chargeRecordVO;
+    }
 
     public int getId() {
         return id;

@@ -14,6 +14,6 @@
     </resultMap>
     <insert id="addChargeRecord" parameterType="com.example.cinema.vo.ChargeRecordUserVO" useGeneratedKeys="true" keyProperty="id">
         insert into chargerecord(userid, amount, chargetime, VIPactivity, given)
-        values (#{userID},#{amount},#{chargetime},#{VIPActivity},#{givenAmount})
+        values (#{userID},#{amount},#{chargeTime},#{VIPActivity},#{givenAmount})
     </insert>
 </mapper>

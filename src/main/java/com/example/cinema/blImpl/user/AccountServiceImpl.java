@@ -39,10 +39,7 @@ public class AccountServiceImpl implements AccountService {
         return new UserVO(user);
     }
 
-    @Override
-    public ManagerForm managerLogin(){
-        return null;
-    }
+
 
 
 }

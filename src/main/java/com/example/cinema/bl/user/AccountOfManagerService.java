@@ -36,4 +36,10 @@ public interface AccountOfManagerService {
      */
     ResponseVO searchByName(String name);
 
+    /**
+     * 管理员登录，登录成功会将用户信息保存在session中
+     * @return
+     */
+    ManagerVO login(ManagerForm managerForm);
+
 }

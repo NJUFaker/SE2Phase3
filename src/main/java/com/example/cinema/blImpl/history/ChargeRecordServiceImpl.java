@@ -5,10 +5,12 @@ import com.example.cinema.blImpl.promotion.ChargeRecordServiceForBl;
 import com.example.cinema.data.history.ChargeRecordMapper;
 import com.example.cinema.po.ChargeRecordPO;
 import com.example.cinema.vo.ChargeRecordUserVO;
+import com.example.cinema.vo.ChargeRecordVO;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +28,11 @@ public class ChargeRecordServiceImpl implements ChargeRecordService, ChargeRecor
                 return ResponseVO.buildFailure("没有充值记录");
             }
             else {
-                return ResponseVO.buildSuccess(chargeRecordPOS);
+                List<ChargeRecordVO> chargeRecordVOS=new ArrayList<>();
+                for (int i = 0; i < chargeRecordPOS.size(); i++) {
+                    chargeRecordVOS.add(chargeRecordPOS.get(i).getVO());
+                }
+                return ResponseVO.buildSuccess(chargeRecordVOS);
             }
         }
         catch (Exception e){

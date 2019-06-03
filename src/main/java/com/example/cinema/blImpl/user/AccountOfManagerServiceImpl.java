@@ -87,4 +87,13 @@ public class AccountOfManagerServiceImpl implements AccountOfManagerService {
             return ResponseVO.buildFailure("查询失败");
         }
     }
+
+    @Override
+    public ManagerVO login(ManagerForm managerForm){
+        ManagerPO managerPO=accountOfManagerMapper.searchByName(managerForm.getUsername());
+        if (managerPO==null||!managerPO.getPassword().equals(managerForm.getPassword())){
+            return null;
+        }
+        return new ManagerVO(managerPO);
+    }
 }

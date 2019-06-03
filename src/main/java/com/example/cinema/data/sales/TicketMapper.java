@@ -31,6 +31,8 @@ public interface TicketMapper {
 
     void updateTicketConsume(@Param("ticketId") int ticketId,@Param("consume") double consume);
 
+    void updateTicketWay(@Param("ticketId") int ticketId,@Param("way") double way);
+
 
     /**
      * 删除失效过期的票

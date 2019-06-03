@@ -10,14 +10,11 @@
         <result column="amount" property="amount"></result>
         <result column="consumetime" property="consumeTime"></result>
         <result column="way" property="way"></result>
-        <result column="filmname" property="filmName"></result>
-        <result column="hallname" property="hallName"></result>
         <result column="seat" property="seat"></result>
-        <result column="begin_time" property="begin"></result>
-        <result column="end_time" property="end"></result>
+        <result column="schedule_id" property="scheduleID"></result>
     </resultMap>
     <insert id="addConsumeRecord" parameterType="com.example.cinema.vo.ConsumeRecordUserVO" useGeneratedKeys="true" keyProperty="id">
-        insert into consumerecord(userid, amount, consumetime, way, filmname, hallname, seat, begin_time, end_time)
-        values (#{userID},#{amount},#{consumeTime},#{way},#{filmName},#{hallName},#{seat},#{begin},#{end})
+        insert into consumerecord(userid, amount, consumetime, way, seat,schedule_id)
+        values (#{userID},#{amount},#{consumeTime},#{way},#{seat},#{scheduleID})
     </insert>
 </mapper>

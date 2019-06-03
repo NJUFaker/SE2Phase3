@@ -23,9 +23,6 @@ public interface AccountService {
      */
     public UserVO login(UserForm userForm);
 
-    /**
-     * 管理员登录
-     */
-    ManagerForm managerLogin();
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.cinema.po;
 
+import com.example.cinema.vo.ConsumeRecordVO;
+
 import java.sql.Timestamp;
 
 /**
@@ -25,29 +27,37 @@ public class ConsumeRecordPO {
     private int way;
 
     /**
-     * 电影名称
-     */
-    private String filmName;
-
-    /**
-     * 影厅名
-     */
-    private String hallName;
-
-    /**
      * 座位，例如：1排1座
      */
     private String seat;
 
     /**
-     * 电影开始时间
+     * 排片id
+     *
      */
-    private Timestamp begin;
+    private int scheduleID;
 
     /**
-     * 电影结束时间
+     * 只给部分vo的属性赋值，排片相关的4个属性在具体的方法中赋值
+     * @return
      */
-    private Timestamp end;
+    public ConsumeRecordVO getVO(){
+        ConsumeRecordVO consumeRecordVO=new ConsumeRecordVO();
+        consumeRecordVO.setAmount(this.amount);
+        consumeRecordVO.setSeat(this.seat);
+        consumeRecordVO.setConsumeTime(this.consumeTime);
+        consumeRecordVO.setWay(this.way);
+        return consumeRecordVO;
+    }
+
+    public int getScheduleID() {
+        return scheduleID;
+    }
+
+    public void setScheduleID(int scheduleID) {
+        this.scheduleID = scheduleID;
+    }
+
 
     public int getId() {
         return id;
@@ -89,22 +99,6 @@ public class ConsumeRecordPO {
         this.way = way;
     }
 
-    public String getFilmName() {
-        return filmName;
-    }
-
-    public void setFilmName(String filmName) {
-        this.filmName = filmName;
-    }
-
-    public String getHallName() {
-        return hallName;
-    }
-
-    public void setHallName(String hallName) {
-        this.hallName = hallName;
-    }
-
     public String getSeat() {
         return seat;
     }
@@ -113,19 +107,5 @@ public class ConsumeRecordPO {
         this.seat = seat;
     }
 
-    public Timestamp getBegin() {
-        return begin;
-    }
 
-    public void setBegin(Timestamp begin) {
-        this.begin = begin;
-    }
-
-    public Timestamp getEnd() {
-        return end;
-    }
-
-    public void setEnd(Timestamp end) {
-        this.end = end;
-    }
 }

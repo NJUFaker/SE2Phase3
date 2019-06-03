@@ -249,7 +249,8 @@ CREATE TABLE `ticket` (
   `state` tinyint(4) DEFAULT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `consume` double NOT NULL,
+  `consume` double NOT NULL default 1,
+  `way` int(11) not null default 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -260,7 +261,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES(12,50,5,3,2,1,'2019-04-23 13:50:52',50);
+INSERT INTO `ticket` VALUES(12,50,5,3,2,1,'2019-04-23 13:50:52',50,1);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,7 +328,7 @@ CREATE TABLE `vip_card` (
   `user_id` int(11) DEFAULT NULL,
   `balance` float DEFAULT NULL,
   `join_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `consume` double NOT NULL,
+  `consume` double NOT NULL default 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `vip_card_user_id_uindex` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;

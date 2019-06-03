@@ -158,8 +158,9 @@ public class TicketServiceImpl implements TicketService {
         ScheduleItem scheduleItem=scheduleService.getScheduleItemById(scheduleId);
         Movie movie=movieServiceForBl.getMovieById(scheduleItem.getMovieId());
         List<Activity> activities=activityServiceForBl.selectActivities();
+        content="用户未获得优惠券";
         for (int i = 0; i < activities.size(); i++) {
-            if (activities.get(i).getMovieList()==null){
+            if (activities.get(i).getMovieList()==null||activities.get(i).getMovieList().size()==0){
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
                 content="用户获得优惠券";
             }
@@ -168,7 +169,7 @@ public class TicketServiceImpl implements TicketService {
                 content="用户获得优惠券";
             }
             else {
-                content="用户未获得优惠券";
+                ;
             }
         }
         return content;
@@ -192,21 +193,15 @@ public class TicketServiceImpl implements TicketService {
         ConsumeRecordUserVO consumeRecordUserVO=new ConsumeRecordUserVO();
 
         double amout=0;//票价
-        String filmName="";
-        String hallName="";
         String seat=""+ticketId.size()+"张 ";
-        Timestamp begin=new Timestamp(System.currentTimeMillis());
-        Timestamp end=new Timestamp(System.currentTimeMillis());
+        int scheduleID=0;
         int userID=0;
         for (int i = 0; i < ticketId.size(); i++) {
             Ticket ticket=ticketMapper.selectTicketById(ticketId.get(i));
+            scheduleID=ticket.getScheduleId();
             userID=ticket.getUserId();
             ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
-            filmName=scheduleItem.getMovieName();
-            hallName=scheduleItem.getHallName();
             seat=seat+(ticket.getRowIndex()+1)+"排"+(ticket.getColumnIndex()+1)+"座 ";
-            begin=new Timestamp(scheduleItem.getStartTime().getTime());
-            end=new Timestamp(scheduleItem.getEndTime().getTime());
             amout=scheduleItem.getFare();
         }
         if (couponId==0){
@@ -218,11 +213,8 @@ public class TicketServiceImpl implements TicketService {
         consumeRecordUserVO.setUserID(userID);
         consumeRecordUserVO.setConsumeTime(new Timestamp(System.currentTimeMillis()));
         consumeRecordUserVO.setWay(way);
-        consumeRecordUserVO.setFilmName(filmName);
-        consumeRecordUserVO.setHallName(hallName);
         consumeRecordUserVO.setSeat(seat);
-        consumeRecordUserVO.setBegin(begin);
-        consumeRecordUserVO.setEnd(end);
+        consumeRecordUserVO.setScheduleID(scheduleID);
         return consumeRecordUserVO;
     }
 
@@ -263,6 +255,7 @@ public class TicketServiceImpl implements TicketService {
             double each=getTotalCosume(ticketId,couponId)/(double)ticketId.size();//平均每张票多少钱
             for (int i = 0; i < ticketId.size(); i++) {
                 ticketMapper.updateTicketConsume(ticketId.get(i),each);
+                ticketMapper.updateTicketWay(ticketId.get(i),0);
             }
             String content=checkAndGiveCoupon(ticketId,couponId);
             for (int i = 0; i < ticketId.size(); i++) {
@@ -296,9 +289,10 @@ public class TicketServiceImpl implements TicketService {
                 double each=getTotalCosume(ticketId,couponId)/(double)ticketId.size();
                 for (int i = 0; i < ticketId.size(); i++) {
                     ticketMapper.updateTicketConsume(ticketId.get(i),each);
+                    ticketMapper.updateTicketWay(ticketId.get(i),1);
                 }
                 consumeRecordServiceForBl.insertConsumeRecord(creatConsumeRecord(1,ticketId,couponId));
-                vipServiceForBl.updataVipConsume(vipCard.getId(),sum);
+                vipServiceForBl.updateVipConsume(vipCard.getId(),vipCard.getConsume()+sum);
                 checkAndGiveCoupon(ticketId,couponId);
                 for (int i = 0; i < ticketId.size(); i++) {
                     ticketMapper.updateTicketState(ticketId.get(i),1);
@@ -382,8 +376,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public ResponseVO refundTickets(List<Integer> ticketId){
         try{
-            Ticket ticket=ticketMapper.selectTicketById(ticketId.get(0));
-            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticket.getScheduleId());
+            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticketMapper.selectTicketById(ticketId.get(0)).getScheduleId());
             double rate=refundStrategyForBl.getBestRefundStrategy(scheduleItem.getStartTime());
             if (rate==0){
                 return ResponseVO.buildFailure("不可以退票");
@@ -391,7 +384,12 @@ public class TicketServiceImpl implements TicketService {
             else {
                 double total=0;
                 for (int i = 0; i < ticketId.size(); i++) {
-                    total=total+ticketMapper.selectTicketById(ticketId.get(i)).getConsume();
+                    Ticket ticket=ticketMapper.selectTicketById(ticketId.get(i));
+                    total=total+ticket.getConsume();
+                    if (ticket.getWay()==1){
+                        VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
+                        vipServiceForBl.updateVipBalance(vipCard.getId(),ticket.getConsume());
+                    }
                     ticketMapper.deleteTicket(ticketId.get(i));
                 }
                 double out=rate*total;//退还给用户的总金额

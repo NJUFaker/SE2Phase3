@@ -1,11 +1,14 @@
 package com.example.cinema.controller.user;
 
 import com.example.cinema.bl.user.AccountOfManagerService;
+import com.example.cinema.config.InterceptorConfiguration;
 import com.example.cinema.vo.ManagerForm;
 import com.example.cinema.vo.ManagerVO;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 /**
  * @author lyp
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 @RequestMapping("/accountOfManager")
 public class AccountOfManagerController {
+    private final static String ACCOUNT_INFO_ERROR="用户名或密码错误";
     @Autowired
     private AccountOfManagerService accountOfManagerService;
 
@@ -35,5 +39,22 @@ public class AccountOfManagerController {
     @GetMapping("/get")
     public ResponseVO searchByName(@RequestParam String name){
         return accountOfManagerService.searchByName(name);
+    }
+
+    @PostMapping("/login")
+    public ResponseVO login(@RequestBody ManagerForm managerForm, HttpSession session){
+        ManagerVO managerVO = accountOfManagerService.login(managerForm);
+        if(managerVO==null){
+            return ResponseVO.buildFailure(ACCOUNT_INFO_ERROR);
+        }
+        //注册session
+        session.setAttribute(InterceptorConfiguration.SESSION_KEY,managerForm);
+        return ResponseVO.buildSuccess(managerVO);
+    }
+
+    @PostMapping("/logout")
+    public String logOut(HttpSession session){
+        session.removeAttribute(InterceptorConfiguration.SESSION_KEY);
+        return "index";
     }
 }

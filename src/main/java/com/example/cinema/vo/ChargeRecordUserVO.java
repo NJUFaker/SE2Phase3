@@ -11,7 +11,7 @@ public class ChargeRecordUserVO {
     /**
      * 充值时间
      */
-    private Timestamp chargetime;
+    private Timestamp chargeTime;
     /**
      * 会员卡充值优惠的描述
      */
@@ -37,12 +37,13 @@ public class ChargeRecordUserVO {
         this.amount = amount;
     }
 
-    public Timestamp getChargetime() {
-        return chargetime;
+
+    public Timestamp getChargeTime() {
+        return chargeTime;
     }
 
-    public void setChargetime(Timestamp chargetime) {
-        this.chargetime = chargetime;
+    public void setChargeTime(Timestamp chargeTime) {
+        this.chargeTime = chargeTime;
     }
 
     public String getVIPActivity() {
