@@ -5,4 +5,8 @@
         select * from chargerecord where userid=#{userID} order by chargetime asc
     </select>
     <resultMap id="ChargeRecordPO" type="com.example.cinema.po.ChargeRecordPO"></resultMap>
+    <insert id="addChargeRecord" parameterType="com.example.cinema.vo.ChargeRecordUserVO" useGeneratedKeys="true" keyProperty="id">
+        insert into chargerecord(userid, amount, chargetime, VIPactivity, given)
+        values (#{userID},#{amount},#{chargetime},#{VIPActivity},#{givenAmount})
+    </insert>
 </mapper>

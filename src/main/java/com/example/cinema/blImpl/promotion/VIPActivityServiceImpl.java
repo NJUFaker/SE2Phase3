@@ -3,7 +3,9 @@ package com.example.cinema.blImpl.promotion;
 import com.example.cinema.bl.promotion.VIPActivityService;
 import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.VIPActivityForm;
+import org.springframework.stereotype.Service;
 
+@Service
 public class VIPActivityServiceImpl implements VIPActivityService {
     VIPActivityService vipActivityService;
 

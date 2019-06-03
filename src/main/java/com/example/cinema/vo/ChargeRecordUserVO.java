@@ -2,7 +2,8 @@ package com.example.cinema.vo;
 
 import java.sql.Timestamp;
 
-public class ChargeRecordVO {
+public class ChargeRecordUserVO {
+    private int userID;
     /**
      * 充值金额
      */
@@ -19,6 +20,14 @@ public class ChargeRecordVO {
      *被充值优惠赠送的金额
      */
     private int givenAmount;
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
 
     public double getAmount() {
         return amount;

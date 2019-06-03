@@ -4,13 +4,12 @@ import com.example.cinema.bl.promotion.VIPService;
 import com.example.cinema.blImpl.sales.VipServiceForBl;
 import com.example.cinema.data.promotion.VIPCardMapper;
 import com.example.cinema.data.sales.RefundTicketMapper;
-import com.example.cinema.vo.VIPCardForm;
+import com.example.cinema.vo.*;
 import com.example.cinema.po.VIPCard;
-import com.example.cinema.vo.ResponseVO;
-import com.example.cinema.vo.VIPInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -21,7 +20,9 @@ import java.util.List;
 public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceForPromotionBl {
     @Autowired
     VIPCardMapper vipCardMapper;
-    RefundTicketMapper refundTicketMapper;
+    @Autowired
+    ChargeRecordServiceForBl chargeRecordServiceForBl;
+
 
     @Override
     public ResponseVO addVIPCard(int userId) {
@@ -54,7 +55,16 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
         vipInfoVO.setPrice(VIPCard.price);
         return ResponseVO.buildSuccess(vipInfoVO);
     }
-
+    private void insertChargeRecord(VIPCardForm vipCardForm,String VIPActivity,int givenAmount){
+        ChargeRecordUserVO chargeRecordUserVO=new ChargeRecordUserVO();
+        VIPCard vipCard=vipCardMapper.selectCardById(vipCardForm.getVipId());
+        chargeRecordUserVO.setUserID(vipCard.getUserId());
+        chargeRecordUserVO.setAmount(vipCardForm.getAmount());
+        chargeRecordUserVO.setChargetime(new Timestamp(System.currentTimeMillis()));
+        chargeRecordUserVO.setVIPActivity(VIPActivity);
+        chargeRecordUserVO.setGivenAmount(givenAmount);
+        chargeRecordServiceForBl.insertChargeRecord(chargeRecordUserVO);
+    }
     @Override
     public ResponseVO charge(VIPCardForm vipCardForm) {
 
@@ -63,6 +73,9 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
             return ResponseVO.buildFailure("会员卡不存在");
         }
         double balance = vipCard.calculate(vipCardForm.getAmount());
+
+        insertChargeRecord(vipCardForm,"满200减20",20);//插入充值记录
+
         vipCard.setBalance(vipCard.getBalance() + balance);
         try {
             vipCardMapper.updateCardBalance(vipCardForm.getVipId(), vipCard.getBalance());

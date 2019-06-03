@@ -1,8 +1,10 @@
 package com.example.cinema.blImpl.history;
 
 import com.example.cinema.bl.history.ChargeRecordService;
+import com.example.cinema.blImpl.promotion.ChargeRecordServiceForBl;
 import com.example.cinema.data.history.ChargeRecordMapper;
 import com.example.cinema.po.ChargeRecordPO;
+import com.example.cinema.vo.ChargeRecordUserVO;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ChargeRecordServiceImpl implements ChargeRecordService {
+public class ChargeRecordServiceImpl implements ChargeRecordService, ChargeRecordServiceForBl {
     @Autowired
     private ChargeRecordMapper chargeRecordMapper;
     @Override
@@ -31,5 +33,10 @@ public class ChargeRecordServiceImpl implements ChargeRecordService {
             e.printStackTrace();
             return ResponseVO.buildFailure("失败");
         }
+    }
+
+    @Override
+    public void insertChargeRecord(ChargeRecordUserVO chargeRecordUserVO){
+        chargeRecordMapper.addChargeRecord(chargeRecordUserVO);
     }
 }
