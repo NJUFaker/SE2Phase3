@@ -71,7 +71,7 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
                 }
             }
             return refundPercentage;
-        }   catch (Exception e){return -1;}
+        }   catch (Exception e){return 0;}
     }
 
 
