@@ -1,6 +1,7 @@
 package com.example.cinema.vo;
 
 
+import com.example.cinema.po.VIPActivity;
 
 /**
  * @author lyp
@@ -14,7 +15,15 @@ public class VIPActivityForm {
     private int id;
     private float bonusBalance;
     private String description;
-
+    public VIPActivityForm(VIPActivity activity){
+        name=activity.getName();
+        costInNeed=activity.getCost_in_need();
+        fixedDiscount=activity.getFixed_discount();
+        discountPercentage=activity.getDiscount_percentage();
+        id=activity.getId();
+        bonusBalance=activity.getBonus_balance();
+        description=activity.getDescription();
+    }
     public float getBonusBalance() {
         return bonusBalance;
     }

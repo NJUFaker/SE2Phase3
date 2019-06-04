@@ -1,5 +1,7 @@
 package com.example.cinema.po;
 
+import com.example.cinema.vo.RefundTicketStrategyForm;
+
 public class RefundTicketStrategy {
     private int id;
     private float refund_percentage;//退款百分比
@@ -36,5 +38,11 @@ public class RefundTicketStrategy {
 
     public float getRefundPercentage() {
         return refund_percentage;
+    }
+
+    public RefundTicketStrategy(RefundTicketStrategyForm r){
+        this.id=r.getId();
+        this.refund_percentage=r.getRefundPercentage();
+        this.available_time=r.getAvailableTime();
     }
 }
