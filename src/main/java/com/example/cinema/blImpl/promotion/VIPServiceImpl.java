@@ -2,8 +2,10 @@ package com.example.cinema.blImpl.promotion;
 
 import com.example.cinema.bl.promotion.VIPService;
 import com.example.cinema.blImpl.sales.VipServiceForBl;
+import com.example.cinema.data.promotion.VIPActivityMapper;
 import com.example.cinema.data.promotion.VIPCardMapper;
 import com.example.cinema.data.sales.RefundTicketMapper;
+import com.example.cinema.po.VIPActivity;
 import com.example.cinema.vo.*;
 import com.example.cinema.po.VIPCard;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
     VIPCardMapper vipCardMapper;
     @Autowired
     ChargeRecordServiceForBl chargeRecordServiceForBl;
-
+    VIPActivityMapper vipActivityMapper;
 
     @Override
     public ResponseVO addVIPCard(int userId) {
@@ -74,7 +76,28 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
         }
         double balance = vipCard.calculate(vipCardForm.getAmount());
 
-        insertChargeRecord(vipCardForm,"满200减20",20);//插入充值记录
+        List<VIPActivity> vipActivities=vipActivityMapper.getAllVIPActivities();
+        int pos=0;
+        double maxBonus=0;
+        for(int i=0;i<vipActivities.size();i++){
+            if(vipActivities.get(i).getDiscount_percentage()!=0 &&
+                    vipActivities.get(i).getDiscount_percentage()*vipCardForm.getAmount()>maxBonus){
+                maxBonus=vipActivities.get(i).getDiscount_percentage()*vipCardForm.getAmount();
+                pos=i;
+                continue;
+            }
+            if(vipActivities.get(i).getBonus_balance()>vipActivities.get(pos).getBonus_balance()){
+                double bonus=vipActivities.get(pos).getBonus_balance();
+                if(bonus==0)
+                    bonus=vipActivities.get(pos).getFixed_discount();
+                if(maxBonus<bonus){
+                    maxBonus=bonus;
+                    pos=i;
+                }
+            }
+        }
+
+        insertChargeRecord(vipCardForm,vipActivities.get(pos).getDescription(),(int)maxBonus);//插入充值记录
 
         vipCard.setBalance(vipCard.getBalance() + balance);
         try {

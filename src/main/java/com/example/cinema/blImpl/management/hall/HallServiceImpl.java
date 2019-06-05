@@ -44,12 +44,28 @@ public class HallServiceImpl implements HallService, HallServiceForBl {
 
     @Override
     public ResponseVO addHall(HallForm hallForm){
-        return null;
+        try{
+            int id=hallMapper.insertHall(hallForm);
+
+
+            return ResponseVO.buildSuccess(id);
+        }catch(Exception e){
+            return ResponseVO.buildFailure("Module Failed");
+        }
     }
 
     @Override
     public ResponseVO updateHall(HallForm hallForm){
-        return null;
+
+        try{
+
+            hallMapper.updateHall(hallForm);
+
+            return ResponseVO.buildSuccess();
+        }catch(Exception e){
+            return ResponseVO.buildFailure("Module Failed");
+        }
+
     }
 
     private List<HallVO> hallList2HallVOList(List<Hall> hallList){
