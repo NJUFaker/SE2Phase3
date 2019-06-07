@@ -405,10 +405,48 @@ DROP TABLE IF EXISTS `manager`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `manager`(
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(50),
-  `password` VARCHAR(50),
+  `username` VARCHAR(50)  DEFAULT NULL,
+  `password` VARCHAR(50) DEFAULT NULL,
   PRIMARY KEY(`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+--
+-- Table structure for table `chargerecord`
+--
+
+DROP TABLE IF EXISTS `chargerecord`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `chargerecord`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userid` int(11) NOT NULL,
+  `amount` double NOT NULL,
+  VIPActivity VARCHAR(255) DEFAULT NULL,
+  given int(11),
+
+  PRIMARY KEY(`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+
+--
+-- Table structure for table `consumerecord`
+--
+
+DROP TABLE IF EXISTS `consumerecord`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `consumerecord`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL,
+  `amount` double NOT NULL,
+  `consumetime` TIMESTAMP NOT NULL,
+  `way` int(11) NOT NULL,
+  `seat` VARCHAR(255) NOT NULL,
+  `schedule_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
 
 --
 -- Dumping events for database 'cinema'
