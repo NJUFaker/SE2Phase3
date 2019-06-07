@@ -389,6 +389,7 @@ public class TicketServiceImpl implements TicketService {
                     if (ticket.getWay()==1){
                         VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
                         vipServiceForBl.updateVipBalance(vipCard.getId(),ticket.getConsume());
+                        vipServiceForBl.updateVipConsume(vipCard.getId(),vipCard.getConsume()-ticket.getConsume());
                     }
                     ticketMapper.deleteTicket(ticketId.get(i));
                 }
