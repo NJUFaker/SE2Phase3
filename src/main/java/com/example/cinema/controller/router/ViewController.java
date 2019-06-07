@@ -20,6 +20,11 @@ public class ViewController {
         return "signUp";
     }
 
+    @RequestMapping(value = "/adminLogin")
+    public String getAdminLogin() {
+        return "/adminLogin";
+    }
+
     @RequestMapping(value = "/admin/movie/manage")
     public String getAdminMovieManage() {
         return "adminMovieManage";
@@ -47,6 +52,12 @@ public class ViewController {
 
     @RequestMapping(value = "/admin/movieDetail")
     public String getAdminMovieDetail(@RequestParam int id) { return "adminMovieDetail"; }
+
+    @RequestMapping(value = "/admin/coupon/manage")
+    public String getAdminCouponManage() { return "AdminCouponManage"; }
+
+    @RequestMapping(value = "/root/staffManage")
+    public String getRootStaffManage() { return "rootStaffManage"; }
 
     @RequestMapping(value = "/user/home")
     public String getUserHome() {
