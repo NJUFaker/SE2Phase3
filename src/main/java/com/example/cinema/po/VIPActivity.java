@@ -1,13 +1,16 @@
 package com.example.cinema.po;
 
 public class VIPActivity{
+    private int id;
     private String name;
+    private String description;
     private float cost_in_need; //固定金额减免所需要的最低消费
     private float fixed_discount;    //固定减免
-    private float discount_percentage;   //百分比减免Dd
-    private int id;
     private float bonus_balance;
-    private String description;
+    private float discount_percentage;   //百分比减免Dd
+
+
+
 
     public void setDescription(String description) {
         this.description = description;
