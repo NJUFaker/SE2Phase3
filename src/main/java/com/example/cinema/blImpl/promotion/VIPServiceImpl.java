@@ -24,6 +24,7 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
     VIPCardMapper vipCardMapper;
     @Autowired
     ChargeRecordServiceForBl chargeRecordServiceForBl;
+    @Autowired
     VIPActivityMapper vipActivityMapper;
 
     @Override

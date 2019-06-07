@@ -5,11 +5,13 @@ import com.example.cinema.data.promotion.VIPActivityMapper;
 import com.example.cinema.po.VIPActivity;
 import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.VIPActivityForm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
 public class VIPActivityServiceImpl implements VIPActivityService {
+    @Autowired
     VIPActivityMapper vipActivityMapper;
 
     @Override
@@ -22,6 +24,7 @@ public class VIPActivityServiceImpl implements VIPActivityService {
     public ResponseVO getVIPActivities(){
         try{
             List<VIPActivity> activities=vipActivityMapper.getAllVIPActivities();
+            System.out.println(activities.size());
             List<VIPActivityForm> a=new ArrayList<>();
             for(int i=0;i<activities.size();i++){
                 a.add(new VIPActivityForm(activities.get(i)));

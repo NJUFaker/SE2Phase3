@@ -1,5 +1,6 @@
 package com.example.cinema.bl.promotion;
 
+import ch.qos.logback.core.pattern.util.RegularEscapeUtil;
 import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.VIPActivityForm;
 

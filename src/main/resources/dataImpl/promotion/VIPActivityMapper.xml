@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.cinema.data.promotion.VIPActivityMapper">
-    <select id="getAllActivities" resultMap="VIPActivity">
+    <select id="getAllVIPActivities" resultType="com.example.cinema.po.VIPActivity">
       select * from vip_activity
     </select>
 
-    <select id="getVIPActivityById" resultMap="VIPActivity" parameterType="int">
+    <select id="getVIPActivityById" resultType="com.example.cinema.po.VIPActivity" parameterType="int">
         select * from vip_activity where `id`=#{id}
     </select>
 
