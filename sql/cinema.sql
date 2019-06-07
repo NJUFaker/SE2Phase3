@@ -397,6 +397,20 @@ UNLOCK TABLES;
 
 
 --
+-- Table structure for table `manager`
+--
+
+DROP TABLE IF EXISTS `manager`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `manager`(
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50),
+  `password` VARCHAR(50),
+  PRIMARY KEY(`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+--
 -- Dumping events for database 'cinema'
 --
 
