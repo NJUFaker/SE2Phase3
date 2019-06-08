@@ -9,6 +9,9 @@ import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AccountOfManagerServiceImpl implements AccountOfManagerService {
     @Autowired
@@ -88,6 +91,15 @@ public class AccountOfManagerServiceImpl implements AccountOfManagerService {
         }
     }
 
+    @Override
+    public ResponseVO searchAllManagers(){
+        List<ManagerPO> managerPOS=accountOfManagerMapper.searchAllManagers();
+        List<ManagerForm> managerForms=new ArrayList<>();
+        for (int i = 0; i < managerPOS.size(); i++) {
+            managerForms.add(managerPOS.get(i).getManagerForm());
+        }
+        return ResponseVO.buildSuccess(managerForms);
+    }
     @Override
     public ManagerVO login(ManagerForm managerForm){
         ManagerPO managerPO=accountOfManagerMapper.searchByName(managerForm.getUsername());

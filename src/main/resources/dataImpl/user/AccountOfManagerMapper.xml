@@ -15,6 +15,9 @@
     <select id="searchByName" parameterType="java.lang.String" resultMap="ManagerPO">
         select * from manager where username=#{name}
     </select>
+    <select id="searchAllManagers" resultMap="ManagerPO">
+        select * from manager
+    </select>
     <resultMap id="ManagerPO" type="com.example.cinema.po.ManagerPO"></resultMap>
 
 </mapper>

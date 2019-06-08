@@ -37,6 +37,10 @@ public interface AccountOfManagerService {
     ResponseVO searchByName(String name);
 
     /**
+     * 返回所有管理员的信息
+     */
+    ResponseVO searchAllManagers();
+    /**
      * 管理员登录，登录成功会将用户信息保存在session中
      * @return
      */

@@ -41,6 +41,10 @@ public class AccountOfManagerController {
         return accountOfManagerService.searchByName(name);
     }
 
+    @GetMapping("/get/all")
+    public ResponseVO searchAllManagers(){
+        return accountOfManagerService.searchAllManagers();
+    }
     @PostMapping("/login")
     public ResponseVO login(@RequestBody ManagerForm managerForm, HttpSession session){
         ManagerVO managerVO = accountOfManagerService.login(managerForm);
