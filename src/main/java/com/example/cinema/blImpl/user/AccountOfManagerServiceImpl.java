@@ -82,7 +82,7 @@ public class AccountOfManagerServiceImpl implements AccountOfManagerService {
                 return ResponseVO.buildFailure("管理员不存在");
             }
             else {
-                return ResponseVO.buildSuccess(managerPO.getManagerForm());
+                return ResponseVO.buildSuccess(new ManagerVO(managerPO));
             }
         }
         catch (Exception e){

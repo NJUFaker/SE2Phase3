@@ -5,7 +5,7 @@ import com.example.cinema.po.ManagerPO;
 public class ManagerVO {
     private String username;
     private String password;
-    private Integer managerID;
+    private int managerID;
 
     public ManagerVO(ManagerPO managerPO){
         this.managerID=managerPO.getManagerID();
@@ -28,11 +28,11 @@ public class ManagerVO {
         this.password = password;
     }
 
-    public Integer getManagerID() {
+    public int getManagerID() {
         return managerID;
     }
 
-    public void setManagerID(Integer managerID) {
+    public void setManagerID(int managerID) {
         this.managerID = managerID;
     }
 }

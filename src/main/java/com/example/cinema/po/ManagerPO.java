@@ -1,6 +1,7 @@
 package com.example.cinema.po;
 
 import com.example.cinema.vo.ManagerForm;
+import com.example.cinema.vo.ManagerVO;
 
 public class ManagerPO {
     private String username;
@@ -13,6 +14,7 @@ public class ManagerPO {
         managerForm.setPassword(this.password);
         return managerForm;
     }
+
 
     public String getUsername() {
         return username;
