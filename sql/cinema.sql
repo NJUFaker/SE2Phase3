@@ -405,9 +405,11 @@ DROP TABLE IF EXISTS `manager`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `manager`(
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` VARCHAR(50)  DEFAULT NULL,
-  `password` VARCHAR(50) DEFAULT NULL,
-  PRIMARY KEY(`id`)
+  `username` VARCHAR(50)  NOT NULL,
+  `password` VARCHAR(50) NOT NULL,
+  PRIMARY KEY(`id`),
+  UNIQUE KEY `user_id_uindex` (`id`),
+  UNIQUE KEY `user_username_uindex` (`username`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 
