@@ -54,7 +54,7 @@ public class ViewController {
     public String getAdminMovieDetail(@RequestParam int id) { return "adminMovieDetail"; }
 
     @RequestMapping(value = "/admin/coupon/manage")
-    public String getAdminCouponManage() { return "AdminCouponManage"; }
+    public String getAdminCouponManage() { return "adminCouponManage"; }
 
     @RequestMapping(value = "/root/staffManage")
     public String getRootStaffManage() { return "rootStaffManage"; }

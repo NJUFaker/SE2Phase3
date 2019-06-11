@@ -4,6 +4,12 @@ $(document).ready(function(){
     var userId = sessionStorage.getItem('id');
     var isLike = false;
 
+
+    //插入新的链接
+    if ((sessionStorage.getItem('role')==='root')){
+        $('##root-in').append(' <li role="presentation"><a href="/root/staffManage"><i class="icon-bar-chart"></i>员工管理</a></li>')
+    }
+
     getMovie();
     if(sessionStorage.getItem('role') === 'admin')
         getMovieLikeChart();
@@ -126,8 +132,8 @@ $(document).ready(function(){
         $("#movie-director-input").val(movie.director);
         $("#movie-star-input").val(movie.starring);
         $("#movie-writer-input").val(movie.screenWriter);
-
     });
+
     $("#modify-form-btn").click(function () {
         var movieForm = getMovieForm();
         if (!validateMovieForm(movieForm)) {
