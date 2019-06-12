@@ -17,7 +17,7 @@ $(document).ready(function () {
         )
         
     }
-    //
+    
     function renderStaffList(list) {
         // console.log("render")
         $('.staff-table-body').empty()
@@ -64,7 +64,6 @@ $(document).ready(function () {
     })
 
     //编辑按钮
-
     //显示编辑框
     $(document).on('click','.edit-staff',function (e) {
         var user=JSON.parse(e.target.dataset.user)
@@ -109,7 +108,6 @@ $(document).ready(function () {
 
     })
 
-
     //删除按钮
 
     $(document).on('click','.deleteStaff',function (e) {
@@ -133,12 +131,6 @@ $(document).ready(function () {
                }
            )
         }
-
-        $('#staff-edit-btn').attr("data-oldname",user.username)
-    })
-    $('.deleteStaff').click(function () {
-
-
     })
 
 
@@ -159,6 +151,7 @@ $(document).ready(function () {
             isValidUser=false
             $('#staff-password-input').parent('.form-group').addClass('has-error');
         }
+        if (user.password) 
         // console.log(isValidUser)
         return isValidUser
     }
@@ -166,47 +159,8 @@ $(document).ready(function () {
     $('#addStaff').on('hide.bs.modal', function () {
         $(':text').val('')
     })
-    // TODO:填空
-    /*
-    function renderTicketList(list) {
-        console.log(list)
-        for (var i = 0; i < list.length; i++) {
-            let tempVO = list[i]
-            if (tempVO.state == "未完成") {
-                continue;
-            }
-            let state = ""
-            let seat = ""
-            seat = "<td>" + (tempVO.rowIndex + 1) + "排" + (tempVO.columnIndex + 1) + "座" + "</td>"
-            state = "<td>" + tempVO.state + "</td>"
-            // console.log("enter")
-            // console.log(tempVO)
-            getRequest(
-                "/schedule/" + tempVO.scheduleId,
-                function (res) {
-                    console.log("本次排片")
-                    console.log(res)
-                    let tempSche = res.content
-                    // console.log(tempSche.startTime.substring(0,10))
-                    let name = "<td>" + tempSche.movieName + "</td>"
-                    let hallname = "<td>" + tempSche.hallName + "</td>"
-                    let sTime = "<td>" + tempSche.startTime.substring(0, 10) + ' ' + tempSche.startTime.substring(11, 16) + "</td>"
-                    let eTime = "<td>" + tempSche.endTime.substring(0, 10) + ' ' + tempSche.endTime.substring(11, 16) + "</td>"
-                    let tempStr = "<tr>" + name + hallname + seat + sTime + eTime + state + "</tr>"
-                    // console.log("得到每条数据的内容")
-                    // console.log(tempStr)
-                    $('#ticket-table-body-in').append(tempStr)
-                }
-            );
-            // console.log("lalalalla")
-            // console.log(sessionStorage.getItem(count))
-        }
-    }
 
-     */
-
-    // $(#root-)
-
+    //密码表单验证
 
 
 });

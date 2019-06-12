@@ -73,7 +73,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="staff-password-input"><span class="error-text">*</span>密码</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="staff-password-input" placeholder="请输入登陆密码">
+                            <input type="text" class="form-control" id="staff-password-input" placeholder="请输入密码，最长20位，只能为数字或字母" maxlength="20"
+                                   onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" >
                         </div>
                     </div>
                 </form>
@@ -104,7 +105,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label" for="staff-edit-password-input"><span class="error-text">*</span>密码</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="staff-edit-password-input">
+                            <input type="text" class="form-control" id="staff-edit-password-input" maxlength="20"
+                                   onkeyup="value=value.replace(/[^\w\.\/]/ig,'')">
                         </div>
                     </div>
                 </form>
