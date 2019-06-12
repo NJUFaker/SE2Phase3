@@ -8,9 +8,9 @@
     <delete id="deleteManager" parameterType="java.lang.String">
         delete from manager where username=#{name}
     </delete>
-    <update id="updateManager" parameterType="com.example.cinema.vo.ManagerForm">
+    <update id="updateManager" parameterType="com.example.cinema.vo.ManagerUpdateVO">
         update manager set username=#{username},password=#{password}
-        where id=#{managerID}
+        where username=#{oldname}
     </update>
     <select id="searchByName" parameterType="java.lang.String" resultMap="ManagerPO">
         select * from manager where username=#{name}

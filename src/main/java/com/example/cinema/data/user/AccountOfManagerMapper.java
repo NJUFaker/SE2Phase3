@@ -2,6 +2,7 @@ package com.example.cinema.data.user;
 
 import com.example.cinema.po.ManagerPO;
 import com.example.cinema.vo.ManagerForm;
+import com.example.cinema.vo.ManagerUpdateVO;
 import com.example.cinema.vo.ManagerVO;
 import com.example.cinema.vo.ResponseVO;
 import org.apache.catalina.Manager;
@@ -30,7 +31,7 @@ public interface AccountOfManagerMapper {
      * @param
      * @return
      */
-    int updateManager(ManagerVO managerVO);
+    int updateManager(ManagerUpdateVO managerUpdateVO);
 
     /**
      * 查找管理员的信息（根据用户名）
