@@ -4,6 +4,7 @@ import com.example.cinema.bl.user.AccountOfManagerService;
 import com.example.cinema.data.user.AccountOfManagerMapper;
 import com.example.cinema.po.ManagerPO;
 import com.example.cinema.vo.ManagerForm;
+import com.example.cinema.vo.ManagerUpdateVO;
 import com.example.cinema.vo.ManagerVO;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +60,9 @@ public class AccountOfManagerServiceImpl implements AccountOfManagerService {
      * @param
      * @return
      */
-    public ResponseVO updateManager(ManagerVO managerVO){
+    public ResponseVO updateManager(ManagerUpdateVO managerUpdateVO){
         try {
-            accountOfManagerMapper.updateManager(managerVO);
+            accountOfManagerMapper.updateManager(managerUpdateVO);
             return ResponseVO.buildSuccess();
         }
         catch (Exception e){
@@ -82,7 +83,7 @@ public class AccountOfManagerServiceImpl implements AccountOfManagerService {
                 return ResponseVO.buildFailure("管理员不存在");
             }
             else {
-                return ResponseVO.buildSuccess(new ManagerVO(managerPO));
+                return ResponseVO.buildSuccess(managerPO.getManagerForm());
             }
         }
         catch (Exception e){

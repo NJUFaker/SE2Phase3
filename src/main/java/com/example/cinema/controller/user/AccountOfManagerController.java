@@ -3,6 +3,7 @@ package com.example.cinema.controller.user;
 import com.example.cinema.bl.user.AccountOfManagerService;
 import com.example.cinema.config.InterceptorConfiguration;
 import com.example.cinema.vo.ManagerForm;
+import com.example.cinema.vo.ManagerUpdateVO;
 import com.example.cinema.vo.ManagerVO;
 import com.example.cinema.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class AccountOfManagerController {
     }
 
     @PostMapping("/update")
-    public ResponseVO updateManager(@RequestBody ManagerVO managerVO){
-        return  accountOfManagerService.updateManager(managerVO);
+    public ResponseVO updateManager(@RequestBody ManagerUpdateVO managerUpdateVO){
+        return  accountOfManagerService.updateManager(managerUpdateVO);
     }
 
     @GetMapping("/get")
