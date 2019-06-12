@@ -9,6 +9,7 @@ import com.example.cinema.po.Coupon;
 import com.example.cinema.po.ScheduleItem;
 import com.example.cinema.po.VIPCard;
 import com.example.cinema.vo.CouponForm;
+import com.example.cinema.vo.CouponVO;
 import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.TicketForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,11 +130,11 @@ public class CouponServiceImpl implements CouponService, CouponServiceForBl {
                 return ResponseVO.buildFailure("无有效的优惠券");
             }
             else {
-                List<CouponForm> couponForms=new ArrayList<>();
+                List<CouponVO> couponVOS=new ArrayList<>();
                 for (int i = 0; i < coupons.size(); i++) {
-                    couponForms.add(coupons.get(i).getCouponForm());
+                    couponVOS.add(new CouponVO(coupons.get(i)));
                 }
-                return ResponseVO.buildSuccess(couponForms);
+                return ResponseVO.buildSuccess(couponVOS);
             }
         }
         catch (Exception e){
