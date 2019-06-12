@@ -112,6 +112,8 @@ $(document).ready(function() {
     }
 
     $(document).on('click','.schedule-item',function (e) {
+        // console.log("click")
+        // console.log(e)
         var schedule = JSON.parse(e.target.dataset.schedule);
         $("#schedule-edit-hall-input").children('option[value='+schedule.hallId+']').attr('selected',true);
         $("#schedule-edit-movie-input").children('option[value='+schedule.movieId+']').attr('selected',true);
