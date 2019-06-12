@@ -4,6 +4,21 @@ $(document).ready(function() {
     if (role==='root'){
         $('#root-staff-manage').css("display","")
     }
+    
+    //得到优惠券列表
+    getAllCoupon();
+
+    function getAllCoupon() {
+        getRequest(
+            '/coupon/giveVIP/get',
+            function (res) {
+                console.log(res)
+            },
+            function (err) {
+                alert(JSON.stringify(err))
+            }
+        )
+    }
 
 
 });

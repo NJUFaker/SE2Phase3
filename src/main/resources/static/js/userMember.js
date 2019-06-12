@@ -92,7 +92,7 @@ function confirmCommit() {
                         getVIP();
                     },
                     function (error) {
-                        alert(error);
+                        alert(JSON.stringify(error));
                     });
             }
         } else {
