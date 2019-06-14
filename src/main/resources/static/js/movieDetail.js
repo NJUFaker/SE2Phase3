@@ -7,7 +7,7 @@ $(document).ready(function(){
 
     //插入新的链接
     if ((sessionStorage.getItem('role')==='root')){
-        $('##root-in').append(' <li role="presentation"><a href="/root/staffManage"><i class="icon-bar-chart"></i>员工管理</a></li>')
+        $('#root-in').append(' <li role="presentation"><a href="/root/staffManage"><i class="icon-bar-chart"></i>员工管理</a></li>')
     }
 
     getMovie();

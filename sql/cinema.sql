@@ -379,9 +379,7 @@ CREATE TABLE `vip_activity`(
   `name` varchar(45) DEFAULT NULL,
   `description` varchar(255) DEFAULT NUll,
   `cost_in_need` float(9,3) NOT NULL DEFAULT '0',
-  `fixed_discount` float(9,3) NOT NULL DEFAULT '0',
   `bonus_balance` float(9,3) NOT NULL DEFAULT '0',
-  `discount_percentage` float(5,4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
@@ -391,7 +389,7 @@ CREATE TABLE `vip_activity`(
 
 LOCK TABLES `vip_activity` WRITE;
 /*!40000 ALTER TABLE `vip_activity` DISABLE KEYS */;
-INSERT INTO `vip_activity` VALUES (0,"赠送余额","充值100元送10元",100,0,10,0),(null,"折扣优惠","所有充值打9折",0,0,0,0.9);
+INSERT INTO `vip_activity` VALUES (0,"赠送余额","充值100元送10元",100,10),(null,"赠送余额2","充值200元送20元",200,30);
 /*!40000 ALTER TABLE `vip_activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
