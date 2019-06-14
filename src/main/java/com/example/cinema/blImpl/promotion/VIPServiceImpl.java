@@ -81,16 +81,8 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
         int pos=0;
         double maxBonus=0;
         for(int i=0;i<vipActivities.size();i++){
-            if(vipActivities.get(i).getDiscount_percentage()!=0 &&
-                    vipActivities.get(i).getDiscount_percentage()*vipCardForm.getAmount()>maxBonus){
-                maxBonus=vipActivities.get(i).getDiscount_percentage()*vipCardForm.getAmount();
-                pos=i;
-                continue;
-            }
             if(vipActivities.get(i).getBonus_balance()>vipActivities.get(pos).getBonus_balance()){
                 double bonus=vipActivities.get(pos).getBonus_balance();
-                if(bonus==0)
-                    bonus=vipActivities.get(pos).getFixed_discount();
                 if(maxBonus<bonus){
                     maxBonus=bonus;
                     pos=i;
