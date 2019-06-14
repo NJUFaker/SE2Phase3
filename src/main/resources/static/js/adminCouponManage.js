@@ -61,6 +61,28 @@ $(document).ready(function() {
 function submitPro() {
     var couponId=getCouponIdList()
     var amount=$('.vip-consume-input').val()
+    console.log(amount)
+    console.log(couponId)
+    console.log("start post*3")
+
+    postRequest(
+        '/coupon/giveVIP/give?consume='+amount+'&couponIds='+couponId,
+        couponId,
+        function (res) {
+            console.log(res)
+            if (res.success){
+                alert("消费额满"+amount+"的会员获赠"+couponId.length+'张优惠券')
+            }
+            else {
+                alert(res.message)
+            }
+        },
+        function (err) {
+            alert("网络错误")
+        }
+
+    )
+
 }
 //得到被选中的优惠券
 function getCouponIdList () {
@@ -73,7 +95,7 @@ function getCouponIdList () {
     else {
     list.each(function(){
         var cur=$(this).val()
-        // console.log(cur)
+        console.log(cur)
         // console.log("*******************************")
         couponId.push(cur)
     })
