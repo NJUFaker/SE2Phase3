@@ -51,26 +51,31 @@ $(document).ready(function() {
             }
         )
     }
-    
-    //得到被选中的优惠券
-    function getCouponIdList() {
-        var list=$("input[name='select-coupon']:")
-        
-    }
-    // $('.coupon').click(function () {
-    //     $("h4").slideToggle();
-    //     console.log("click coupon")
-    // })
-
-    // $(document).on('click','.coupon',function (e) {
-    //     console.log(e)
-    //    
-    // })
-
-
-
-
     function formatDate(date) {
         return date.substring(5, 10).replace("-", ".");
     }
 });
+
+
+
+function submitPro() {
+    getCouponIdList()
+}
+//得到被选中的优惠券
+function getCouponIdList() {
+    var list=$("input[name='select-coupon']:checked")
+    var couponId=[]
+    // console.log(!list)
+    if (list==="a"){
+        alert("请选择要赠送的优惠券")
+    }
+    else {
+    list.each(function(){
+        var cur=$(this).val()
+        // console.log(cur)
+        // console.log("*******************************")
+        couponId.push(cur)
+    })
+    return couponId
+    }
+}
