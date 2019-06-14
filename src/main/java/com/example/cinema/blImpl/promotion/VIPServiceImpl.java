@@ -75,24 +75,20 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
         if (vipCard == null) {
             return ResponseVO.buildFailure("会员卡不存在");
         }
-        double balance = vipCard.calculate(vipCardForm.getAmount());
-
         List<VIPActivity> vipActivities=vipActivityMapper.getAllVIPActivities();
         int pos=0;
         double maxBonus=0;
         for(int i=0;i<vipActivities.size();i++){
-            if(vipActivities.get(i).getBonus_balance()>vipActivities.get(pos).getBonus_balance()){
-                double bonus=vipActivities.get(pos).getBonus_balance();
-                if(maxBonus<bonus){
-                    maxBonus=bonus;
-                    pos=i;
-                }
+            if(vipCardForm.getAmount()>=vipActivities.get(i).getCost_in_need() && vipActivities.get(i).getBonus_balance()>maxBonus){
+                maxBonus=vipActivities.get(i).getBonus_balance();
+                pos=i;
             }
         }
+        double balance = vipCardForm.getAmount()+(int)maxBonus+vipCard.getBalance();
 
         insertChargeRecord(vipCardForm,vipActivities.get(pos).getDescription(),(int)maxBonus);//插入充值记录
 
-        vipCard.setBalance(vipCard.getBalance() + balance);
+        vipCard.setBalance(balance);
         try {
             vipCardMapper.updateCardBalance(vipCardForm.getVipId(), vipCard.getBalance());
             return ResponseVO.buildSuccess(vipCard);
