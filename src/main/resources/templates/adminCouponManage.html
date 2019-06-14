@@ -6,15 +6,17 @@
     <link rel="stylesheet" type="text/css" href="/css/common.css"/>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.css"/>
     <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/cinemaHall.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/adminCouponManage.css"/>
 
     <script src="/js/jquery.js"></script>
     <script src="/js/bootstrap.js"></script>
     <script src="/js/request.js"></script>
     <script src="/js/adminCouponManage.js"></script>
+
 </head>
 <body>
 <div class="main-container">
+
     <div class="nav-left-container">
         <div class="nav-user-container" style="margin-bottom: 50px;">
             <img class="avatar-lg" src="/images/defaultAvatar.jpg" />
@@ -27,7 +29,7 @@
             <li role="presentation"><a href="/admin/cinema/manage"><i class="icon-cogs"></i> 影院管理</a></li>
             <li role="presentation"><a href="/admin/cinema/statistic"><i class="icon-bar-chart"></i> 影院统计</a></li>
             <li role="presentation"  class="active"><a href="/admin/coupon/manage"><i class="icon-bar-chart"></i> 赠送优惠券</a></li>
-            <li role="presentation" display="none" id="root-staff-manage"><a href="/root/staffManage"><i class="icon-bar-chart"></i> 员工管理</a></li>
+            <li role="presentation" id="root-staff-manage" style="display:none"><a href="/root/staffManage"><i class="icon-bar-chart"></i> 员工管理</a></li>
         </ul>
     </div>
 
@@ -43,8 +45,70 @@
                 <span class="vip-consume-content">元的会员获得优惠券</span>
             </div>
             <div class="coupon-list">
-                <div class="coupon-item">
-                    <div class=""></div>
+                <div class="all-coupon-item " id="all-coupon-list">
+<!--                    <div class="col-md-4 coupon-wrapper right ">-->
+<!--                    <input class="coupon-checkbox col-md-1" type="checkbox" name="select-coupon" value="1" id="11">-->
+<!--                        <label for="11">-->
+<!--                                <div class="coupon">-->
+<!--                                    <div class="content">-->
+<!--                                        <div class="col-md-8 left">-->
+<!--                                            <div class="name">名字</div>-->
+<!--                                            <div class="description">描述</div>-->
+<!--                                            <div class="price">满100减30</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-md-5 right">-->
+<!--                                            <div>有效日期</div>-->
+<!--                                            <div>06.12~12.30</div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                        </label>-->
+<!--                    </input>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-4 coupon-wrapper right">-->
+<!--                    <input class="coupon-checkbox col-md-1" type="checkbox" name="select-coupon" value="1" id="12">-->
+<!--                        <label for="12">-->
+<!--                                <div class="coupon">-->
+<!--                                    <div class="content">-->
+<!--                                        <div class="col-md-8 left">-->
+<!--                                            <div class="name">名字2</div>-->
+<!--                                            <div class="description">描述2</div>-->
+<!--                                            <div class="price">满200减100</div>-->
+<!--                                        </div>-->
+<!--                                        <div class="col-md-5 right">-->
+<!--                                            <div>有效日期</div>-->
+<!--                                            <div>06.12~12.30</div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+<!--                        </label>-->
+<!--                    </input>-->
+<!--                    </div>-->
+
+<!--                    <div class="col-md-4 coupon-wrapper right">-->
+<!--                    <input class="coupon-checkbox col-md-1" type="checkbox" name="select-coupon" value="1" id="13">-->
+<!--                    <label for="13">-->
+
+<!--                        <div class="coupon">-->
+<!--                            <div class="content">-->
+<!--                                <div class="col-md-8 left">-->
+<!--                                    <div class="name">名字</div>-->
+<!--                                    <div class="description">描述</div>-->
+<!--                                    <div class="price">满100减30</div>-->
+<!--                                </div>-->
+<!--                                <div class="col-md-5 right">-->
+<!--                                    <div>有效日期</div>-->
+<!--                                    <div>06.12~12.30</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </label>-->
+<!--                    </input>-->
+<!--                </div>-->
+
+
                 </div>
             </div>
         </div>
