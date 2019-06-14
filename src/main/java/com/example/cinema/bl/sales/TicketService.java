@@ -71,5 +71,5 @@ public interface TicketService {
      * @param ticketId
      * @return
      */
-    ResponseVO refundTickets(List<Integer> ticketId);
+    ResponseVO refundTickets(List<Integer> ticketId,double rate);
 }

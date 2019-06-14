@@ -374,10 +374,8 @@ public class TicketServiceImpl implements TicketService {
         }
     }
     @Override
-    public ResponseVO refundTickets(List<Integer> ticketId){
+    public ResponseVO refundTickets(List<Integer> ticketId,double rate){
         try{
-            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticketMapper.selectTicketById(ticketId.get(0)).getScheduleId());
-            double rate=refundStrategyForBl.getBestRefundStrategy(scheduleItem.getStartTime());
             if (rate==0){
                 return ResponseVO.buildFailure("不可以退票");
             }
