@@ -59,14 +59,15 @@ $(document).ready(function() {
 
 
 function submitPro() {
-    getCouponIdList()
+    var couponId=getCouponIdList()
+    var amount=$('.vip-consume-input').val()
 }
 //得到被选中的优惠券
-function getCouponIdList() {
+function getCouponIdList () {
     var list=$("input[name='select-coupon']:checked")
     var couponId=[]
-    // console.log(!list)
-    if (list==="a"){
+    console.log(list)
+    if (list.length==0){
         alert("请选择要赠送的优惠券")
     }
     else {

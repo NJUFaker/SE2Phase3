@@ -24,3 +24,6 @@ target/
 /nbdist/
 /.nb-gradle/
 /build/
+
+###application.yml###
+application.yml
