@@ -24,7 +24,16 @@ $(document).ready(function () {
         for (var i=0;i<list.length;i++){
             var user=list[i]
             // var userStr=JSON.stringify(user)
-            var link='<button type="button" class="btn btn-primary edit-staff"data-backdrop="static" data-toggle="modal" data-target="#editStaff"  data-user='+JSON.stringify(user) +'> 编辑</button>'+' <button type="button" class="btn btn-primary deleteStaff"  id="delete-staff" data-name='+user.username+'> 删除</button>'
+            //root不能被删除
+            var link=""
+            if (user.username==="root"){
+                link='<button type="button" class="btn btn-primary edit-staff"data-backdrop="static" data-toggle="modal" data-target="#editStaff"  data-user='+JSON.stringify(user) +'> 编辑</button>'
+
+            }
+            else {
+                link='<button type="button" class="btn btn-primary edit-staff"data-backdrop="static" data-toggle="modal" data-target="#editStaff"  data-user='+JSON.stringify(user) +'> 编辑</button>'+' <button type="button" class="btn btn-primary deleteStaff"  id="delete-staff" data-name='+user.username+'> 删除</button>'
+
+            }
             var line=$('<tr>'+'<td>'+user.username+'</td>'+'<td>'+user.password+'</td>'+'<td>'+link+'</td>'+'</tr>')
             $("#staff-table-body-in").append(line)
         }
@@ -71,6 +80,12 @@ $(document).ready(function () {
         $('#staff-edit-username-input').val(user.username);
         $('#staff-edit-password-input').val(user.password);
         $('#staff-edit-btn').attr("data-oldname",user.username)
+        if (user.username==="root"){
+            $('#staff-edit-username-input').attr("readonly",true)
+        }
+        else {
+            $('#staff-edit-username-input').attr("readonly",false)
+        }
     })
     // 点击确认按钮
     $(".editStaff").click(function () {
