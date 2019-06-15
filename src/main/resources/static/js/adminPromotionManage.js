@@ -89,15 +89,15 @@ $(document).ready(function() {
            endTime: $("#activity-end-date-input").val(),
            movieList: [...selectedMovieIds],
            couponForm: {
-               description: $("#coupon-name-input").val(),
-               name: $("#coupon-description-input").val(),
+               description: $("#coupon-description-input").val(),
+               name: $("#coupon-name-input").val(),
                targetAmount: $("#coupon-target-input").val(),
                discountAmount: $("#coupon-discount-input").val(),
                startTime: $("#activity-start-date-input").val(),
                endTime: $("#activity-end-date-input").val()
            }
        };
-       console.log("&&&&&&&&&&")
+       // console.log("&&&&&&&&&&")
         console.log(form)
 
         postRequest(
