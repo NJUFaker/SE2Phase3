@@ -1,4 +1,11 @@
 $(document).ready(function() {
+    //选择是否显示root权限
+    var role=sessionStorage.getItem('role')
+    console.log(role)
+    console.log(role==='root')
+    if (role==='root'){
+        $('#root-staff-manage').css("display","")
+    }
 
     getAllMovies();
 
@@ -23,6 +30,8 @@ $(document).ready(function() {
 
         activities.forEach(function (activity) {
             var movieDomStr = "";
+            console.log(activity)
+            console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
             if(activity.movieList.length){
                 activity.movieList.forEach(function (movie) {
                     movieDomStr += "<li class='activity-movie primary-text'>"+movie.name+"</li>";
@@ -88,6 +97,8 @@ $(document).ready(function() {
                endTime: $("#activity-end-date-input").val()
            }
        };
+       console.log("&&&&&&&&&&")
+        console.log(form)
 
         postRequest(
             '/activity/publish',

@@ -1,4 +1,11 @@
 $(document).ready(function(){
+    //选择是否显示root权限
+    var role=sessionStorage.getItem('role')
+    console.log(role)
+    console.log(role==='root')
+    if (role==='root'){
+        $('#root-staff-manage').css("display","")
+    }
 
     var movieId = parseInt(window.location.href.split('?')[1].split('&')[0].split('=')[1]);
     var userId = sessionStorage.getItem('id');
