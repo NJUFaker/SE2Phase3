@@ -72,4 +72,9 @@ public interface TicketService {
      * @return
      */
     ResponseVO refundTickets(List<Integer> ticketId,double rate);
+
+    /**
+     * 得到用户所有退的票
+     */
+    ResponseVO getRefundedTickets(int userId);
 }
