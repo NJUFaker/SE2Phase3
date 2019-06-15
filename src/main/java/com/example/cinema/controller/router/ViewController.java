@@ -91,4 +91,9 @@ public class ViewController {
     
     @RequestMapping(value = "/admin/membercard/manage")
     public String getaddcard() { return "addcard"; }
+
+    @RequestMapping(value = "/user/ticket/refund")
+    public String getUserTicketRefund() {
+        return "userTicketRefund";
+    }
 }
