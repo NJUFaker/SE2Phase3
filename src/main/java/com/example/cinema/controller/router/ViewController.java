@@ -88,4 +88,7 @@ public class ViewController {
     public String getUserMember() {
         return "userMember";
     }
+    
+    @RequestMapping(value = "/admin/membercard/manage")
+    public String getaddcard() { return "addcard"; }
 }
