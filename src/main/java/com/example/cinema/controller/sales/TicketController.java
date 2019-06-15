@@ -53,7 +53,10 @@ public class TicketController {
         return ticketService.refundTickets(ticketId,rate);
     }
 
-
+    @GetMapping("/get/refundedTickets/{userId}")
+    public ResponseVO getRefundedTickets(@PathVariable int userId){
+        return ticketService.getRefundedTickets(userId);
+    }
 
 
 }

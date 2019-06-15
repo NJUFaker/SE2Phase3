@@ -400,7 +400,25 @@ public class TicketServiceImpl implements TicketService {
             return ResponseVO.buildFailure("失败");
         }
     }
-
+    public ResponseVO getRefundedTickets(int userId){
+        try{
+            List<Ticket> tickets=ticketMapper.selectRefundedTicketByUser(userId);
+            if (tickets==null||tickets.size()==0){
+                return ResponseVO.buildFailure("没有退票记录");
+            }
+            else {
+                List<TicketVO> ticketVOS=new ArrayList<>();
+                for (int i = 0; i < tickets.size(); i++) {
+                    ticketVOS.add(tickets.get(i).getVO());
+                }
+                return ResponseVO.buildSuccess(ticketVOS);
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
 
 
 

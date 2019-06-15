@@ -39,5 +39,8 @@ public interface TicketMapper {
      */
     @Scheduled(cron = "0/1 * * * * ?")
     void cleanExpiredTicket();
+
+
+    List<Ticket> selectRefundedTicketByUser(int userId);
 }
 
