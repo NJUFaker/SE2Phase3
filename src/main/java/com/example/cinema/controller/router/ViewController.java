@@ -75,7 +75,7 @@ public class ViewController {
     }
 
     @RequestMapping(value = "/user/movieDetail/buy")
-    public String getUserMovieBuy(@RequestParam int id, @RequestParam(value = "unpay",required = false,defaultValue = "false") boolean unpay ) {
+    public String getUserMovieBuy(@RequestParam int id ) {
         return "userMovieBuy";
     }
 

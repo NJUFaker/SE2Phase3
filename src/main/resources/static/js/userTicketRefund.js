@@ -8,7 +8,10 @@ $(document).ready(function(){
             '/ticket/get/refundedTickets/' + sessionStorage.getItem('id'),
             function (res) {
                 console.log(res.content)
-                renderUsedTicket(res.content);
+                if (res.content){
+                    renderUsedTicket(res.content);
+                }
+
             },
             function (error) {
                 alert(error);

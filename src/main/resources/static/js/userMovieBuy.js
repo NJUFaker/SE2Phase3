@@ -13,7 +13,54 @@ $(document).ready(function () {
     //console.log(window)
     scheduleId = parseInt(window.location.href.split('?')[1].split('&')[1].split('=')[1]);
 
-    getInfo();
+    let isUnpay=parseInt(window.location.href.split('?')[1].split('&')[2].split('=')[1]);
+    console.log(isUnpay)
+    //再次支付
+    if (isUnpay){
+        $('#seat-state').css("display", "none");
+        $('#order-state').css("display", "");
+
+        //得到order
+        getRequest(
+            '/ticket/get/info/unpaid?userId='+sessionStorage.getItem('id')+'&scheduleId='+scheduleId,
+            function (res) {
+                console.log(res)
+                if (res.success){
+                    renderOrder(res.content)
+                    getRequest(
+                        '/vip/' + sessionStorage.getItem('id') + '/get',
+                        function (res) {
+                            isVIP = res.success;
+                            useVIP = res.success;
+                            if (isVIP) {
+                                $('#member-balance').html("<div><b>会员卡余额：</b>" + res.content.balance.toFixed(2) + "元</div>");
+                            } else {
+                                $("#member-pay").css("display", "none");
+                                $("#nonmember-pay").addClass("active");
+
+                                $("#modal-body-member").css("display", "none");
+                                $("#modal-body-nonmember").css("display", "");
+                            }
+                        },
+                        function (error) {
+                            alert(error);
+                        });
+                }
+                else {
+                    console.log(res.message)
+                }
+            },
+            function (err) {
+                alert(err)
+            }
+        )
+
+
+    }
+    else {
+        getInfo();
+    }
+
 
     function getInfo() {
         getRequest(

@@ -94,12 +94,14 @@ var renderOrder = function (finList) {
                 curSchedule.movieName + '</span><span class="hall">' +
                 curSchedule.hallName + '</span><span class="startTime">' +
                 curSchedule.startTime.substring(0, 10) + ' ' + curSchedule.startTime.substring(11, 16) + '</span></div><div class="order-content"><div class="ticket-list"><div class="ticket-title col-md-4 left">已选择座位：</div>' +
-                seatList + '</div><div class="order-operate"></div></div></div></div>'
+                seatList + '</div><div class="order-operate">' +
+                '<a href="user/movieDetail/buy?id=10&scheduleId='+order.scheId+'&unpay=true">继续支付</a>'+
+                '</div></div></div></div>'
             orderStr += ordItemStr
         }
     })
 
-    $('.order-container').append(orderStr)
+    $('.order-container').html(orderStr)
 
     return true;
 }

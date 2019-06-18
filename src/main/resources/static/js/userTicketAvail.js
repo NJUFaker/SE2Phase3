@@ -2,27 +2,28 @@ $(document).ready(function(){
     getUsedTicket();
 
 // 得到列表
-    function getUsedTicket() {
-        // 发请求得到全部电影票
-        getRequest(
-            '/ticket/get/' + sessionStorage.getItem('id'),
-            function (res) {
-                // console.log(res)
-                renderAvailTicket(res.content);
-            },
-            function (error) {
-                alert(error);
-            });
-        // console.log("end")
+
+});
+
+//ready外
+function getUsedTicket() {
+    // 发请求得到全部电影票
+    getRequest(
+        '/ticket/get/' + sessionStorage.getItem('id'),
+        function (res) {
+            // console.log(res)
+            renderAvailTicket(res.content);
+        },
+        function (error) {
+            alert(error);
+        });
+    // console.log("end")
 
 // 遍历：
 // 1. 是否过期（结束时间<当前时间），过期被选中
 // 2. 分类，按照排片id分成不同的list
 // 填进去
-    }
-});
-
-//ready外
+}
 
 function renderAvailTicket(originList) {
     // console.log(originList)
@@ -204,6 +205,19 @@ function startRefund() {
         if (r){
             let ticketId=getTicketList()
             console.log(ticketId)
+            deleteRequest(
+                '/ticket/delete?ticketId='+ticketId,
+                null,
+                function (res) {
+                    console.log(res)
+
+                    //刷新
+                    getUsedTicket();
+                },
+                function (err) {
+                    console.log(err)
+                }
+            )
         }
 
 }
