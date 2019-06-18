@@ -36,8 +36,6 @@ function renderAvailTicket(originList) {
     // 按照时间筛一下
     // let a = renderOrder(resList,getValidSche(resList))
     let a=getValidSche(resList,renderOrder)
-
-    console .log(a)
     //开始填数据
 
 }
@@ -96,7 +94,7 @@ function getValidSche(scheList,callback) {
 var renderOrder=function (finList) {
     let orderStr=""
     finList.forEach(function (order) {
-        console.log(order)
+        // console.log(order)
         //判断是否过期
         if (order.scheId!=null){
             let ordItemStr=''
@@ -109,7 +107,7 @@ var renderOrder=function (finList) {
                     id:ticket.id,
                     seat:ticket.rowIndex + 1 + "排" + ticket.columnIndex + 1 + "座",
                 }
-                console.log(ticketOb.seat)
+                // console.log(ticketOb.seat)
                 tStrList.push(JSON.stringify(ticketOb))
             })
             seatList='<div class="ticket-item col-md-8 right">'+seatList+'</div>'
@@ -125,7 +123,7 @@ var renderOrder=function (finList) {
         }
     })
 
-    $('.order-container').append(orderStr)
+    $('.order-container').html(orderStr)
 
     return true;
 }
@@ -210,7 +208,13 @@ function startRefund() {
                 null,
                 function (res) {
                     console.log(res)
-
+                    if (res.success){
+                        console.log("退票成功")
+                    }
+                    else {
+                        console.log(res.content)
+                    }
+                    $('#refundTicket').modal("hide")
                     //刷新
                     getUsedTicket();
                 },
@@ -233,8 +237,8 @@ function getTicketList() {
     else {
         list.each(function(){
             var cur=$(this).val()
-            // console.log(cur)
-            // // console.log("*******************************")
+            console.log(cur)
+            console.log("*******************************")
             ticketList.push(cur)
         })
         return ticketList
