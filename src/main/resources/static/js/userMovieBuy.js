@@ -19,7 +19,7 @@ $(document).ready(function () {
         getRequest(
             '/ticket/get/occupiedSeats?scheduleId=' + scheduleId,
             function (res) {
-                // console.log(res)
+                console.log(res)
                 if (res.success) {
                     renderSchedule(res.content.scheduleItem, res.content.seats);
                 }

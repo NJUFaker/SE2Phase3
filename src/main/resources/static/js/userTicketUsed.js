@@ -40,24 +40,30 @@ function renderUsedTicket(originList) {
 }
 
 function getSortedList(originList) {
-    let resList=[]
-    var sche={}
-    originList.forEach(ticket =>{
-        if(!sche[ticket.scheduleId]){
-        resList.push({
-            scheId: ticket.scheduleId,
-            tList: [ticket],
-        })
-        sche[ticket.scheduleId]=ticket
+    let resList = []
+    var sche = {}
+
+    for (var i = 0; i < originList.length; i++) {
+        let ticket = originList[i]
+        // if (ticket.state === "未完成") {
+            if (!sche[ticket.scheduleId]) {
+                resList.push({
+                    scheId: ticket.scheduleId,
+                    tList: [ticket],
+                })
+                sche[ticket.scheduleId] = ticket
+            } else {
+                for (var j = 0; j < resList.length; j++) {
+                    let ele = resList[j]
+                    if (ele.scheId == ticket.scheduleId) {
+                        ele.tList.push(ticket)
+                        break
+                    }
+                }
+
+            }
+        // }
     }
-else{
-        resList.forEach(ele => {
-            if(ele.scheId==ticket.scheduleId){
-            ele.tList.push(ticket)
-        }
-    })
-    }
-})
     return resList
 }
 
