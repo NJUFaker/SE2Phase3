@@ -101,17 +101,25 @@ var renderOrder=function (finList) {
             let ordItemStr=''
             //形成座位
             let seatList=''
+            let tStrList=[]
             order.tList.forEach(function (ticket) {
                 seatList+='<div class="order-ticket">'+(ticket.rowIndex + 1) + "排" + (ticket.columnIndex + 1) + "座" +'</div>'
+                var ticketOb={
+                    id:ticket.id,
+                    seat:ticket.rowIndex + 1 + "排" + ticket.columnIndex + 1 + "座",
+                }
+                console.log(ticketOb.seat)
+                tStrList.push(JSON.stringify(ticketOb))
             })
             seatList='<div class="ticket-item col-md-8 right">'+seatList+'</div>'
+
             let curSchedule=order.schedule
             ordItemStr='<div class="order-item col-md-4"><div class="order-item-inside"><div class="order-basic-title"><span class="name">'+
                 curSchedule.movieName+'</span><span class="hall">'+
                 curSchedule.hallName+'</span><span class="startTime">'+
                 curSchedule.startTime.substring(0, 10) + ' ' + curSchedule.startTime.substring(11, 16)+'</span></div><div class="order-content"><div class="ticket-list"><div class="ticket-title col-md-4 left">已选择座位：</div>'+
                 seatList+'</div><div class="order-operate"><button type="button" class="btn btn-primary refund-ticket"data-backdrop="static" data-toggle="modal" data-target="#refundTicket" data-name="'+curSchedule.movieName+'" data-hall="'+curSchedule.hallName
-                +'" data-time="' + curSchedule.startTime+'" data-ticL="'+order.tList+'" >退票</button></div></div></div></div>'
+                +'" data-time="' + curSchedule.startTime+'" data-ticl='+JSON.stringify(tStrList)+' >退票</button></div></div></div></div>'
             orderStr+=ordItemStr
         }
     })
@@ -126,25 +134,68 @@ function isBefore(first,second) {
 }
 
 
+//渲染模态框时判断有无策略
+// $('.refund-modal').on('show.bs.modal', function () {
+//     console.log("aaaaaaaaaaaaa")
+//     getRequest(
+//         '/ticket/get/refundStrategy',
+//         function (res) {
+//             console.log(res)
+//             if (res.success) {
+//                 $('.refund-stra').html(res.content)
+//             }
+//             else {
+//                 alert(res.message)
+//                 $('#refundTicket').modal("hide")
+//             }
+//         },
+//         function (err) {
+//             console.log(err)
+//
+//         }
+//     )
+// })
+
+
 //点击退票按钮
 $(document).on('click','.refund-ticket',function (e) {
-    console.log(e)
-    // var user=JSON.parse(e.target.dataset.user)
-    // // console.log(user)
-    // $('#staff-edit-username-input').val(user.username);
-    // $('#staff-edit-password-input').val(user.password);
-    // $('#staff-edit-btn').attr("data-oldname",user.username)
-    // if (user.username==="root"){
-    //     $('#staff-edit-username-input').attr("readonly",true)
-    // }
-    // else {
-    //     $('#staff-edit-username-input').attr("readonly",false)
-    // }
+    // console.log(e)
+    let data=e.target.dataset
+    //填入数据基本信息
+    let basicMsg= '<div class="refund-content-name">' +data.name+'</div><div class="refund-content-hall">'+data.hall+'</div><div class="refund-content-time">'+ data.time.substring(0, 10) + ' ' + data.time.substring(11, 16)+'</div>'
+    $('.refund-basic-info-content').html(basicMsg)
+    // console.log(JSON.parse(data.ticl))
+    let list=JSON.parse(data.ticl)
+    let ticketList=''
+    for (var j=0;j<list.length;j++){
+        var ticket=JSON.parse(list[j])
+        let tempTic='<div class="form-group col-md-3 clearfix"><input  class="refund-ticket-checkbox col-md-4" type="checkbox" name="select-ticket" id="couponid'+ticket.id+'" value="'+ticket.id+'"><label class="order-ticket" for="couponid'+ticket.id+'">'+ticket.seat+'</label></input></div>'
+        ticketList+=tempTic
+    }
+    ticketList='<form class="form-horizontal list-form clearfix" role="form">'+ticketList+'</form>'
+    $('.ticket-list-form').html(ticketList)
+    getRefundstrategy()
 })
 
 //得到退票策略
     function getRefundstrategy(){
+    getRequest(
+        '/ticket/get/refundStrategy',
+        function (res) {
+            console.log(res)
+            if (res.success) {
+                $('.refund-stra').html(res.content)
+            }
+            else {
+                alert(res.message)
+                // $('#refundTicket').modal("hide")
+            }
+        },
+        function (err) {
+           console.log(err)
 
+        }
+    )
     }
 
 //点击确认
@@ -152,6 +203,7 @@ function startRefund() {
         var r=confirm("确认退票？")
         if (r){
             let ticketId=getTicketList()
+            console.log(ticketId)
         }
 
 }

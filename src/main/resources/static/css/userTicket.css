@@ -174,3 +174,13 @@ ul {
 .order-ticket{
     border-bottom:  #5cb762 dashed 1px;
 }
+.form-group{
+    display: inline;
+}
+
+.modal-body{
+    height: 100%;
+}
+.list-form{
+    margin-top: 5%;
+}

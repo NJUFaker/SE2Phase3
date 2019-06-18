@@ -87,23 +87,23 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="refundTicket" tabindex="-1" aria-labelledby="refundTicketLabel" aria-hidden="true">
+<div class="modal fade refund-modal" id="refundTicket" tabindex="-1" aria-labelledby="refundTicketLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cancel"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="refundTicketLabel">退票</h4>
             </div>
-            <div class="modal-body">
-                <div class="refund-basic-info">
+            <div class="modal-body clearfix">
+                <div class="refund-basic-info clearfix">
                     <h5 class="refund-basic-info-title">您要退的是：</h5>
                     <div class="refund-basic-info-content">
-                        <div class="refund-content-name">夏目友人帐</div>
-                        <div class="refund-content-hall">2号厅</div>
-                        <div class="refund-content-time">2019-06-17 08:40</div>
                     </div>
                 </div>
-                <form class="form-horizontal ticket-list" role="form">
+                <div class="refund-stra clearfix">
+                </div>
+                <div class="ticket-list-form clearfix">
+                <form class="form-horizontal ticket-list-form" role="form">
                     <div class="form-group">
                         <input  class="refund-ticket-checkbox" type="checkbox" name="select-ticket" id="couponid64" value="64"><label class="order-ticket" for="couponid64">1排10座</label></input>
                     </div>
@@ -117,6 +117,7 @@
                         <input  class="refund-ticket-checkbox" type="checkbox" name="select-ticket" id="couponid66" value="66"><label class="order-ticket" for="couponid66">1排12座</label></input>
                     </div>
                 </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" >取消</button>
