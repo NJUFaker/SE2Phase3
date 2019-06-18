@@ -90,6 +90,7 @@ ul {
 
 .nav-record-top-container{
     /*height: 70px;*/
+    position: fixed;
     width: 100%;
     background: #fff;
     padding: 5px 20px;
@@ -97,9 +98,12 @@ ul {
     justify-content: space-around;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
+    z-index:99;
 }
 
 .body-container{
+    /*height: 96%;*/
+    /*size: auto;*/
     height: 100%;
     background: #e4e7ea;
     /*padding: 20px;*/
@@ -117,45 +121,45 @@ ul {
     padding: 30px 20px;
 }
 
-.order-container{
+.record-container{
     /*flex: 2;*/
-    /*position: relative;*/
-    margin-left: 14%;
-    width: 90%;
+    position: relative;
+    /*size: auto;*/
+    left: 14%;
+    top: 52px;
+    width: 86%;
     height: 100%;
+    /*height: auto;*/
     padding: 10px 2%;
+    /*background-color: #ffffff;*/
 }
 
-.order-item-inside{
-    margin: 10px 0.5%;
+.record-item{
+    margin: 0;
     border:solid #c9e2b3 2px;
     box-shadow:10px 10px 10px #3c763d ;
     background-color: white;
-    border-radius:25px;
-    max-height: 250px;
-    height:250px;
-    padding: 20px 20px;
+    padding: 20px 5px;
 }
-.order-basic-title{
-    border-bottom: #3c763d dashed 1px;
-    display: flex;
-    justify-content: space-between;
-}
-.order-content{
-    height: 90%;
-    display: flex;
-    align-items: center;
-}
-.name,.hall,.startTime{
-    font-size: 18px;
-    padding-bottom: 3px;
-}
+
+/*.panel-collapse{*/
+/*    max-height: 400px;*/
+/*    min-height: 400px;*/
+/*}*/
+
+/*.panel-body{*/
+/*    max-height: 400px;*/
+/*    min-height: 400px;*/
+/*}*/
 .ticket-list{
-    padding: 1%;
-    width: 90%;
-    height: 100%;
+    /*padding: 1%;*/
+    /*width: 90%;*/
+    /*height: 100%;*/
     /*display: flex;*/
     /*justify-content: space-between;*/
+    max-height: 200px;
+    min-height: 200px;
+    overflow-y: auto;
 }
 
 .ticket-title{
@@ -163,6 +167,19 @@ ul {
     padding:0 1%;
 }
 
+.detail-title{
+    /*display: inline;*/
+    white-space:nowrap;
+}
+.sche-detail{
+    max-height: 300px;
+    overflow: auto;
+}
+
+/*.detail-ticket-list{*/
+/*    max-height: 70%;*/
+/*    overflow: auto;*/
+/*}*/
 .ticket-item{
     height: 100%;
     overflow: auto;
