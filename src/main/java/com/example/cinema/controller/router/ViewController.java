@@ -122,8 +122,4 @@ public class ViewController {
         return "userRechargeRecord";
     }
 
-    @RequestMapping(value = "/user/record/vip")
-    public String getUserRecordVip() {
-        return "userRecordVip";
-    }
 }
