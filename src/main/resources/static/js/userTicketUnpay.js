@@ -95,7 +95,7 @@ var renderOrder = function (finList) {
                 curSchedule.hallName + '</span><span class="startTime">' +
                 curSchedule.startTime.substring(0, 10) + ' ' + curSchedule.startTime.substring(11, 16) + '</span></div><div class="order-content"><div class="ticket-list"><div class="ticket-title col-md-4 left">已选择座位：</div>' +
                 seatList + '</div><div class="order-operate">' +
-                '<a href="user/movieDetail/buy?id=10&scheduleId='+order.scheId+'&unpay=true">继续支付</a>'+
+                '<a href="/user/movieDetail/buy?id=10&scheduleId='+order.scheId+'&unpay=true&'+encodeURIComponent(curSchedule.movieName)+'&'+encodeURIComponent(curSchedule.hallName)+'&'+encodeURIComponent(curSchedule.startTime.substring(5, 10) + curSchedule.startTime.substring(11, 16)+"场") +'">继续支付</a>'+
                 '</div></div></div></div>'
             orderStr += ordItemStr
         }
