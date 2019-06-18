@@ -88,7 +88,7 @@ ul {
     10px -40px 50px #1caf9a;
 }
 
-.nav-ticket-top-container{
+.nav-record-top-container{
     /*height: 70px;*/
     width: 100%;
     background: #fff;
@@ -106,7 +106,7 @@ ul {
     overflow-y: scroll;
     display: flex;
 }
-.nav-ticket-left-container {
+.nav-record-left-container {
     top: 52px;
     position:fixed;
     bottom: 0;

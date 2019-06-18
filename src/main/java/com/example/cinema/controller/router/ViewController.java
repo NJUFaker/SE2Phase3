@@ -96,4 +96,34 @@ public class ViewController {
     public String getUserTicketRefund() {
         return "userTicketRefund";
     }
+
+    @RequestMapping(value = "/user/ticket/used")
+    public String getUserTicketUsed() {
+        return "userTicketUsed";
+    }
+
+    @RequestMapping(value = "/user/ticket/unpay")
+    public String getUserTicketUnpay() {
+        return "userTicketUnpay";
+    }
+
+    @RequestMapping(value = "/user/ticket/avail")
+    public String getUserTicket() {
+        return "userTicketAvail";
+    }
+
+    @RequestMapping(value = "/user/record/consume")
+    public String getUserConsumeRecord() {
+        return "userConsumeRecord";
+    }
+
+    @RequestMapping(value = "/user/record/charge")
+    public String getUserRechargeRecord() {
+        return "userRechargeRecord";
+    }
+
+    @RequestMapping(value = "/user/record/vip")
+    public String getUserRecordVip() {
+        return "userRecordVip";
+    }
 }

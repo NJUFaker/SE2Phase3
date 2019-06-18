@@ -31,10 +31,11 @@
             getRequest(
                 "/schedule/" + tempVO.scheduleId,
                 function (res) {
-                    console.log("本次排片")
-                    console.log(res)
+                    // console.log("本次排片")
+                    // console.log(res)
                     let tempSche = res.content
-                    // console.log(tempSche.startTime.substring(0,10))
+                    // console.log(new Date(tempSche.startTime))
+                    // console.log(new Date(tempSche.startTime)>new Date())
                     let name = "<td>" + tempSche.movieName + "</td>"
                     let hallname = "<td>" + tempSche.hallName + "</td>"
                     let sTime = "<td>" + tempSche.startTime.substring(0, 10) + ' ' + tempSche.startTime.substring(11, 16) + "</td>"
