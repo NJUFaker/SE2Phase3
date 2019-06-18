@@ -79,5 +79,5 @@ public interface TicketService {
      */
     ResponseVO getRefundedTickets(int userId);
 
-    ResponseVO getInfoOfUnpaidTickets (List<TicketVO> ticketVOS);
+    ResponseVO getInfoOfUnpaidTickets (int userId,int scheduleId);
 }

@@ -20,10 +20,10 @@ $(document).ready(function() {
                     var couponList = res.content;
                     var couponListContent = '';
                     for (let coupon of couponList) {
-                        couponListContent += '<div class="col-md-4 coupon-wrapper"><input class="coupon-checkbox col-md-1 left" type="checkbox" name="select-coupon" id="couponid+' +
+                        couponListContent += '<div class="col-md-4 coupon-wrapper right"><input class="coupon-checkbox col-md-1" type="checkbox" name="select-coupon" id="couponid+' +
                             coupon.couponId +
                             '" value="' +coupon.couponId+
-                            '" ><label class="coupon-label col-md-11 right" for="couponid+' +coupon.couponId+
+                            '" ><label for="couponid+' +coupon.couponId+
                             '">' +
                             '<div class="coupon"><div class="content">' +
                             '<div class="col-md-8 left">' +
@@ -57,46 +57,23 @@ $(document).ready(function() {
 });
 
 
-//发放优惠券
+
 function submitPro() {
-    var couponId=getCouponIdList()
-    var amount=$('.vip-consume-input').val()
-    // console.log(amount)
-    // console.log(couponId)
-    // console.log("start post*3")
-
-    postRequest(
-        '/coupon/giveVIP/give?consume='+amount+'&couponIds='+couponId,
-        couponId,
-        function (res) {
-            console.log(res)
-            if (res.success){
-                alert("消费额满"+amount+"的会员获赠"+couponId.length+'张优惠券')
-            }
-            else {
-                alert(res.message)
-            }
-        },
-        function (err) {
-            alert("网络错误")
-        }
-
-    )
-
+    getCouponIdList()
 }
 //得到被选中的优惠券
-function getCouponIdList () {
+function getCouponIdList() {
     var list=$("input[name='select-coupon']:checked")
     var couponId=[]
-    // console.log(list)
-    if (list.length==0){
+    // console.log(!list)
+    if (list==="a"){
         alert("请选择要赠送的优惠券")
     }
     else {
     list.each(function(){
         var cur=$(this).val()
         // console.log(cur)
-        // // console.log("*******************************")
+        // console.log("*******************************")
         couponId.push(cur)
     })
     return couponId

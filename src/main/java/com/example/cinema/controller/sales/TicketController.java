@@ -60,7 +60,7 @@ public class TicketController {
     }
 
     @GetMapping("/get/info/unpaid")
-    public ResponseVO getInfoOfUnpaidTickets (@RequestBody List<TicketVO> ticketVOS){
-        return ticketService.getInfoOfUnpaidTickets(ticketVOS);
+    public ResponseVO getInfoOfUnpaidTickets (@RequestParam int userId,@RequestParam int scheduleId){
+        return ticketService.getInfoOfUnpaidTickets(userId,scheduleId);
     }
 }
