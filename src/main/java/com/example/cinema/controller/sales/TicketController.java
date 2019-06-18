@@ -3,6 +3,7 @@ package com.example.cinema.controller.sales;
 import com.example.cinema.bl.sales.TicketService;
 import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.TicketForm;
+import com.example.cinema.vo.TicketVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,8 +50,8 @@ public class TicketController {
         return ticketService.getRefundStrategies();
     }
     @DeleteMapping("/delete")
-    public ResponseVO refundTickets(@RequestParam List<Integer> ticketId,double rate){
-        return ticketService.refundTickets(ticketId,rate);
+    public ResponseVO refundTickets(@RequestParam List<Integer> ticketId){
+        return ticketService.refundTickets(ticketId);
     }
 
     @GetMapping("/get/refundedTickets/{userId}")
@@ -58,5 +59,8 @@ public class TicketController {
         return ticketService.getRefundedTickets(userId);
     }
 
-
+    @GetMapping("/get/info/unpaid")
+    public ResponseVO getInfoOfUnpaidTickets (@RequestBody List<TicketVO> ticketVOS){
+        return ticketService.getInfoOfUnpaidTickets(ticketVOS);
+    }
 }

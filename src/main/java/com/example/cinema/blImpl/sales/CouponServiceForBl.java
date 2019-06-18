@@ -18,5 +18,5 @@ public interface CouponServiceForBl {
      */
      Coupon getCouponById(Integer couponId);
      void deleteCoupon(int couponId,int userId);
-     List<Coupon> selectCouponByUserAndAmount(TicketForm ticketForm);
+     List<Coupon> selectCouponByUserAndAmount(double total,int userId);
 }

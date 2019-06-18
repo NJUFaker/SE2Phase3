@@ -2,6 +2,7 @@ package com.example.cinema.bl.sales;
 
 import com.example.cinema.vo.ResponseVO;
 import com.example.cinema.vo.TicketForm;
+import com.example.cinema.vo.TicketVO;
 
 import java.util.List;
 
@@ -71,10 +72,12 @@ public interface TicketService {
      * @param ticketId
      * @return
      */
-    ResponseVO refundTickets(List<Integer> ticketId,double rate);
+    ResponseVO refundTickets(List<Integer> ticketId);
 
     /**
      * 得到用户所有退的票
      */
     ResponseVO getRefundedTickets(int userId);
+
+    ResponseVO getInfoOfUnpaidTickets (List<TicketVO> ticketVOS);
 }

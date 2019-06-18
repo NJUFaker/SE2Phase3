@@ -88,9 +88,8 @@ public class CouponServiceImpl implements CouponService, CouponServiceForBl {
     }
 
     @Override
-    public List<Coupon> selectCouponByUserAndAmount(TicketForm ticketForm){
-        ScheduleItem schedule=scheduleServiceForBl.getScheduleItemById(ticketForm.getScheduleId());
-        return couponMapper.selectCouponByUserAndAmount(ticketForm.getUserId(),schedule.getFare()*ticketForm.getSeats().size());
+    public List<Coupon> selectCouponByUserAndAmount(double total,int userId){
+        return couponMapper.selectCouponByUserAndAmount(userId,total);
     }
 
     @Override

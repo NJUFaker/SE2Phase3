@@ -79,7 +79,6 @@ public class TicketServiceImpl implements TicketService {
 
         List<SeatForm> seats=ticketForm.getSeats();
         List<TicketVO> ticketVOS=new ArrayList<>();
-        int count=0;
         for (int i = 0; i < seats.size(); i++) {
             int[][] lockedSeats=getLockedSeats(ticketForm.getScheduleId());
             if (lockedSeats[seats.get(i).getRowIndex()][seats.get(i).getColumnIndex()]==1){
@@ -97,15 +96,10 @@ public class TicketServiceImpl implements TicketService {
             ticketMapper.insertTicket(ticket);
             TicketVO ticketVO=ticketMapper.selectTicketByScheduleIdAndSeat(ticket.getScheduleId(),ticket.getColumnIndex(),ticket.getRowIndex()).getVO();
             ticketVOS.add(ticketVO);
-            count++;
         }
 
         try {
-            TicketWithCouponVO ticketWithCouponVO=new TicketWithCouponVO();
-            ticketWithCouponVO.setTicketVOList(ticketVOS);
-            ticketWithCouponVO.setTotal(count*scheduleService.getScheduleItemById(ticketForm.getScheduleId()).getFare());
-            ticketWithCouponVO.setCoupons(couponServiceForBl.selectCouponByUserAndAmount(ticketForm));
-            ticketWithCouponVO.setActivities(activityServiceForBl.selectActivities());
+            TicketWithCouponVO ticketWithCouponVO=getTicketWithCouponVO(ticketVOS);
             return ResponseVO.buildSuccess(ticketWithCouponVO);
         } catch (Exception e) {
             e.printStackTrace();
@@ -374,8 +368,10 @@ public class TicketServiceImpl implements TicketService {
         }
     }
     @Override
-    public ResponseVO refundTickets(List<Integer> ticketId,double rate){
+    public ResponseVO refundTickets(List<Integer> ticketId){
         try{
+            ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticketMapper.selectTicketById(ticketId.get(0)).getScheduleId());
+            double rate=refundStrategyForBl.getBestRefundStrategy(scheduleItem.getStartTime());
             if (rate==0){
                 return ResponseVO.buildFailure("不可以退票");
             }
@@ -420,7 +416,32 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
+    /**
+     * 得到再支付票需要的相关信息：观众可用优惠券，所有优惠活动，总价
+     * @param ticketVOS
+     * @return
+     */
+    @Override
+    public ResponseVO getInfoOfUnpaidTickets (List<TicketVO> ticketVOS){
+        try {
+            TicketWithCouponVO ticketWithCouponVO=getTicketWithCouponVO(ticketVOS);
+            return ResponseVO.buildSuccess(ticketWithCouponVO);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseVO.buildFailure("失败");
+        }
+    }
 
+    private TicketWithCouponVO getTicketWithCouponVO(List<TicketVO> ticketVOS){
+        TicketWithCouponVO ticketWithCouponVO=new TicketWithCouponVO();
+        ticketWithCouponVO.setTicketVOList(ticketVOS);
+        double total=ticketVOS.size()*scheduleService.getScheduleItemById(ticketVOS.get(0).getScheduleId()).getFare();
+        ticketWithCouponVO.setTotal(total);
+        ticketWithCouponVO.setCoupons(couponServiceForBl.selectCouponByUserAndAmount(total,ticketVOS.get(0).getUserId()));
+        ticketWithCouponVO.setActivities(activityServiceForBl.selectActivities());
+        return ticketWithCouponVO;
+    }
 
 
 
