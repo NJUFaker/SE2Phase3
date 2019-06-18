@@ -52,10 +52,11 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
             for(int i=0;i<strategies.size();i++){
                 strategyForms.add(new RefundTicketStrategyForm(strategies.get(i)));
             }
+            return strategyForms;
         }catch (Exception e){
             return null;
         }
-        return null;
+
     }
 
     @Override
