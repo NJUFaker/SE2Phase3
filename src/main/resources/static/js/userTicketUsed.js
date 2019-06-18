@@ -45,7 +45,7 @@ function getSortedList(originList) {
 
     for (var i = 0; i < originList.length; i++) {
         let ticket = originList[i]
-        // if (ticket.state === "未完成") {
+        if (ticket.state === "已完成") {
             if (!sche[ticket.scheduleId]) {
                 resList.push({
                     scheId: ticket.scheduleId,
@@ -62,7 +62,7 @@ function getSortedList(originList) {
                 }
 
             }
-        // }
+        }
     }
     return resList
 }
@@ -112,7 +112,7 @@ var renderOrder=function (finList) {
         }
     })
 
-    $('.order-container').append(orderStr)
+    $('.order-container').html(orderStr)
 
     return true;
 }
