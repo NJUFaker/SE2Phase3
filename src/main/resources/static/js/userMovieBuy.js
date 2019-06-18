@@ -182,6 +182,8 @@ function switchPay(type) {
 }
 
 function renderOrder(orderInfo) {
+    console.log("^^^^^^^order")
+    console.log(orderInfo)
     var ticketStr = "<div>" + selectedSeats.length + "张</div>";
     for (let ticketInfo of orderInfo.ticketVOList) {
         ticketStr += "<div>" + (ticketInfo.rowIndex + 1) + "排" + (ticketInfo.columnIndex + 1) + "座</div>";
@@ -232,8 +234,8 @@ function payConfirmClick() {
 }
 // TODO:填空
 function postPayRequest(isVIP) {
-    $('#order-state').css("display", "none");
-    $('#success-state').css("display", "");
+    // $('#order-state').css("display", "none");
+    // $('#success-state').css("display", "");
     $('#buyModal').modal('hide')
     console.log(orderInfo)
     console.log(order)
@@ -251,7 +253,18 @@ function postPayRequest(isVIP) {
             '/ticket/vip/buy?ticketId='+order.ticketId+'&couponId='+order.couponId,
             null,
             function (res) {
+                console.log("aaaaaaaaaaaaa")
                 console.log(res)
+                if (!res.success){
+                    alert(res.message+",请更换支付方式或给会员卡进行充值。未完成的订单在15分钟内，可至我的电影票-待付款完成。")
+                    // $('#buyModal').modal('hide')
+                    // $('#buyModal').modal('show')
+                }
+                else {
+                    $('#order-state').css("display", "none");
+                    $('#success-state').css("display", "");
+                    $('#buyModal').modal('hide')
+                }
             },
             function (err) {
                 alert(err.message)

@@ -2,6 +2,7 @@ var dates;
 var movieId;
 
 $(document).ready(function () {
+    console.log(window.location.href)
     movieId = parseInt(window.location.href.split('?')[1].split('&')[0].split('=')[1]);
 
     getSchedule();

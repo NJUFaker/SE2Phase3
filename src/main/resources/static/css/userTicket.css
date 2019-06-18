@@ -89,7 +89,7 @@ ul {
 }
 
 .nav-ticket-top-container{
-    /*height: 70px;*/
+    position: fixed;
     width: 100%;
     background: #fff;
     padding: 5px 20px;
@@ -97,6 +97,7 @@ ul {
     justify-content: space-around;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
+    z-index:99;
 }
 
 .body-container{
@@ -119,10 +120,13 @@ ul {
 
 .order-container{
     /*flex: 2;*/
-    /*position: relative;*/
-    margin-left: 14%;
-    width: 90%;
+    position: relative;
+    /*size: auto;*/
+    left: 14%;
+    top: 52px;
+    width: 86%;
     height: 100%;
+    /*height: auto;*/
     padding: 10px 2%;
 }
 
