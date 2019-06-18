@@ -418,12 +418,20 @@ public class TicketServiceImpl implements TicketService {
 
     /**
      * 得到再支付票需要的相关信息：观众可用优惠券，所有优惠活动，总价
-     * @param ticketVOS
+     *
      * @return
      */
     @Override
-    public ResponseVO getInfoOfUnpaidTickets (List<TicketVO> ticketVOS){
+    public ResponseVO getInfoOfUnpaidTickets (int userId,int scheduleId){
         try {
+            List<Ticket> tickets=ticketMapper.selectTicketByUserScheduleAndState(userId,scheduleId);
+            if(tickets==null||tickets.size()==0){
+                return ResponseVO.buildFailure("由于您未在15分钟内支付，订单已经过期");
+            }
+            List<TicketVO> ticketVOS=new ArrayList<>();
+            for (int i = 0; i < tickets.size(); i++) {
+                ticketVOS.add(tickets.get(i).getVO());
+            }
             TicketWithCouponVO ticketWithCouponVO=getTicketWithCouponVO(ticketVOS);
             return ResponseVO.buildSuccess(ticketWithCouponVO);
         }

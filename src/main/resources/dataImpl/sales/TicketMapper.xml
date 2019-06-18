@@ -37,6 +37,9 @@
         select * from ticket_refunded where user_id=#{userId}
     </select>
 
+    <select id="selectTicketByUserScheduleAndState" resultMap="Ticket">
+        select * from ticket where user_id=#{userId} and schedule_id=#{scheduleId} and state=0
+    </select>
     <update id="updateTicketState">
         update ticket set state = #{state} where id=#{ticketId}
     </update>

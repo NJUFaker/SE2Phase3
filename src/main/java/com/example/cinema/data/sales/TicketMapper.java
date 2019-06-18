@@ -33,7 +33,7 @@ public interface TicketMapper {
 
     void updateTicketWay(@Param("ticketId") int ticketId,@Param("way") double way);
 
-
+    List<Ticket> selectTicketByUserScheduleAndState(@Param("userId") int userId,@Param("scheduleId")int scheduleId);
     /**
      * 删除失效过期的票
      */
