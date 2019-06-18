@@ -40,6 +40,9 @@ public class RefundTicketStrategy {
         return refund_percentage;
     }
 
+    public RefundTicketStrategy(){
+        ;
+    }
     public RefundTicketStrategy(RefundTicketStrategyForm r){
         this.id=r.getId();
         this.refund_percentage=r.getRefundPercentage();
