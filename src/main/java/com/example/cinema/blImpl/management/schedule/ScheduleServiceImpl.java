@@ -328,22 +328,4 @@ public class ScheduleServiceImpl implements ScheduleService, ScheduleServiceForB
         }
         return scheduleItemVOList;
     }
-    void eatSth(){};
-    void sleepSomeTime(){};
-
-    int time=6*3600;
-    void eat(){
-        while(time>0){
-            this.eatSth();
-            time--;
-        }
-        sleep();
-    }
-    void sleep(){
-        while(time>0){
-            this.sleepSomeTime();
-            time--;
-        }
-        eat();
-    }
 }
