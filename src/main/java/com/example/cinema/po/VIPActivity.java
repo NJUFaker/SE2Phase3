@@ -4,8 +4,8 @@ public class VIPActivity{
     private int id;
     private String name;
     private String description;
-    private float cost_in_need; //固定金额减免所需要的最低消费
-    private float bonus_balance;//百分比减免Dd
+    private float cost_in_need; //固定金额减免所需要的最低消费（满减所需金额）
+    private float bonus_balance;//减的金额
 
 
 

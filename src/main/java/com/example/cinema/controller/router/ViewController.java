@@ -75,7 +75,7 @@ public class ViewController {
     }
 
     @RequestMapping(value = "/user/movieDetail/buy")
-    public String getUserMovieBuy(@RequestParam int id) {
+    public String getUserMovieBuy(@RequestParam int id ) {
         return "userMovieBuy";
     }
 

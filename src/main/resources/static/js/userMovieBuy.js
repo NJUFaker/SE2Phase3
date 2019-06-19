@@ -10,16 +10,70 @@ var useVIP = true;
 
 //
 $(document).ready(function () {
-    //console.log(window)
+    console.log(window.location.href.split('?')[1])
     scheduleId = parseInt(window.location.href.split('?')[1].split('&')[1].split('=')[1]);
 
-    getInfo();
+    let isUnpay=window.location.href.split('?')[1].split('&')[2].split('=')[1];
+    console.log(isUnpay==='false')
+    //再次支付
+    if (isUnpay==='true'){
+        $('#seat-state').css("display", "none");
+        $('#order-state').css("display", "");
+
+        var  info=window.location.href.split('?')[1].split('&');
+
+        $('#order-movie-name').html(decodeURIComponent(info[3]));
+        $('#order-schedule-hall-name').html(decodeURIComponent(info[4]));
+        $('#order-schedule-time').html(decodeURIComponent(info[5]));
+
+
+        //得到order
+        getRequest(
+            '/ticket/get/info/unpaid?userId='+sessionStorage.getItem('id')+'&scheduleId='+scheduleId,
+            function (res) {
+                console.log(res)
+                if (res.success){
+                    renderOrder(res.content)
+                    getRequest(
+                        '/vip/' + sessionStorage.getItem('id') + '/get',
+                        function (res) {
+                            isVIP = res.success;
+                            useVIP = res.success;
+                            if (isVIP) {
+                                $('#member-balance').html("<div><b>会员卡余额：</b>" + res.content.balance.toFixed(2) + "元</div>");
+                            } else {
+                                $("#member-pay").css("display", "none");
+                                $("#nonmember-pay").addClass("active");
+
+                                $("#modal-body-member").css("display", "none");
+                                $("#modal-body-nonmember").css("display", "");
+                            }
+                        },
+                        function (error) {
+                            alert(error);
+                        });
+                }
+                else {
+                    console.log(res.message)
+                }
+            },
+            function (err) {
+                alert(err)
+            }
+        )
+
+
+    }
+    else {
+        getInfo();
+    }
+
 
     function getInfo() {
         getRequest(
             '/ticket/get/occupiedSeats?scheduleId=' + scheduleId,
             function (res) {
-                // console.log(res)
+                console.log(res)
                 if (res.success) {
                     renderSchedule(res.content.scheduleItem, res.content.seats);
                 }
@@ -184,7 +238,7 @@ function switchPay(type) {
 function renderOrder(orderInfo) {
     console.log("^^^^^^^order")
     console.log(orderInfo)
-    var ticketStr = "<div>" + selectedSeats.length + "张</div>";
+    var ticketStr = "<div>" + orderInfo.ticketVOList.length + "张</div>";
     for (let ticketInfo of orderInfo.ticketVOList) {
         ticketStr += "<div>" + (ticketInfo.rowIndex + 1) + "排" + (ticketInfo.columnIndex + 1) + "座</div>";
         order.ticketId.push(ticketInfo.id);
@@ -192,6 +246,7 @@ function renderOrder(orderInfo) {
     $('#order-tickets').html(ticketStr);
 
     var total = orderInfo.total;
+    $('#order-schedule-fare').text(Math.floor(total/orderInfo.ticketVOList.length))
     $('#order-total').text(total);
     $('#order-footer-total').text("总金额： ¥" + total);
 
@@ -286,4 +341,18 @@ function validateForm() {
         $('#userBuy-cardPwd-error').css("visibility", "visible");
     }
     return isValidate;
+}
+
+function getCookie(cname)
+{
+    var ss = document.cookie;
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++)
+    {
+        var c = ca[i].trim();
+        if (c.indexOf(name)==0)
+            return c.substring(name.length,c.length);
+    }
+    return "";
 }

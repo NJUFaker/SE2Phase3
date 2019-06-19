@@ -40,24 +40,30 @@ function renderUsedTicket(originList) {
 }
 
 function getSortedList(originList) {
-    let resList=[]
-    var sche={}
-    originList.forEach(ticket =>{
-        if(!sche[ticket.scheduleId]){
-        resList.push({
-            scheId: ticket.scheduleId,
-            tList: [ticket],
-        })
-        sche[ticket.scheduleId]=ticket
-    }
-else{
-        resList.forEach(ele => {
-            if(ele.scheId==ticket.scheduleId){
-            ele.tList.push(ticket)
+    let resList = []
+    var sche = {}
+
+    for (var i = 0; i < originList.length; i++) {
+        let ticket = originList[i]
+        if (ticket.state === "已完成") {
+            if (!sche[ticket.scheduleId]) {
+                resList.push({
+                    scheId: ticket.scheduleId,
+                    tList: [ticket],
+                })
+                sche[ticket.scheduleId] = ticket
+            } else {
+                for (var j = 0; j < resList.length; j++) {
+                    let ele = resList[j]
+                    if (ele.scheId == ticket.scheduleId) {
+                        ele.tList.push(ticket)
+                        break
+                    }
+                }
+
+            }
         }
-    })
     }
-})
     return resList
 }
 
@@ -106,7 +112,7 @@ var renderOrder=function (finList) {
         }
     })
 
-    $('.order-container').append(orderStr)
+    $('.order-container').html(orderStr)
 
     return true;
 }
