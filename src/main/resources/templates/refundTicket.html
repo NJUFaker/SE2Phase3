@@ -32,17 +32,31 @@
 
         </ul>
     </div>
+<!--    /退票主显示界面-->
     <div class="content-container">
         <div class="header">
             <div class="content-header">
                 <span class="title gray-text" style="margin-right: 75%">退票策略</span>
                 <button type="button" class="btn btn-primary" data-backdrop="static" data-toggle="modal" data-target="#activityModal"><i class="icon-plus-sign"></i> 发布退票策略</button>
             </div>
-            <ul class="movie-on-list">
-            </ul>
+            <div class="table">
+                <table class="staff-table table">
+                    <thead class="staff-table-head col-md">
+                    <tr>
+                        <th>退票最晚期限</th>
+                        <th>应退金额百分比</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody class="staff-table-body" id="staff-table-body-in">
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 </div>
+<!--/新增退票策略按钮/-->
 <div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -52,16 +66,16 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form">
+<!--                    <div class="form-group">-->
+<!--                        <label class="col-sm-2 control-label" for="refundStrategy-description-input"><span class="error-text">*</span>退票策略</label>-->
+<!--                        <div class="col-sm-10">-->
+<!--                            <input type="text" class="form-control" id="refundStrategy-description-input" placeholder="请输入退票策略描述">-->
+<!--                        </div>-->
+<!--                    </div>-->
                     <div class="form-group">
-                        <label class="col-sm-2 control-label" for="activity-description-input"><span class="error-text">*</span>退票策略</label>
+                        <label class="col-sm-2 control-label" for="refund-time-input"><span class="error-text">*</span>退票期限</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="activity-description-input" placeholder="请输入退票策略描述">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label" for="activity-start-date-input"><span class="error-text">*</span>退票期限</label>
-                        <div class="col-sm-10">
-                            <input type="time" class="form-control" id="activity-start-date-input" placeholder="请输入最晚退票期限">
+                            <input type="time" class="form-control" id="refund-time-input" placeholder="请输入最晚退票期限">
                         </div>
                     </div>
                     <div class="form-group">
@@ -74,6 +88,42 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary" id="activity-form-btn">确认</button>
             </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="activityModaledit" tabindex="-1" role="dialog" aria-labelledby="movieModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="activytyModalLabeledit">发布退票策略</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <!--                    <div class="form-group">-->
+                    <!--                        <label class="col-sm-2 control-label" for="refundStrategy-description-input"><span class="error-text">*</span>退票策略</label>-->
+                    <!--                        <div class="col-sm-10">-->
+                    <!--                            <input type="text" class="form-control" id="refundStrategy-description-input" placeholder="请输入退票策略描述">-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="refund-time-edit-input"><span class="error-text">*</span>退票期限</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" id="refund-time-edit-input" placeholder="请输入最晚退票期限">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="refundPercentage-edit-input"><span class="error-text">*</span>  退票金额百分比</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="refundPercentage-edit-input" placeholder="请输入退票金额百分比">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="activity-edit-form-btn">确认</button>
+                    </div>
                 </form>
             </div>
         </div>
