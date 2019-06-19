@@ -13,9 +13,9 @@ public interface VIPActivityMapper {
 
     VIPActivity getVIPActivityById(int id);
 
-    int insertActivity(VIPActivityForm vipActivityForm);
+    int insertActivity(VIPActivity vipActivity);
 
-    void updateActivity(VIPActivityForm vipActivityForm);
+    void updateActivity(VIPActivity vipActivity);
 
     void deleteActivity(int id);
 }
