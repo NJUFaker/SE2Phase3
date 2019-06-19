@@ -18,11 +18,11 @@ public class RefundTicketStrategyController {
     @Autowired
     private RefundTicketStrategyService refundTicketStrategyService;
 
-    @RequestMapping(value = "refund/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/refund/add",method = RequestMethod.POST)
     public ResponseVO publishRefundTicketStragety(@RequestBody RefundTicketStrategyForm refundTicketStrategyForm){
         return refundTicketStrategyService.publishRefundTicketStrategy(refundTicketStrategyForm);
     }
-    @RequestMapping(value = "refund/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/refund/update",method = RequestMethod.POST)
     public ResponseVO updateRefundTicketStragety(@RequestBody RefundTicketStrategyForm refundTicketStrategyForm){
         return refundTicketStrategyService.updateRefundTicketStrategy(refundTicketStrategyForm);
     }

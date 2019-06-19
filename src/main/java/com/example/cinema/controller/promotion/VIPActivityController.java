@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class VIPActivityController {
     @Autowired
     private VIPActivityService vipActivityService;
-    @RequestMapping(value = "vipActivity/publish",method = RequestMethod.POST)
+    @RequestMapping(value = "/vipActivity/publish",method = RequestMethod.POST)
     public ResponseVO publishVIPActivity(@RequestBody VIPActivityForm vipActivityForm){
         return vipActivityService.publishVIPActivity(vipActivityForm);
     }
-    @RequestMapping(value = "vipActivity/get",method = RequestMethod.GET)
+    @RequestMapping(value = "/vipActivity/get",method = RequestMethod.GET)
     public ResponseVO getVIPActivity(){
         return vipActivityService.getVIPActivities();
     }
 
-    @RequestMapping(value = "vipActivity/update",method = RequestMethod.POST)
+    @RequestMapping(value = "/vipActivity/update",method = RequestMethod.POST)
     public ResponseVO updateVIPActivity(@RequestBody VIPActivityForm vipActivityForm){
         return vipActivityService.updateVIPActivity(vipActivityForm);
     }
