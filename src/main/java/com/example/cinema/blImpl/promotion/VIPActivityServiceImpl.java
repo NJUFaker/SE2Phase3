@@ -17,7 +17,7 @@ public class VIPActivityServiceImpl implements VIPActivityService {
     @Override
     public ResponseVO publishVIPActivity(VIPActivityForm vipActivityForm) {
         try {
-            return ResponseVO.buildSuccess(vipActivityMapper.insertActivity(vipActivityForm));
+            return ResponseVO.buildSuccess(vipActivityMapper.insertActivity(new VIPActivity(vipActivityForm)));
         } catch (Exception e) { return ResponseVO.buildFailure("Module Failed");}
     }
     @Override
@@ -37,7 +37,7 @@ public class VIPActivityServiceImpl implements VIPActivityService {
         try {
             VIPActivity activity=vipActivityMapper.getVIPActivityById(vipActivityForm.getId());
             if(activity==null) throw new Exception();
-            vipActivityMapper.updateActivity(vipActivityForm);
+            vipActivityMapper.updateActivity(new VIPActivity(vipActivityForm));
             return ResponseVO.buildSuccess();
         } catch (Exception e) { return ResponseVO.buildFailure("Module Failed");}
 

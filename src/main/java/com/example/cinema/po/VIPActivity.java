@@ -1,5 +1,7 @@
 package com.example.cinema.po;
 
+import com.example.cinema.vo.VIPActivityForm;
+
 public class VIPActivity{
     private int id;
     private String name;
@@ -8,7 +10,16 @@ public class VIPActivity{
     private float bonus_balance;//减的金额
 
 
+    public VIPActivity(){
 
+    }
+    public VIPActivity(VIPActivityForm vipActivityForm){
+        this.id=vipActivityForm.getId();
+        this.name=vipActivityForm.getName();
+        this.description=vipActivityForm.getDescription();
+        this.cost_in_need=vipActivityForm.getCostInNeed();
+        this.bonus_balance=vipActivityForm.getBonusBalance();
+    }
 
     public void setDescription(String description) {
         this.description = description;
