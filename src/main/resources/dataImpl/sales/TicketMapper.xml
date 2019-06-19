@@ -6,6 +6,11 @@
         insert into ticket(user_id,schedule_id,column_index,row_index,state)
         values(#{userId}, #{scheduleId},#{columnIndex},#{rowIndex},#{state})
     </insert>
+    <insert id="insertRefundedTicket" parameterType="com.example.cinema.po.Ticket"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into ticket_refunded(user_id,schedule_id,column_index,row_index,state,time,consume,way)
+        values(#{userId}, #{scheduleId},#{columnIndex},#{rowIndex},#{state},#{time},#{consume},#{way})
+    </insert>
     <insert id="insertTickets" parameterType="java.util.List"
             useGeneratedKeys="true" keyProperty="id">
         insert into ticket(user_id,schedule_id,column_index,row_index,state)
