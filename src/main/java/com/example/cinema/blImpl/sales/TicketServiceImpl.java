@@ -370,6 +370,7 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public ResponseVO refundTickets(List<Integer> ticketId){
         try{
+
             ScheduleItem scheduleItem=scheduleService.getScheduleItemById(ticketMapper.selectTicketById(ticketId.get(0)).getScheduleId());
             double rate=refundStrategyForBl.getBestRefundStrategy(scheduleItem.getStartTime());
             if (rate==0){
@@ -382,10 +383,11 @@ public class TicketServiceImpl implements TicketService {
                     total=total+ticket.getConsume();
                     if (ticket.getWay()==1){
                         VIPCard vipCard=(VIPCard)vipService.getCardByUserId(ticket.getUserId()).getContent();
-                        vipServiceForBl.updateVipBalance(vipCard.getId(),ticket.getConsume());
+                        vipServiceForBl.updateVipBalance(vipCard.getId(),rate*ticket.getConsume());
                         vipServiceForBl.updateVipConsume(vipCard.getId(),vipCard.getConsume()-ticket.getConsume());
                     }
                     ticketMapper.deleteTicket(ticketId.get(i));
+                    ticketMapper.insertRefundedTicket(ticket);
                 }
                 double out=rate*total;//退还给用户的总金额
                 return ResponseVO.buildSuccess(out);
