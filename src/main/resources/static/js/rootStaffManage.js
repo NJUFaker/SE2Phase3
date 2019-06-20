@@ -41,7 +41,7 @@ $(document).ready(function () {
 
 
 
-    $("#staff-add-btn").click(function () {
+    $("#card-form-btn").click(function () {
         var user=getUserForm();
         if (validUserForm(user)){
             postRequest(
@@ -166,7 +166,7 @@ $(document).ready(function () {
             isValidUser=false
             $('#staff-password-input').parent('.form-group').addClass('has-error');
         }
-        if (user.password) 
+        if (user.password)
         // console.log(isValidUser)
         return isValidUser
     }

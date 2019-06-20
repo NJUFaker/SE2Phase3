@@ -1,7 +1,7 @@
 
 $(document).ready(function () {
 
-    console.log(getTime(95000))
+    // console.log(getTime(86430))
     // console.log(parseInt(12/5))
     // console.log(parseInt(14/5))
     // console.log(parseInt(13%5))
@@ -38,7 +38,7 @@ $(document).ready(function () {
             stra.sec=temp.sec
             console.log(stra)
             var link='<button type="button" class="btn btn-primary edit-refund"data-backdrop="static" data-toggle="modal" data-target="#editRefund"  data-user='+JSON.stringify(stra) +'> 编辑</button>'
-            var line=$('<tr>'+'<td>'+stra.availableTime+'</td>'+'<td>'+stra.day+"天"+stra.hour+"小时"+stra.min+"分钟"+stra.sec+"秒"+'</td>'+'<td>'+link+'</td>'+'</tr>')
+            var line=$('<tr>'+'<td>'+stra.day+"天"+stra.hour+"小时"+stra.min+"分钟"+stra.sec+"秒"+'</td>'+'<td>'+stra.refundPercentage+'</td>'+'<td>'+link+'</td>'+'</tr>')
             $("#refund-table-body-in").append(line)
         }
     }
@@ -76,14 +76,15 @@ $(document).ready(function () {
     })
 
     //显示编辑框
-    $(document).on('click','#editRefund',function (e) {
+    $(document).on('click','.edit-refund',function (e) {
         var refund=JSON.parse(e.target.dataset.user)
+
         console.log(refund)
         $('#edit-refund-day-input').val(refund.day);
         $('#edit-refund-hour-input').val(refund.hour);
         $('#edit-refund-min-input').val(refund.min);
         $('#edit-refund-sec-input').val(refund.sec);
-        $('#edit-refund-percentage-input').val(refund.per);
+        $('#edit-refund-percentage-input').val(refund.refundPercentage);
 
         $('#edit-refund-btn').attr("data-id",refund.id)
     })
@@ -104,7 +105,7 @@ $(".edit-refund-btn").click(function () {
             refund
             ,
             function (res) {
-                console.log(res)
+                // console.log(res)
                 if (res.message){
                     alert(res.message)
                 }
@@ -129,7 +130,8 @@ function getTime(second) {
     var day=parseInt(second/86400)
     var temp=second%86400
     var hour=parseInt(temp/3600)
-    temp=second%3600
+    temp=temp%3600
+    // console.log(temp)
     var min=parseInt(temp/60)
     var sec=temp%60
     return {
@@ -141,7 +143,8 @@ function getTime(second) {
 }
 
 function setTime(day,h,m,s) {
-    return day*86400+h*3600+m*60+s
+    // console.log(parseInt(day*86400)+parseInt(h*3600)+parseInt(m*60)+parseInt(s))
+    return parseInt(day*86400)+parseInt(h*3600)+parseInt(m*60)+parseInt(s)
 }
 
 function getRefundForm() {
@@ -156,12 +159,13 @@ function getRefundForm() {
 }
 
 function validRefundForm(ref) {
+    if (!ref.day) console.log("asdffff")
     var isValidUser=true
-    if (!(ref.hour&&ref.hour&&ref.min&&ref.sec&&ref.hour<25&&ref.hour>0&&ref.min<61&&ref.min>0&&ref.sec<61&&ref.sec>0)){
+    if (!(ref.hour&&ref.hour&&ref.min&&ref.sec&&ref.hour<25&&ref.hour>=0&&ref.min<61&&ref.min>=0&&ref.sec<61&&ref.sec>=0)){
         isValidUser=false
         alert("请输入正确的时间")
     }
-    if (!user.password){
+    if (!ref.per||ref.per>1&&ref.per<0){
         isValidUser=false
         alert("请输入正确的退款比例")
     }
