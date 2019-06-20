@@ -79,5 +79,10 @@ public interface TicketService {
      */
     ResponseVO getRefundedTickets(int userId);
 
+    /**
+     * 得到再支付票需要的相关信息：观众可用优惠券，所有优惠活动，总价
+     *
+     * @return
+     */
     ResponseVO getInfoOfUnpaidTickets (int userId,int scheduleId);
 }

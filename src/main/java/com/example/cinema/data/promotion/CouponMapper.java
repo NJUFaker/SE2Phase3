@@ -23,6 +23,12 @@ public interface CouponMapper {
 
     void deleteCouponUser(@Param("couponId") int couponId,@Param("userId")int userId);
 
+    /**
+     * 得到观众在一次购票中可用的优惠券
+     * @param userId
+     * @param amount 票的总价
+     * @return
+     */
     List<Coupon> selectCouponByUserAndAmount(@Param("userId") int userId,@Param("amount") double amount);
 
     List<Coupon> selectValidCoupon(@Param("now")Timestamp now);

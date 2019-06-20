@@ -21,5 +21,10 @@ public interface RefundTicketStrategyService {
      * @return
      */
     ResponseVO updateRefundTicketStrategy(RefundTicketStrategyForm refundTicketStrategyForm);
+
+    /**
+     * 得到所有的退票策略
+     * @return
+     */
     ResponseVO getAllRefundTicketStrategies();
 }
