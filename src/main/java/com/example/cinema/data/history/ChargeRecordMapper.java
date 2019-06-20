@@ -13,6 +13,17 @@ import java.util.List;
  */
 @Mapper
 public interface ChargeRecordMapper {
+    /**
+     * 得到某个用户的所有充值记录
+     * @param userID
+     * @return
+     */
     List<ChargeRecordPO> getChargeRecords(@Param("userID")int userID);
+
+    /**
+     * 增加充值记录
+     * @param chargeRecordUserVO
+     * @return
+     */
     int addChargeRecord(ChargeRecordUserVO chargeRecordUserVO);
 }

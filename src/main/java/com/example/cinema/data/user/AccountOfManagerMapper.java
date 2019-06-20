@@ -39,5 +39,10 @@ public interface AccountOfManagerMapper {
      * @return
      */
     ManagerPO searchByName(String name);
+
+    /**
+     * 查找所有的管理员
+     * @return
+     */
     List<ManagerPO> searchAllManagers();
 }

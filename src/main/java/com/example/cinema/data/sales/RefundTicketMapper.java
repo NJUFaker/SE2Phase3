@@ -12,6 +12,11 @@ public interface RefundTicketMapper {
      */
     List<RefundTicketStrategy> getAllStragegies();
 
+    /**
+     * 按照id查找退票策略
+     * @param refundTicketId
+     * @return
+     */
     RefundTicketStrategy getStrategyById(int refundTicketId);
 
     /**
