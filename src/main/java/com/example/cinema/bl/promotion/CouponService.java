@@ -26,7 +26,7 @@ public interface CouponService {
 
     /**
      * 查询已发布的所有优惠券
-     * @return 返回couponForm的list
+     * @return 返回couponVO的list
      */
     ResponseVO searchCoupons();
 
