@@ -173,30 +173,61 @@ $(document).on('click','.refund-ticket',function (e) {
     }
     ticketList='<form class="form-horizontal list-form clearfix" role="form">'+ticketList+'</form>'
     $('.ticket-list-form').html(ticketList)
-    getRefundstrategy()
+    getRefundStrategy()
 })
 
 //得到退票策略
-    function getRefundstrategy(){
+
+function getRefundStrategy() {
     getRequest(
-        '/ticket/get/refundStrategy',
+        '/refund/get',
         function (res) {
             console.log(res)
             if (res.success) {
-                $('.refund-stra').html(res.content)
+                renderRefundList(res.content)
             }
             else {
                 alert(res.message)
-                // $('#refundTicket').modal("hide")
             }
         },
         function (err) {
-           console.log(err)
+            console.log(err)
 
         }
     )
-    }
+}
 
+function renderRefundList(list) {
+    // console.log("render")
+    $('.refund-table-body').empty()
+    for (var i=0;i<list.length;i++){
+        var stra=list[i]
+        var temp=getTime(stra.availableTime)
+        stra.day=temp.day
+        stra.hour=temp.hour
+        stra.min=temp.min
+        stra.sec=temp.sec
+        console.log(stra)
+        var line=$('<tr>'+'<td>'+stra.day+"天"+stra.hour+"小时"+stra.min+"分钟"+stra.sec+"秒"+'</td>'+'<td>'+stra.refundPercentage+'</td>'+'</tr>')
+        $("#refund-table-body-in").append(line)
+    }
+}
+
+function getTime(second) {
+    var day=parseInt(second/86400)
+    var temp=second%86400
+    var hour=parseInt(temp/3600)
+    temp=temp%3600
+    // console.log(temp)
+    var min=parseInt(temp/60)
+    var sec=temp%60
+    return {
+        day:day,
+        hour:hour,
+        min:min,
+        sec:sec
+    }
+}
 //点击确认
 function startRefund() {
         var r=confirm("确认退票？")
