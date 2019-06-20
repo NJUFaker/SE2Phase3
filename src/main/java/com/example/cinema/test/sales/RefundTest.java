@@ -4,6 +4,7 @@ import com.example.cinema.bl.sales.RefundTicketStrategyService;
 import com.example.cinema.data.sales.RefundTicketMapper;
 import com.example.cinema.po.RefundTicketStrategy;
 import com.example.cinema.vo.RefundTicketStrategyForm;
+import com.example.cinema.vo.ResponseVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +24,14 @@ public class RefundTest {
     RefundTicketMapper refundTicketMapper;
     @Test
     public void testRefund(){
-        /*DataTestDone
         testGetAll();
         int id=testInsert();
         testGetById(id);
-        testUpdate();*/
+        testUpdate();
         RefundTicketStrategyForm f=new RefundTicketStrategyForm();
         f.setRefundPercentage(0.2f);
         f.setAvailableTime(60000);
-        int id=(Integer)refundTicketStrategyService.publishRefundTicketStrategy(f).getContent();
+        id=(Integer)refundTicketStrategyService.publishRefundTicketStrategy(f).getContent();
         testGetAll();
         System.out.println(id);
         f.setId(id);
