@@ -52,7 +52,7 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
 
     @Override
     public List<RefundTicketStrategyForm> getRefundStrategy(){
-
+        try {
             List<RefundTicketStrategy> strategies=refundTicketMapper.getAllStragegies();
             List<RefundTicketStrategyForm> strategyForms=new ArrayList<>();
             for(int i=0;i<strategies.size();i++){
@@ -70,6 +70,12 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
                 }
             }
             return strategyForms;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
 
 
     }
