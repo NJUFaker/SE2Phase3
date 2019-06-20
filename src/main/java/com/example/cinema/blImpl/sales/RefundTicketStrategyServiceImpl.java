@@ -21,19 +21,25 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
     @Override
     public ResponseVO publishRefundTicketStrategy(RefundTicketStrategyForm refundTicketStrategyForm){
         try{
-            int x=refundTicketMapper.insertRefundStrategy(new RefundTicketStrategy(refundTicketStrategyForm));
+            RefundTicketStrategy r=new RefundTicketStrategy(refundTicketStrategyForm);
+            refundTicketMapper.insertRefundStrategy(r);
+            int x=r.getId();
+
             return ResponseVO.buildSuccess(x);
         }catch (Exception e){
             return ResponseVO.buildFailure("Module Failed");
         }
 
     }
-
+    @Override
+    public ResponseVO getAllRefundTicketStrategies(){
+        return ResponseVO.buildSuccess(getRefundStrategy());
+    }
 
     @Override
     public ResponseVO updateRefundTicketStrategy(RefundTicketStrategyForm refundTicketStrategyForm){
         try{
-            if(refundTicketMapper.getStrategyById(refundTicketStrategyForm.getId())!=null){
+            if(refundTicketMapper.getStrategyById(refundTicketStrategyForm.getId())==null){
                 throw new Exception();
             }
             refundTicketMapper.updateRefundStrategy(new RefundTicketStrategy(refundTicketStrategyForm));
@@ -46,13 +52,30 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
 
     @Override
     public List<RefundTicketStrategyForm> getRefundStrategy(){
-
+        try {
             List<RefundTicketStrategy> strategies=refundTicketMapper.getAllStragegies();
             List<RefundTicketStrategyForm> strategyForms=new ArrayList<>();
             for(int i=0;i<strategies.size();i++){
                 strategyForms.add(new RefundTicketStrategyForm(strategies.get(i)));
             }
+
+            RefundTicketStrategyForm temp;
+            for(int i=0;i<strategyForms.size();i++){
+                for(int j=0;j<strategyForms.size()-i-1;j++){
+                    if(strategyForms.get(j).getAvailableTime()>strategyForms.get(j+1).getAvailableTime()){
+                        temp=strategyForms.get(j+1);
+                        strategyForms.set(j+1,strategyForms.get(j));
+                        strategyForms.set(j,temp);
+                    }
+                }
+            }
             return strategyForms;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+
 
 
     }

@@ -19,6 +19,9 @@ public class VIPActivityForm {
         bonusBalance=activity.getBonus_balance();
         description=activity.getDescription();
     }
+    public VIPActivityForm(){
+
+    }
     public float getBonusBalance() {
         return bonusBalance;
     }

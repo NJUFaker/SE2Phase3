@@ -11,7 +11,7 @@
 
     <insert id="insertActivity" parameterType="com.example.cinema.po.VIPActivity"
             useGeneratedKeys="true" keyProperty="id">
-        insert into vip_activity values(null,#{name},#{descirption},#{cost_in_need},#{bonus_balance})
+        insert into vip_activity values(null,#{name},#{description},#{cost_in_need},#{bonus_balance})
     </insert>
 
     <delete id="deleteActivity" parameterType="int">

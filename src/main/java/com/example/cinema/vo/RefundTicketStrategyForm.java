@@ -17,6 +17,9 @@ public class RefundTicketStrategyForm {
         this.refundPercentage=refundTicketStrategy.getRefundPercentage();
         this.availableTime=refundTicketStrategy.getAvailableTime();
     }
+    public RefundTicketStrategyForm(){
+
+    }
 
     /*public String getDescription() {
         return description;
