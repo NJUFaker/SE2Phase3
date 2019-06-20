@@ -45,8 +45,9 @@ public class HallServiceImpl implements HallService, HallServiceForBl {
     @Override
     public ResponseVO addHall(HallForm hallForm){
         try{
-            int id=hallMapper.insertHall(hallForm);
-
+            Hall hall=new Hall(hallForm);
+            hallMapper.insertHall(hall);
+            int id=hall.getId();
 
             return ResponseVO.buildSuccess(id);
         }catch(Exception e){
@@ -58,8 +59,8 @@ public class HallServiceImpl implements HallService, HallServiceForBl {
     public ResponseVO updateHall(HallForm hallForm){
 
         try{
-
-            hallMapper.updateHall(hallForm);
+            Hall hall=new Hall(hallForm);
+            hallMapper.updateHall(hall);
 
             return ResponseVO.buildSuccess();
         }catch(Exception e){

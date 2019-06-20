@@ -55,6 +55,17 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
             for(int i=0;i<strategies.size();i++){
                 strategyForms.add(new RefundTicketStrategyForm(strategies.get(i)));
             }
+
+            RefundTicketStrategyForm temp;
+            for(int i=0;i<strategyForms.size();i++){
+                for(int j=0;j<strategyForms.size()-i-1;j++){
+                    if(strategyForms.get(j).getAvailableTime()>strategyForms.get(j+1).getAvailableTime()){
+                        temp=strategyForms.get(j+1);
+                        strategyForms.set(j+1,strategyForms.get(j));
+                        strategyForms.set(j,temp);
+                    }
+                }
+            }
             return strategyForms;
 
 

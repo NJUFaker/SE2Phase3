@@ -25,7 +25,7 @@ public interface HallMapper {
      */
     Hall selectHallById(@Param("hallId") int hallId);
 
-    int insertHall(HallForm hallForm);
+    int insertHall(Hall hall);
 
-    void updateHall(HallForm hallForm);
+    void updateHall(Hall hall);
 }
