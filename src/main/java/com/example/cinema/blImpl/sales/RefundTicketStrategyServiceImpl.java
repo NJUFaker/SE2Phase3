@@ -21,7 +21,10 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
     @Override
     public ResponseVO publishRefundTicketStrategy(RefundTicketStrategyForm refundTicketStrategyForm){
         try{
-            int x=refundTicketMapper.insertRefundStrategy(new RefundTicketStrategy(refundTicketStrategyForm));
+            RefundTicketStrategy r=new RefundTicketStrategy(refundTicketStrategyForm);
+            refundTicketMapper.insertRefundStrategy(r);
+            int x=r.getId();
+
             return ResponseVO.buildSuccess(x);
         }catch (Exception e){
             return ResponseVO.buildFailure("Module Failed");
@@ -33,7 +36,7 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
     @Override
     public ResponseVO updateRefundTicketStrategy(RefundTicketStrategyForm refundTicketStrategyForm){
         try{
-            if(refundTicketMapper.getStrategyById(refundTicketStrategyForm.getId())!=null){
+            if(refundTicketMapper.getStrategyById(refundTicketStrategyForm.getId())==null){
                 throw new Exception();
             }
             refundTicketMapper.updateRefundStrategy(new RefundTicketStrategy(refundTicketStrategyForm));

@@ -22,4 +22,5 @@ public interface RefundTicketMapper {
     void deleteRefundStrategy(int refundTicketId);
 
     void updateRefundStrategy(RefundTicketStrategy refundTicketStrategy);
+    int getMaxKey();
 }
