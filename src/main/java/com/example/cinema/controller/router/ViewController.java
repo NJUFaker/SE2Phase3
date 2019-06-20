@@ -97,7 +97,6 @@ public class ViewController {
         return "userTicketRefund";
     }
 
-
     @RequestMapping(value = "/user/ticket/used")
     public String getUserTicketUsed() {
         return "userTicketUsed";
@@ -127,5 +126,4 @@ public class ViewController {
     public String getrefundTicket() {
         return "refundTicket";
     }
-
 }
