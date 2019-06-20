@@ -40,7 +40,7 @@ $(document).ready(function() {
                 }
                 seat+= "<div>"+temp+"</div>";
             }
-            var link='<button type="button" class="btn btn-primary edit-hall"data-backdrop="static" data-toggle="modal" data-target="#edithall"  data-card='+JSON.stringify(hall) +'> 编辑</button>'
+            var link='<button type="button" class="btn btn-primary edit-hall"data-backdrop="static" data-toggle="modal" data-target="#edithall"  data-hall='+JSON.stringify(hall) +'> 编辑</button>'
 
             var hallDom =
                 "<div class='cinema-hall'>" +
@@ -101,14 +101,12 @@ $(document).ready(function() {
     })
 
 
-    $("#card-form-btn").click(function () {
-        var card=getCardForm();
-        if (validCardForm(card)){
-            card.name="满减"
-            card.decription="满减策略"
+    $("#hall-add-btn").click(function () {
+        var hall=getHallorm()
+        if (validHallForm(hall)){
             postRequest(
-                '/vipActivity/publish',
-                card
+                '/hall/addHall',
+                hall
                 ,
                 function (res) {
                     // console.log(res)
@@ -117,8 +115,8 @@ $(document).ready(function() {
                     }
                     else {
                         alert("添加成功")
-                        getAllCard()
-                        $('#addcard').modal('hide')
+                        getCinemaHalls()
+                        $('#addhall').modal('hide')
                     }
                 },
                 function (err) {
@@ -135,25 +133,24 @@ $(document).ready(function() {
 
     //编辑按钮
     //显示编辑框
-    $(document).on('click','.edit-staff',function (e) {
-        var card=JSON.parse(e.target.dataset.card)
+    $(document).on('click','.edit-hall',function (e) {
+        var hall=JSON.parse(e.target.dataset.hall)
         // console.log(user)
-        $('#VIPcard-money-edit-input').val(card.costInNeed);
-        $('#discount-edit-input').val(card.bonusBalance);
+        $('#edit-hall-name-input').val(hall.name);
+        $('#edit-row-input').val(hall.row);
+        $('#edit-column-input').val(hall.column);
 
-        $('#card-form-edit-btn').attr("data-id",card.id)
+        $('#hall-edit-btn').attr("data-id",hall.id)
     })
 
     // 点击确认按钮
-    $("#card-form-edit-btn").click(function () {
-        var card=getCardForm()
-        if (getCardForm(card)){
-            card.name="满减"
-            card.decription="满减策略"
-            card.id=$('#card-form-edit-btn').attr("data-id")
+    $("#hall-edit-btn").click(function () {
+        var hall=getHallorm()
+        if (validHallForm(hall)){
+            hall.id=$('#hall-edit-btn').attr("data-id")
             postRequest(
-                '/vipActivity/update',
-                card
+                '/hall/updateHall',
+                hall
                 ,
                 function (res) {
                     // console.log(res)
@@ -162,8 +159,8 @@ $(document).ready(function() {
                     }
                     else {
                         alert("修改成功")
-                        getAllCard()
-                        $('#addcardedit').modal('hide')
+                        getCinemaHalls()
+                        $('#edithall').modal('hide')
                     }
                 },
                 function (err) {
@@ -207,13 +204,15 @@ $(document).ready(function() {
         return isValidUser
     }
     //隐藏modal执行清空
-    $('#addcard').on('hide.bs.modal', function () {
-        $("#VIPcard-money-input").val('')
-        $("#discount-input").val('')
+    $('#edithall').on('hide.bs.modal', function () {
+        $("#edit-hall-name-input").val('')
+        $("#edit-row-input").val('')
+        $("#edit-column-input").val('')
     })
 
-    $('#addcardedit').on('hide.bs.modal', function () {
-        $("#VIPcard-money-edit-input").val('')
-        $("#discount-edit-input").val('')
+    $('#addhall').on('hide.bs.modal', function () {
+        $("#hall-name-input").val('')
+        $("#row-input").val('')
+        $("#column-input").val('')
     })
 });

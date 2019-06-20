@@ -1,6 +1,15 @@
 
 $(document).ready(function () {
 
+
+    //选择是否显示root权限
+    var role=sessionStorage.getItem('role')
+    console.log(role)
+    console.log(role==='root')
+    if (role==='root'){
+        $('#root-staff-manage').css("display","")
+    }
+
     // console.log(getTime(86430))
     // console.log(parseInt(12/5))
     // console.log(parseInt(14/5))
