@@ -12,11 +12,17 @@ import java.util.List;
  */
 public interface CouponServiceForBl {
     /**
-     *
+     *按照优惠券id查找优惠券
      * @param couponId
      * @return
      */
      Coupon getCouponById(Integer couponId);
+
+    /**
+     * 删除用户的某张优惠券
+     * @param couponId
+     * @param userId
+     */
      void deleteCoupon(int couponId,int userId);
 
     /**

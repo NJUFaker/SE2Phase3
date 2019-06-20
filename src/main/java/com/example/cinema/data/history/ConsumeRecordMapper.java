@@ -15,6 +15,17 @@ import java.util.List;
  */
 @Mapper
 public interface ConsumeRecordMapper {
+    /**
+     * 得到某个用户所有的消费记录
+     * @param userID
+     * @return
+     */
     List<ConsumeRecordPO> getConsumeRecords(@Param("userID")int userID);
+
+    /**
+     * 插入消费记录
+     * @param consumeRecordUserVO
+     * @return
+     */
     int addConsumeRecord(ConsumeRecordUserVO consumeRecordUserVO);
 }
