@@ -33,7 +33,6 @@ $(document).ready(function () {
 
 
     $("#card-form-btn").click(function () {
-        console.log("adfadsf")
         var card=getCardForm();
         if (validCardForm(card)){
             card.name="满减"
