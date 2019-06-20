@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -38,6 +39,9 @@ public class TicketServiceImplTest {
 
     @Test
     public void refundTickets() {
+        List<Integer> ids=new ArrayList<>();
+        ids.add(10);
+        ticketService.refundTickets(ids);
     }
 
     @Test
