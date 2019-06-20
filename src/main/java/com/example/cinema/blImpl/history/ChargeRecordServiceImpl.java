@@ -43,6 +43,11 @@ public class ChargeRecordServiceImpl implements ChargeRecordService, ChargeRecor
 
     @Override
     public void insertChargeRecord(ChargeRecordUserVO chargeRecordUserVO){
-        chargeRecordMapper.addChargeRecord(chargeRecordUserVO);
+        try {
+            chargeRecordMapper.addChargeRecord(chargeRecordUserVO);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

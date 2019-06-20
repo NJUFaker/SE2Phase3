@@ -135,8 +135,13 @@ public class VIPServiceImpl implements VIPService, VipServiceForBl,VIPServiceFor
 
     @Override
     public void updateVipBalance(int vipcardID,double refund){
-        VIPCard vipCard=vipCardMapper.selectCardById(vipcardID);
-        vipCardMapper.updateCardBalance(vipcardID,vipCard.getBalance()+refund);
+        try {
+            VIPCard vipCard=vipCardMapper.selectCardById(vipcardID);
+            vipCardMapper.updateCardBalance(vipcardID,vipCard.getBalance()+refund);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

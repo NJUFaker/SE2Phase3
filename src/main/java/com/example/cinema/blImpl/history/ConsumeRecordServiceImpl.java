@@ -53,7 +53,12 @@ public class ConsumeRecordServiceImpl implements ConsumeRecordService , ConsumeR
     }
     @Override
     public void  insertConsumeRecord(ConsumeRecordUserVO consumeRecordUserVO){
-        consumeRecordMapper.addConsumeRecord(consumeRecordUserVO);
+        try {
+            consumeRecordMapper.addConsumeRecord(consumeRecordUserVO);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
