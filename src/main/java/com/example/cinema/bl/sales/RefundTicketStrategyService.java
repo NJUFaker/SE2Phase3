@@ -21,4 +21,5 @@ public interface RefundTicketStrategyService {
      * @return
      */
     ResponseVO updateRefundTicketStrategy(RefundTicketStrategyForm refundTicketStrategyForm);
+    ResponseVO getAllRefundTicketStrategies();
 }

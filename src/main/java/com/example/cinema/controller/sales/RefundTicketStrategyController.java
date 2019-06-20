@@ -26,4 +26,9 @@ public class RefundTicketStrategyController {
     public ResponseVO updateRefundTicketStragety(@RequestBody RefundTicketStrategyForm refundTicketStrategyForm){
         return refundTicketStrategyService.updateRefundTicketStrategy(refundTicketStrategyForm);
     }
+    @RequestMapping(value="/refund/get",method=RequestMethod.GET)
+    public ResponseVO getAllRefundStrategies(){
+        return refundTicketStrategyService.getAllRefundTicketStrategies();
+    }
 }
+

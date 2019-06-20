@@ -31,7 +31,10 @@ public class RefundTicketStrategyServiceImpl implements RefundStrategyForBl, Ref
         }
 
     }
-
+    @Override
+    public ResponseVO getAllRefundTicketStrategies(){
+        return ResponseVO.buildSuccess(getRefundStrategy());
+    }
 
     @Override
     public ResponseVO updateRefundTicketStrategy(RefundTicketStrategyForm refundTicketStrategyForm){
