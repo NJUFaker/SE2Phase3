@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -158,7 +159,7 @@ public class TicketServiceImpl implements TicketService {
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
                 content="用户获得优惠券";
             }
-            else if (containMovie(activities.get(i).getMovieList(),movie)){
+            else if (containMovie(activities.get(i).getMovieList().iterator(),movie)){
                 couponService.issueCoupon(activities.get(i).getCoupon().getId(),ticket.getUserId());
                 content="用户获得优惠券";
             }
@@ -170,10 +171,16 @@ public class TicketServiceImpl implements TicketService {
 
     }
 
-    private boolean containMovie(List<Movie> movies,Movie movie){
+    /**
+     *
+     * @param i 优惠活动包含的电影po对象列表的迭代器
+     * @param movie
+     * @return
+     */
+    private boolean containMovie(Iterator<Movie> i, Movie movie){
         ArrayList<Integer> ids=new ArrayList<>();
-        for (int i = 0; i < movies.size(); i++) {
-            ids.add(movies.get(i).getId());
+        while (i.hasNext()){
+            ids.add(i.next().getId());
         }
         return ids.contains(movie.getId());
     }
