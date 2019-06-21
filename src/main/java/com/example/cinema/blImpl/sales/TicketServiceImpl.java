@@ -456,6 +456,11 @@ public class TicketServiceImpl implements TicketService {
         }
     }
 
+    /**
+     * 由List<TicketVO>生成TicketWithCouponVO对象
+     * @param ticketVOS
+     * @return
+     */
     private TicketWithCouponVO getTicketWithCouponVO(List<TicketVO> ticketVOS){
         TicketWithCouponVO ticketWithCouponVO=new TicketWithCouponVO();
         ticketWithCouponVO.setTicketVOList(ticketVOS);
