@@ -51,8 +51,8 @@ public class TicketServiceImpl implements TicketService {
     private RefundStrategyForBl refundStrategyForBl;
     /**
      * 每一个schedule绑定一系列票，从而确定哪些座位被锁定
-     * @param scheduleId
-     * @return
+     * @param scheduleId 排片id
+     * @return 二元数组，被锁定就是1，没有则为0
      */
     private int[][] getLockedSeats(int scheduleId){
         List<Ticket> tickets = ticketMapper.selectTicketsBySchedule(scheduleId);
