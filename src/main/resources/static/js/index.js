@@ -16,7 +16,7 @@ $(document).ready(function () {
                     sessionStorage.setItem('username', formData.username);
                     sessionStorage.setItem('id', res.content.id);
                     sessionStorage.setItem('role', 'user');
-                    window.location.href = "/user/home"
+                    window.location.href = "/user/movie"
 
                 } else {
                     alert(res.message);

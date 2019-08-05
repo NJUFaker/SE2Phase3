@@ -41,7 +41,7 @@ $(document).ready(function () {
 
 
 
-    $("#card-form-btn").click(function () {
+    $("#staff-add-btn").click(function () {
         var user=getUserForm();
         if (validUserForm(user)){
             postRequest(
